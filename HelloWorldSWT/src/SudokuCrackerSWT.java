@@ -17,7 +17,27 @@ public class SudokuCrackerSWT {
 	private SudokuView sv;
 	private SudokuDumpView sdv;
 	
-    public void initUI() {
+	public SudokuModel getSm() {
+		return sm;
+	}
+
+	public SudokuView getSv() {
+		return sv;
+	}
+
+	public SudokuDumpView getSdv() {
+		return sdv;
+	}
+
+    public Shell getShell() {
+		return shell;
+	}
+
+	public Display getDisplay() {
+		return display;
+	}
+
+	public void initUI() {
 		
     	display = new Display();
 		shell = new Shell(display);
@@ -101,9 +121,9 @@ public class SudokuCrackerSWT {
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		SudokuCrackerSWT hw = new SudokuCrackerSWT();
-		hw.initUI();
-		hw.run();
+		SudokuCrackerSWT sc = new SudokuCrackerSWT();
+		sc.initUI();
+		sc.run();
 	}
 
 }

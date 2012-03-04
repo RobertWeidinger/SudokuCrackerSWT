@@ -22,6 +22,10 @@ public class SudokuDumpView implements View {
 	private Text getText() {
 		return t;
 	}
+	
+	public String getString() {
+		return getText().getText();
+	}
 
 	private void setText(Text t) {
 		this.t = t;
