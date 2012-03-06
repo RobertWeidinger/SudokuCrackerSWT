@@ -1,4 +1,6 @@
 
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.junit.After;
 import org.junit.Assert;
@@ -29,9 +31,20 @@ public class SudokuCrackerSWTTest {
 		SudokuDumpView sdv = sc.getSdv();
 		String s = sdv.getString();
 		Assert.assertTrue(s.startsWith("9"));
-		Display d = sc.getDisplay();
-		int i = 2+3;
-		// for (Button b : d.)
+		Display d = sc.getDisplay(); //getDisplay();
+		Control cArray[] = d.getShells()[0].getChildren();
+		boolean bFound=false;
+		for (int i=0; i<cArray.length; i++)
+		{
+			Control c=cArray[i];
+			if (c instanceof Button)
+			{
+				Button b = (Button)c;
+				String sb = b.getText();
+				if (sb.equals("Quit")) bFound=true;
+			}
+		}
+		Assert.assertTrue(bFound);
 	}
 
 }
