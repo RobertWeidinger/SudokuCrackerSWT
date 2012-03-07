@@ -72,6 +72,7 @@ public class SudokuView implements View {
 	public void update() 
 	{
 		updateModelSuppressed = true;
+		SudokuHelper sh = new SudokuHelper(getModel());
 		for (int i=0; i<sm.getSize(); i++)
 			for (int j=0; j<sm.getSize(); j++)
 			{
@@ -99,6 +100,8 @@ public class SudokuView implements View {
 					sut.setTextIfNew(s);
 					sut.setPropertiesError();
 				}
+				
+				if (sh.findConflicts(i, j, v).size()>0) sut.setPropertiesError();
 			}
 		updateModelSuppressed=false;
 	}

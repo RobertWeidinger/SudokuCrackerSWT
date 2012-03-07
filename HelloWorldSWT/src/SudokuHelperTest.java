@@ -112,6 +112,10 @@ public class SudokuHelperTest extends TestCase {
 		Assert.assertEquals(2, sfv.getCol());
 		Assert.assertEquals(3, sfv.getValues().getFirst().intValue());
 		
+		sm = new SudokuModel(9,3);
+		sh = new SudokuHelper(sm);
+		ll = sh.findConflicts(0, 0, -1);
+		Assert.assertEquals(0,ll.size());
 	}
 
 	

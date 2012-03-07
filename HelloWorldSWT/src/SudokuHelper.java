@@ -101,6 +101,9 @@ public class SudokuHelper {
 	public LinkedList<SudokuFieldValues> findConflicts(int row, int col, int number)
 	{
 		LinkedList<SudokuFieldValues> ll = new LinkedList<SudokuFieldValues>();
+		
+		if (number<0) return ll;
+		
 		// Suche in Zeile
 		for (int j=0; j<sm.getSize(); j++)
 		{
