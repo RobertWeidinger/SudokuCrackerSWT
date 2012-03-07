@@ -1,11 +1,5 @@
-import java.io.IOException;
-
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Shell;
 
 
@@ -50,60 +44,15 @@ public class SudokuCrackerSWT {
         sv.update();
         sdv.update();
         
-        Button loadFile = new Button(shell, SWT.PUSH);
-        loadFile.setText("Datei laden");
-        loadFile.setBounds(500, 200, 80, 30);
-        loadFile.addSelectionListener(new SelectionAdapter() {
-            @Override
-            public void widgetSelected(SelectionEvent e) {
-                //sm.loadFromFile();
-            	FileDialog fd = new FileDialog(Display.getCurrent().getActiveShell(), SWT.OPEN);
-            	fd.setFilterExtensions(new String[] {"*.txt"});
-            	fd.setText("Sudoku laden");  
-            	String strFile = fd.open();
-            	if (strFile != null)
-            	{
-            		try {
-						SudokuFileReader.readSudokuFromFile(sm, strFile);
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-            	}
-            }
-        });
         
-        Button fix = new Button(shell, SWT.PUSH);
-        fix.setText("Fixieren");
-        fix.setBounds(500, 300, 80, 30);
-        fix.addSelectionListener(new SelectionAdapter() {
-            @Override
-            public void widgetSelected(SelectionEvent e) {
-                sm.makeValuesFixed();
-            }
-        });
-
-        Button undo = new Button(shell, SWT.PUSH);
-        undo.setText("Rückgängig");
-        undo.setBounds(500, 400, 80, 30);
-        undo.addSelectionListener(new SelectionAdapter() {
-            @Override
-            public void widgetSelected(SelectionEvent e) {
-                sm.undo();
-            }
-        });
-
+        new LoadFileButton(shell, SWT.PUSH, sm, 500, 200, 80, 30);
+                
+        new FixButton(shell, SWT.PUSH, sm, 500, 300, 80, 30);
         
-        Button quit = new Button(shell, SWT.PUSH);
-        quit.setText("Quit");
-        quit.setBounds(500, 500, 80, 30);
-        quit.addSelectionListener(new SelectionAdapter() {
-            @Override
-            public void widgetSelected(SelectionEvent e) {
-                shell.getDisplay().dispose();
-                System.exit(0);
-            }
-        });
+        new UndoButton(shell, SWT.PUSH, sm, 500, 400, 80, 30);
+        
+        new QuitButton(shell, SWT.PUSH, sm, 500, 500, 80, 30);
+        
 
     }
 

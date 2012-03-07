@@ -98,5 +98,47 @@ public class SudokuHelper {
 		return res;
 	}
 	
+	public LinkedList<SudokuFieldValues> findConflicts(int row, int col, int number)
+	{
+		LinkedList<SudokuFieldValues> ll = new LinkedList<SudokuFieldValues>();
+		// Suche in Zeile
+		for (int j=0; j<sm.getSize(); j++)
+		{
+			if (j==col) continue;
+			if (sm.getValue(row, j)==number)
+			{
+				LinkedList<Integer> llI = new LinkedList<Integer>();
+				llI.add(number);
+				ll.add(new SudokuFieldValues(row, j, llI));
+			}
+		}
+		
+		// Suche in Spalte
+		for (int i=0; i<sm.getSize(); i++)
+		{
+			if (i==row) continue;
+			if (sm.getValue(i, col)==number)
+			{
+				LinkedList<Integer> llI = new LinkedList<Integer>();
+				llI.add(number);
+				ll.add(new SudokuFieldValues(i, col, llI));
+			}
+		}
+		
+		// Suche in Block
+		int iBlockCoords[] = blockCoords(row, col);
+		for (int i=iBlockCoords[0]*sm.getSubSize(); i<(iBlockCoords[0]+1)*sm.getSubSize(); i++ )
+			for (int j=iBlockCoords[1]*sm.getSubSize(); j<(iBlockCoords[1]+1)*sm.getSubSize(); j++)
+			{
+				if (i==row && j==col) continue;
+				if (sm.getValue(i,j).intValue()==number)
+				{
+					LinkedList<Integer> llI = new LinkedList<Integer>();
+					llI.add(number);
+					ll.add(new SudokuFieldValues(i, j, llI));
+				}
+			}
+		return ll;
+	}
 	
 }

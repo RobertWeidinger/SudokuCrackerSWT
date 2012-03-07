@@ -43,14 +43,23 @@ public class SudokuView implements View {
 		colorEditable =new Color(parent.getBackground().getDevice(),255,255,255);
 		colorFixed = new Color(parent.getBackground().getDevice(),128,255,128);
 		colorError = new Color(parent.getBackground().getDevice(),128,128,255);
+		int additionalRowSpace=0;
 		for (int i=0; i<sm.getSize(); i++)
+		{
+			if (i%sm.getSubSize()==0)
+				additionalRowSpace+=5;
+			int additionalColSpace=0;
 			for (int j=0; j<sm.getSize(); j++)
 			{
+				if (j%sm.getSubSize()==0)
+					additionalColSpace+=5;
 				textArray[i][j]=new SuText(this, SWT.SINGLE,i,j);
 				SuText sut = textArray[i][j];
 				sut.setSize(textSize);
-				sut.setLocation(textInterspace+j*(textSize.x+textInterspace),textInterspace+i*(textSize.y+textInterspace) );
+				sut.setLocation(textInterspace+j*(textSize.x+textInterspace)+additionalColSpace,
+								textInterspace+i*(textSize.y+textInterspace)+additionalRowSpace );
 			}
+		}
 		sm.registerView(this);
 	}
 	

@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.LinkedList;
 
 import junit.framework.Assert;
@@ -82,6 +83,35 @@ public class SudokuHelperTest extends TestCase {
 		Assert.assertEquals(-1, res);
 		res = sh.findUniquePlaceForNumberInRowPart(5, 3, 5, 4);
 		Assert.assertEquals(-1, res);
+	}
+	
+	@Test 
+	public void testFindConflicts()
+	{
+		try {
+			SudokuFileReader.readSudokuFromFile(sm, "src\\sz20120224.txt");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			Assert.assertTrue(false);
+		}
+		sh = new SudokuHelper(sm);
+		LinkedList<SudokuFieldValues> ll = sh.findConflicts(0, 0, 6);
+		Assert.assertEquals(0,ll.size());
+		ll = sh.findConflicts(1, 3, 2);
+		Assert.assertEquals(1,ll.size());
+		SudokuFieldValues sfv = ll.getFirst();
+		Assert.assertEquals(2, sfv.getRow());
+		Assert.assertEquals(4, sfv.getCol());
+		Assert.assertEquals(2, sfv.getValues().getFirst().intValue());
+		
+		ll = sh.findConflicts(8, 2, 3);
+		Assert.assertEquals(1,ll.size());
+		sfv = ll.getFirst();
+		Assert.assertEquals(3, sfv.getRow());
+		Assert.assertEquals(2, sfv.getCol());
+		Assert.assertEquals(3, sfv.getValues().getFirst().intValue());
+		
 	}
 
 	

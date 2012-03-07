@@ -41,7 +41,7 @@ public class SudokuCrackerSWTTest {
 			{
 				Button b = (Button)c;
 				String sb = b.getText();
-				if (sb.equals("Quit")) bFound=true;
+				if (sb.equals("Datei laden")) bFound=true;
 			}
 		}
 		Assert.assertTrue(bFound);
