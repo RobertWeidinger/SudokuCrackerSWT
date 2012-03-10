@@ -82,11 +82,36 @@ public class SudokuHelper {
 			if (sm.getValue(row, i).intValue()==number) return -1;
 			if (sm.getValue(row, i).intValue()==-1)
 			{
-				numberOfFreePlaces++;
-				colRes = i;
+				LinkedList<SudokuFieldValues> ll = findConflicts(row, i, number);
+				if (ll.size()==0) // no conflict
+				{
+					numberOfFreePlaces++;
+					colRes = i;
+				}
 			}
 		}
 		if (numberOfFreePlaces==1) return colRes;
+		return -1;
+	}
+	
+	public int findUniquePlaceForNumberInColPart(int col, int startRow, int endRow, int number)
+	{
+		int numberOfFreePlaces=0;
+		int rowRes = -1;
+		for (int i=startRow; i<=endRow; i++)
+		{
+			if (sm.getValue(i,col).intValue()==number) return -1;
+			if (sm.getValue(i,col).intValue()==-1)
+			{
+				LinkedList<SudokuFieldValues> ll = findConflicts(i, col, number);
+				if (ll.size()==0) // no conflict
+				{
+					numberOfFreePlaces++;
+					rowRes = i;
+				}
+			}
+		}
+		if (numberOfFreePlaces==1) return rowRes;
 		return -1;
 	}
 	
@@ -138,7 +163,9 @@ public class SudokuHelper {
 				{
 					LinkedList<Integer> llI = new LinkedList<Integer>();
 					llI.add(number);
-					ll.add(new SudokuFieldValues(i, j, llI));
+					SudokuFieldValues sfv = new SudokuFieldValues(i, j, llI);
+					if (!ll.contains(sfv))
+						ll.add(new SudokuFieldValues(i, j, llI));
 				}
 			}
 		return ll;

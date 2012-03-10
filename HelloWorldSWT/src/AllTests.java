@@ -9,7 +9,9 @@ import org.junit.runners.Suite.SuiteClasses;
 	SudokuHelperTest.class, 
 	SudokuModelTest.class, 
 	SudokuViewTest.class, 
-	SudokuFileReaderTest.class 
+	SudokuFileReaderTest.class,
+	SudokuFieldValuesTest.class,
+	SudokuSiblingCrackerTest.class
 	})
 public class AllTests {
 

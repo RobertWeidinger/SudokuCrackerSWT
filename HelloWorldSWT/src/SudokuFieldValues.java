@@ -44,5 +44,16 @@ public class SudokuFieldValues {
 	{
 		this.lValues.add(new Integer(v));
 	}
-	
+
+	@Override
+	public boolean equals(Object o) {
+	// TODO Auto-generated method stub
+		SudokuFieldValues sfv = (SudokuFieldValues) o;
+		if (getRow()!=sfv.getRow()) return false;
+		if (getCol()!=sfv.getCol()) return false;
+		if (!getValues().containsAll(sfv.getValues())) return false;
+		if (!sfv.getValues().containsAll(getValues())) return false;
+		return true;
+	}
+
 }

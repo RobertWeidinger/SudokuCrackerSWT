@@ -14,6 +14,17 @@ public class SudokuModel implements Model {
 		return subSize;
 	}
 
+	public int getNumberOfBlocksInARow()
+	{
+		return getSize()/getSubSize();
+	}
+
+	public int getNumberOfBlocksInACol()
+	{
+		return getSize()/getSubSize();
+	}
+	
+	
 	private Integer[][] iValues;
 	private Integer[][] stepValues;
 	private int         step;

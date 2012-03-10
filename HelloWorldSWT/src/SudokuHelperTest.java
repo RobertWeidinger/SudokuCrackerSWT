@@ -76,13 +76,30 @@ public class SudokuHelperTest extends TestCase {
 
 	@Test
 	public void testFindUniquePlaceForNumberInRowPart() {
-		System.out.print(sm.toStringWithStepValues());
+		//System.out.print(sm.toStringWithStepValues());
 		int res = sh.findUniquePlaceForNumberInRowPart(5, 3, 5, 8);
 		Assert.assertEquals(3, res);
 		res = sh.findUniquePlaceForNumberInRowPart(3, 3, 5, 8);
 		Assert.assertEquals(-1, res);
 		res = sh.findUniquePlaceForNumberInRowPart(5, 3, 5, 4);
 		Assert.assertEquals(-1, res);
+		res = sh.findUniquePlaceForNumberInRowPart(6, 6, 8, 9);
+		Assert.assertEquals(7, res);
+	}
+
+	@Test
+	public void testFindUniquePlaceForNumberInColPart() {
+		System.out.print(sm.toStringWithStepValues());
+		int res = sh.findUniquePlaceForNumberInColPart(3, 3, 5, 8);
+		Assert.assertEquals(5, res);
+		res = sh.findUniquePlaceForNumberInColPart(5, 3, 5, 8);
+		Assert.assertEquals(-1, res);
+		res = sh.findUniquePlaceForNumberInColPart(3, 3, 5, 4);
+		Assert.assertEquals(-1, res);
+		
+		sm.setSuggestedValue(7, 0, 5);
+		res = sh.findUniquePlaceForNumberInColPart(8, 6, 8, 5);
+		Assert.assertEquals(6, res);
 	}
 	
 	@Test 
@@ -111,6 +128,9 @@ public class SudokuHelperTest extends TestCase {
 		Assert.assertEquals(3, sfv.getRow());
 		Assert.assertEquals(2, sfv.getCol());
 		Assert.assertEquals(3, sfv.getValues().getFirst().intValue());
+		
+		ll = sh.findConflicts(2, 3, 2);
+		Assert.assertEquals(1, ll.size());
 		
 		sm = new SudokuModel(9,3);
 		sh = new SudokuHelper(sm);
