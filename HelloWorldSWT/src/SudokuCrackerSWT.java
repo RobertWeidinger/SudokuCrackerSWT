@@ -45,11 +45,13 @@ public class SudokuCrackerSWT {
         sdv.update();
         
         
-        new LoadFileButton(shell, SWT.PUSH, sm, 500, 200, 80, 30);
+        new LoadFileButton(shell, SWT.PUSH, sm, 500, 100, 80, 30);
                 
-        new FixButton(shell, SWT.PUSH, sm, 500, 300, 80, 30);
+        new FixButton(shell, SWT.PUSH, sm, 500, 200, 80, 30);
         
-        new UndoButton(shell, SWT.PUSH, sm, 500, 400, 80, 30);
+        new UndoButton(shell, SWT.PUSH, sm, 500, 300, 80, 30);
+
+        new SiblingAlgorithmButton(shell, SWT.PUSH, sm, 500, 400, 80, 30);
         
         new QuitButton(shell, SWT.PUSH, sm, 500, 500, 80, 30);
         
