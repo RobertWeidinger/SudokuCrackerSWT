@@ -1,8 +1,11 @@
+package de.rw.sudokutest.model;
 import java.util.LinkedList;
 
 import junit.framework.Assert;
 
 import org.junit.Test;
+
+import de.rw.sudoku.model.SudokuFieldValues;
 
 
 public class SudokuFieldValuesTest {

@@ -1,7 +1,13 @@
+package de.rw.sudoku.views;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
+
+import de.rw.sudoku.algorithms.SudokuHelper;
+import de.rw.sudoku.model.SudokuEntry;
+import de.rw.sudoku.model.SudokuModel;
 
 
 public class SudokuView implements View {

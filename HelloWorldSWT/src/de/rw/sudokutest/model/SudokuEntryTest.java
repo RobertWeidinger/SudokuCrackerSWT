@@ -1,8 +1,11 @@
+package de.rw.sudokutest.model;
 import java.util.ArrayList;
 
 import junit.framework.Assert;
 
 import org.junit.Test;
+
+import de.rw.sudoku.model.SudokuEntry;
 
 
 public class SudokuEntryTest {

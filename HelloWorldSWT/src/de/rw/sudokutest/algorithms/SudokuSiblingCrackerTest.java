@@ -1,9 +1,14 @@
+package de.rw.sudokutest.algorithms;
 import java.io.IOException;
 
 import junit.framework.Assert;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import de.rw.sudoku.algorithms.SudokuFileReader;
+import de.rw.sudoku.algorithms.SudokuSiblingCracker;
+import de.rw.sudoku.model.SudokuModel;
 
 
 public class SudokuSiblingCrackerTest {

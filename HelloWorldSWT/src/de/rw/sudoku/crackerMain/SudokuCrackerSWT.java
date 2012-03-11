@@ -1,6 +1,16 @@
+package de.rw.sudoku.crackerMain;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
+
+import de.rw.sudoku.model.SudokuModel;
+import de.rw.sudoku.views.FixButton;
+import de.rw.sudoku.views.LoadFileButton;
+import de.rw.sudoku.views.QuitButton;
+import de.rw.sudoku.views.SiblingAlgorithmButton;
+import de.rw.sudoku.views.SudokuDumpView;
+import de.rw.sudoku.views.SudokuView;
+import de.rw.sudoku.views.UndoButton;
 
 
 public class SudokuCrackerSWT {

@@ -1,3 +1,4 @@
+package de.rw.sudokutest.crackerMain;
 
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Control;
@@ -6,6 +7,11 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import de.rw.sudoku.crackerMain.SudokuCrackerSWT;
+import de.rw.sudoku.views.SuText;
+import de.rw.sudoku.views.SudokuDumpView;
+import de.rw.sudoku.views.SudokuView;
 
 
 public class SudokuCrackerSWTTest {

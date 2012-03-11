@@ -1,3 +1,4 @@
+package de.rw.sudoku.model;
 import java.util.LinkedList;
 
 

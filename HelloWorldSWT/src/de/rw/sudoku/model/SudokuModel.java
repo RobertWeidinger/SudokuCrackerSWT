@@ -1,6 +1,9 @@
+package de.rw.sudoku.model;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Vector;
+
+import de.rw.sudoku.views.View;
 
 
 public class SudokuModel implements Model {

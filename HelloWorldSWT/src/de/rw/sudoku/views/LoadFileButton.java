@@ -1,3 +1,5 @@
+package de.rw.sudoku.views;
+
 import java.io.IOException;
 
 import org.eclipse.swt.SWT;
@@ -7,6 +9,9 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
+
+import de.rw.sudoku.algorithms.SudokuFileReader;
+import de.rw.sudoku.model.SudokuModel;
 
 /**
  * 

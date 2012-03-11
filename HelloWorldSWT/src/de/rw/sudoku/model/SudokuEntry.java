@@ -1,3 +1,4 @@
+package de.rw.sudoku.model;
 import java.util.ArrayList;
 
 
@@ -9,7 +10,7 @@ public class SudokuEntry {
 	private boolean isFixed = false;
 	private ArrayList<Integer> possibleValues = null;
 	
-	SudokuEntry(int _row, int _col)
+	public SudokuEntry(int _row, int _col)
 	{
 		possibleValues = new ArrayList<Integer>();
 		row=_row;

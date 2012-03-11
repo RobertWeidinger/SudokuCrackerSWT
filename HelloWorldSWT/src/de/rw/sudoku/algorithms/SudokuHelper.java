@@ -1,4 +1,8 @@
+package de.rw.sudoku.algorithms;
 import java.util.LinkedList;
+
+import de.rw.sudoku.model.SudokuFieldValues;
+import de.rw.sudoku.model.SudokuModel;
 
 
 public class SudokuHelper {

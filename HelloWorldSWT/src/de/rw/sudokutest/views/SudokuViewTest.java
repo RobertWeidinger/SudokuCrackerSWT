@@ -1,3 +1,4 @@
+package de.rw.sudokutest.views;
 import junit.framework.Assert;
 
 import org.eclipse.swt.widgets.Display;
@@ -5,6 +6,10 @@ import org.eclipse.swt.widgets.Shell;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import de.rw.sudoku.model.SudokuModel;
+import de.rw.sudoku.views.SuText;
+import de.rw.sudoku.views.SudokuView;
 
 
 public class SudokuViewTest {

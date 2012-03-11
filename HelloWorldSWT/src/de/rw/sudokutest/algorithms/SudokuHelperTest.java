@@ -1,3 +1,4 @@
+package de.rw.sudokutest.algorithms;
 import java.io.IOException;
 import java.util.LinkedList;
 
@@ -6,6 +7,11 @@ import junit.framework.TestCase;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import de.rw.sudoku.algorithms.SudokuFileReader;
+import de.rw.sudoku.algorithms.SudokuHelper;
+import de.rw.sudoku.model.SudokuFieldValues;
+import de.rw.sudoku.model.SudokuModel;
 
 
 public class SudokuHelperTest extends TestCase {

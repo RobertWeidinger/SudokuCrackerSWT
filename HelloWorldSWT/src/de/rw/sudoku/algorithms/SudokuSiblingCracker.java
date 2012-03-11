@@ -1,10 +1,14 @@
+package de.rw.sudoku.algorithms;
 import java.util.LinkedList;
+
+import de.rw.sudoku.model.SudokuFieldValues;
+import de.rw.sudoku.model.SudokuModel;
 
 
 public class SudokuSiblingCracker {
 
 	SudokuModel sm;
-	SudokuSiblingCracker(SudokuModel _sm)
+	public SudokuSiblingCracker(SudokuModel _sm)
 	{
 		sm = _sm;
 	}
