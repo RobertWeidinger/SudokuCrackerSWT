@@ -10,35 +10,14 @@ public class SudokuModel implements Model {
 
 	private ArrayList<View> alViews=null;
 	private int size;
-	public int getSize() {
-		return size;
-	}
-
 	private int blockSize;
-	public int getBlockSize() {
-		return blockSize;
-	}
-
-	public int getNumberOfBlocksPerRow()
-	{
-		return getSize()/getBlockSize();
-	}
-
-	public int getNumberOfBlocksPerCol()
-	{
-		return getSize()/getBlockSize();
-	}
-	
 	Vector<Vector<SudokuEntry>> arraySudokuEntries;
-	
 	LinkedList<SudokuEntry> oldSudokuEntries;
 	
 	public SudokuModel(int _size, int _subSize)
 	{
 		reInit(_size, _subSize);
 	}
-
-
 
 	public void reInit(int _size, int _subSize) {
 		size = _size;
@@ -61,7 +40,25 @@ public class SudokuModel implements Model {
 			}
 		}
 	}
-	
+
+	public int getSize() {
+		return size;
+	}
+
+	public int getBlockSize() {
+		return blockSize;
+	}
+
+	public int getNumberOfBlocksPerRow()
+	{
+		return getSize()/getBlockSize();
+	}
+
+	public int getNumberOfBlocksPerCol()
+	{
+		return getSize()/getBlockSize();
+	}
+
 	private void updateViews()
 	{
 		for (View v: alViews)
@@ -79,7 +76,7 @@ public class SudokuModel implements Model {
 		return true;
 	}
 	
-	public SudokuEntry getSudokuEntry(int i, int j)
+	private SudokuEntry getSudokuEntry(int i, int j)
 	{
 		if (!inBounds(i,j)) return null;
 		return arraySudokuEntries.get(i).get(j);
@@ -177,6 +174,26 @@ public class SudokuModel implements Model {
 		Vector<SudokuEntry> alSe = arraySudokuEntries.get(ose.getRow());
 		alSe.set(ose.getCol(), ose);
 		updateViews();
+	}
+	
+	public String entryToDisplayString(int row, int col)
+	{
+		return getSudokuEntry(row, col).toDisplayString(1, getSize());
+	}
+	
+	public void addPossibleValue(int row, int col, int value)
+	{
+		getSudokuEntry(row, col).addPossibleValue(value);
+	}
+	
+	public void removePossibleValue(int row, int col, int value)
+	{
+		getSudokuEntry(row, col).removePossibleValue(value);
+	}
+	
+	public ArrayList<Integer> getPossibleValues(int row, int col)
+	{
+		return getSudokuEntry(row, col).getPossibleValues();
 	}
 	
 	public String toString()

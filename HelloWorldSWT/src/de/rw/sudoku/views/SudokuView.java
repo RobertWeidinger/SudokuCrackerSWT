@@ -6,7 +6,6 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 
 import de.rw.sudoku.algorithms.SudokuHelper;
-import de.rw.sudoku.model.SudokuEntry;
 import de.rw.sudoku.model.SudokuModel;
 
 
@@ -82,19 +81,19 @@ public class SudokuView implements View {
 			for (int j=0; j<sm.getSize(); j++)
 			{
 				SuText sut = textArray[i][j];
-				SudokuEntry se = sm.getSudokuEntry(i, j); 
-				String s = se.toDisplayString(1, sm.getSize());
+				String s = sm.entryToDisplayString(i, j);
 				sut.setTextIfNew(s);
-				if (se.isFixed())
+				if (sm.isFixed(i, j))//(se.isFixed())
 					sut.setPropertiesFixed();
-				else if (!se.isValid(1, sm.getSize()))
+				else if (!sm.isValidModel(i, j))
 					sut.setPropertiesError();
 				else
 					sut.setPropertiesEditable();
 				
-				if (!se.isEmpty() && sh.findConflicts(i, j, se.getValue()).size()>0)
+				if (!sm.isEmpty(i, j) && sh.findConflicts(i, j, sm.getValue(i, j)).size()>0)
 					sut.setPropertiesError();
 			}
+		
 		updateModelSuppressed=false;
 	}
 	

@@ -2,7 +2,7 @@ package de.rw.sudoku.model;
 import java.util.ArrayList;
 
 
-public class SudokuEntry {
+class SudokuEntry {
 
 	private int row=-1;
 	private int col=-1;
@@ -10,68 +10,68 @@ public class SudokuEntry {
 	private boolean isFixed = false;
 	private ArrayList<Integer> possibleValues = null;
 	
-	public SudokuEntry(int _row, int _col)
+	protected SudokuEntry(int _row, int _col)
 	{
 		possibleValues = new ArrayList<Integer>();
 		row=_row;
 		col=_col;
 	}
 
-	public int getRow() {
+	protected int getRow() {
 		return row;
 	}
 
-	public int getCol() {
+	protected int getCol() {
 		return col;
 	}
 
-	public Integer getValue() {
+	protected Integer getValue() {
 		return value;
 	}
 
-	public void setValue(int value) {
+	protected void setValue(int value) {
 		this.value = new Integer(value);
 	}
 	
-	public void setEmpty()
+	protected void setEmpty()
 	{
 		value = null;
 		isFixed = false;
 		clearPossibleValues();
 	}
 	
-	public boolean isEmpty() {
+	protected boolean isEmpty() {
 		return value==null;
 	}
 	
-	public boolean isFixed() {
+	protected boolean isFixed() {
 		return isFixed;
 	}
 
-	public void makeFixed() {
+	protected void makeFixed() {
 		this.isFixed = true;
 	}
 
-	public ArrayList<Integer> getPossibleValues() {
+	protected ArrayList<Integer> getPossibleValues() {
 		return possibleValues;
 	}
 
-	public void addPossibleValue(int value)
+	protected void addPossibleValue(int value)
 	{
 		possibleValues.add(new Integer(value));
 	}
 	
-	public void removePossibleValue(int value)
+	protected void removePossibleValue(int value)
 	{
 		possibleValues.remove(new Integer(value));
 	}
 	
-	public void clearPossibleValues()
+	protected void clearPossibleValues()
 	{
 		possibleValues.clear();
 	}
 	
-	public boolean isValid(int minValue, int maxValue)
+	protected boolean isValid(int minValue, int maxValue)
 	{
 		ArrayList<Integer> pV = getPossibleValues();
 		for (Integer i: pV)
@@ -82,14 +82,14 @@ public class SudokuEntry {
 		return true;
 	}
 	
-	public String toDisplayString(int minValue, int maxValue)
+	protected String toDisplayString(int minValue, int maxValue)
 	{
 		if (isEmpty()) return "";
 		if (!isValid(minValue,maxValue)) return "?!?";
 		return getValue().toString();
 	}
 	
-	public String toDumpString()
+	protected String toDumpString()
 	{
 		String s = new String(" {");
 		s+="r=" + row + " c=" + col;

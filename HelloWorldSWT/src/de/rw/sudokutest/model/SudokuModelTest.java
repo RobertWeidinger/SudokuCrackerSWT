@@ -1,4 +1,6 @@
 package de.rw.sudokutest.model;
+import java.util.ArrayList;
+
 import junit.framework.Assert;
 
 import org.junit.Before;
@@ -19,7 +21,7 @@ public class SudokuModelTest {
 	@Test
 	public void testSetFixedValue() {
 		sm.setFixedValue(0, 5, 9);
-		Assert.assertTrue(sm.getSudokuEntry(0, 5).isFixed());
+		Assert.assertTrue(sm.isFixed(0, 5));
 	}
 
 	@Test
@@ -31,15 +33,15 @@ public class SudokuModelTest {
 	@Test
 	public void testSetSuggestedValue() {
 		sm.setSuggestedValue(0, 5, 9);
-		Assert.assertFalse(sm.getSudokuEntry(0, 5).isEmpty());
-		Assert.assertFalse(sm.getSudokuEntry(0, 5).isFixed());
+		Assert.assertFalse(sm.isEmpty(0, 5));
+		Assert.assertFalse(sm.isFixed(0, 5));
 		
 	}
 
 	@Test
 	public void testMakeValuesFixed() {
 		sm.makeValuesFixed();
-		Assert.assertTrue(sm.getSudokuEntry(1, 0).isFixed());
+		Assert.assertTrue(sm.isFixed(1, 0));
 	}
 
 	@Test
@@ -64,10 +66,24 @@ public class SudokuModelTest {
 	@Test
 	public void testUndo() {
 		Assert.assertEquals(1, sm.getValue(0,7).intValue());
-		Assert.assertFalse(sm.getSudokuEntry(0, 7).isFixed());
+		Assert.assertFalse(sm.isFixed(0, 7));
 		sm.undo();
-		Assert.assertTrue(sm.getSudokuEntry(0, 7).isEmpty());
+		Assert.assertTrue(sm.isEmpty(0, 7));
 		Assert.assertTrue(sm.isValidModel());
 	}
 
+	@Test
+	public void testRemovePossibleValue() {
+		sm.setFixedValue(3,2,5);
+		sm.addPossibleValue(3,2,1);
+		sm.addPossibleValue(3,2,2);
+		sm.addPossibleValue(3,2,3);
+		sm.removePossibleValue(3,2,2);
+		ArrayList<Integer> alPossibleValues = sm.getPossibleValues(3,2);
+		Assert.assertEquals(2, alPossibleValues.size());
+		Integer i0 = alPossibleValues.get(0);
+		Integer i1 = alPossibleValues.get(1);
+		Assert.assertEquals(1, i0.intValue());
+		Assert.assertEquals(3, i1.intValue());
+	}
 }
