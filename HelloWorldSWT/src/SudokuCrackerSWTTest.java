@@ -31,7 +31,7 @@ public class SudokuCrackerSWTTest {
 		SudokuDumpView sdv = sc.getSdv();
 		String s = sdv.getString();
 		Assert.assertTrue(s.startsWith("9"));
-		Display d = sc.getDisplay(); //getDisplay();
+		Display d = sc.getDisplay(); 
 		Control cArray[] = d.getShells()[0].getChildren();
 		boolean bFound=false;
 		for (int i=0; i<cArray.length; i++)

@@ -35,7 +35,6 @@ public class SudokuView implements View {
 	
 	public SudokuView(Composite _parent, SudokuModel _sm)
 	{
-		//super(_parent,0);
 		sm = _sm;
 		parent = _parent;
 		updateModelSuppressed = false;
@@ -46,12 +45,12 @@ public class SudokuView implements View {
 		int additionalRowSpace=0;
 		for (int i=0; i<sm.getSize(); i++)
 		{
-			if (i%sm.getSubSize()==0)
+			if (i%sm.getBlockSize()==0)
 				additionalRowSpace+=5;
 			int additionalColSpace=0;
 			for (int j=0; j<sm.getSize(); j++)
 			{
-				if (j%sm.getSubSize()==0)
+				if (j%sm.getBlockSize()==0)
 					additionalColSpace+=5;
 				textArray[i][j]=new SuText(this, SWT.SINGLE,i,j);
 				SuText sut = textArray[i][j];
@@ -76,32 +75,19 @@ public class SudokuView implements View {
 		for (int i=0; i<sm.getSize(); i++)
 			for (int j=0; j<sm.getSize(); j++)
 			{
-				int v = sm.getValue(i, j);
 				SuText sut = textArray[i][j];
-				String s = new String();
-				if (v<0)
-				{
-					s+="";
-					sut.setTextIfNew(s);
-					sut.setPropertiesEditable();
-				}
-				else if (v<10)
-				{
-					s+=String.valueOf(v);
-					sut.setTextIfNew(s);
-					if (sm.isFixed(i, j))
-						sut.setPropertiesFixed();
-					else
-						sut.setPropertiesEditable();
-				}
-				else
-				{
-					s+="?!?";
-					sut.setTextIfNew(s);
+				SudokuEntry se = sm.getSudokuEntry(i, j); 
+				String s = se.toDisplayString(1, sm.getSize());
+				sut.setTextIfNew(s);
+				if (se.isFixed())
+					sut.setPropertiesFixed();
+				else if (!se.isValid(1, sm.getSize()))
 					sut.setPropertiesError();
-				}
+				else
+					sut.setPropertiesEditable();
 				
-				if (sh.findConflicts(i, j, v).size()>0) sut.setPropertiesError();
+				if (!se.isEmpty() && sh.findConflicts(i, j, se.getValue()).size()>0)
+					sut.setPropertiesError();
 			}
 		updateModelSuppressed=false;
 	}
@@ -109,16 +95,12 @@ public class SudokuView implements View {
 	public void updateModel(int row, int col, int value, boolean fixed)
 	{
 		if (updateModelSuppressed) return;
-		if (fixed)
-		{
-			if (sm.getFixedValue(row, col)!=value)
-				sm.setFixedValue(row, col, value);
-		}
+		if (value<0)
+			sm.setEmptyValue(row, col);
+		else if (fixed)
+			sm.setFixedValue(row, col, value);
 		else
-		{
-			if (sm.getSuggestedValue(row, col)!=value)
-				sm.setSuggestedValue(row, col, value);
-		}
+			sm.setSuggestedValue(row, col, value);
 	}
 
 	public SuText getSuText(int i, int j)

@@ -54,7 +54,7 @@ public class SudokuDumpView implements View {
 	@Override
 	public void update() {
 		// TODO Auto-generated method stub
-		getText().setText(getModel().toStringWithStepValues());
+		getText().setText(getModel().toStringWithFlags());
 	}
 
 }

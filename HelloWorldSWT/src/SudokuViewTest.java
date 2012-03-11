@@ -11,7 +11,6 @@ public class SudokuViewTest {
 	
 	private Shell shell;
 	private Display display;
-//	private SudokuModel sm;
 	private SudokuView sv;
 
 	@Before
@@ -26,7 +25,6 @@ public class SudokuViewTest {
 	@After
 	public void tearDown() throws Exception {
 		shell.getDisplay().dispose();
-        //System.exit(0);
     }
 
 	@Test

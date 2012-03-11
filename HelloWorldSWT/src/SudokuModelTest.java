@@ -16,41 +16,32 @@ public class SudokuModelTest {
 	@Test
 	public void testSetFixedValue() {
 		sm.setFixedValue(0, 5, 9);
-		Assert.assertEquals(9, sm.getFixedValue(0, 5).intValue());
+		Assert.assertTrue(sm.getSudokuEntry(0, 5).isFixed());
 	}
 
 	@Test
 	public void testSetEmptyValue() {
 		sm.setEmptyValue(0, 5);
-		Assert.assertEquals(-1, sm.getValue(0, 5).intValue());
+		Assert.assertTrue(sm.isEmpty(0, 5));
 	}
 
 	@Test
 	public void testSetSuggestedValue() {
 		sm.setSuggestedValue(0, 5, 9);
-		Assert.assertEquals(9, sm.getSuggestedValue(0, 5).intValue());
+		Assert.assertFalse(sm.getSudokuEntry(0, 5).isEmpty());
+		Assert.assertFalse(sm.getSudokuEntry(0, 5).isFixed());
 		
-	}
-
-	@Test
-	public void testGetFixedValue() {
-		Assert.assertEquals(8, sm.getFixedValue(1, 1).intValue());
-	}
-
-	@Test
-	public void testGetSuggestedValue() {
-		Assert.assertEquals(1, sm.getSuggestedValue(1, 0).intValue());
 	}
 
 	@Test
 	public void testMakeValuesFixed() {
 		sm.makeValuesFixed();
-		Assert.assertEquals(1, sm.getFixedValue(1, 0).intValue());
+		Assert.assertTrue(sm.getSudokuEntry(1, 0).isFixed());
 	}
 
 	@Test
 	public void testGetValue() {
-		Assert.assertEquals(-1, sm.getValue(2, 0).intValue());
+		Assert.assertTrue(sm.isEmpty(2, 0));
 		Assert.assertEquals(1, sm.getValue(1, 0).intValue());
 	}
 
@@ -61,21 +52,19 @@ public class SudokuModelTest {
 	
 	@Test
 	public void testIsConsistentModel() {
-		Assert.assertTrue( sm.isConsistentModel());
+		Assert.assertTrue( sm.isValidModel());
 		sm = SudokuModel.createCorruptModel1();
-		Assert.assertFalse( sm.isConsistentModel());
+		Assert.assertFalse( sm.isValidModel());
 	}
 
 	
 	@Test
 	public void testUndo() {
-		System.out.println(sm.toStringWithStepValues());
-		Assert.assertEquals(1, sm.getSuggestedValue(0,7).intValue());
-		Assert.assertEquals(-1, sm.getFixedValue(0,7).intValue());
+		Assert.assertEquals(1, sm.getValue(0,7).intValue());
+		Assert.assertFalse(sm.getSudokuEntry(0, 7).isFixed());
 		sm.undo();
-		Assert.assertEquals(-1, sm.getFixedValue(0,7).intValue());
-		Assert.assertEquals(-1, sm.getSuggestedValue(0,7).intValue());
-		Assert.assertTrue(sm.isConsistentModel());
+		Assert.assertTrue(sm.getSudokuEntry(0, 7).isEmpty());
+		Assert.assertTrue(sm.isValidModel());
 	}
 
 }

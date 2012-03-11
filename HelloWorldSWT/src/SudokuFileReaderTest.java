@@ -27,7 +27,7 @@ public class SudokuFileReaderTest {
 			e.printStackTrace();
 		}
 		Assert.assertEquals(2, sm.getValue(3, 5).intValue());
-		Assert.assertEquals(true, sm.isConsistentModel());
+		Assert.assertEquals(true, sm.isValidModel());
 	}
 
 }

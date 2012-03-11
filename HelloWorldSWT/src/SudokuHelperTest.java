@@ -76,7 +76,6 @@ public class SudokuHelperTest extends TestCase {
 
 	@Test
 	public void testFindUniquePlaceForNumberInRowPart() {
-		//System.out.print(sm.toStringWithStepValues());
 		int res = sh.findUniquePlaceForNumberInRowPart(5, 3, 5, 8);
 		Assert.assertEquals(3, res);
 		res = sh.findUniquePlaceForNumberInRowPart(3, 3, 5, 8);
@@ -89,7 +88,7 @@ public class SudokuHelperTest extends TestCase {
 
 	@Test
 	public void testFindUniquePlaceForNumberInColPart() {
-		System.out.print(sm.toStringWithStepValues());
+		System.out.print(sm.toStringWithFlags());
 		int res = sh.findUniquePlaceForNumberInColPart(3, 3, 5, 8);
 		Assert.assertEquals(5, res);
 		res = sh.findUniquePlaceForNumberInColPart(5, 3, 5, 8);

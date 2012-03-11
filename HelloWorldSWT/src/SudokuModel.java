@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Vector;
 
 
 public class SudokuModel implements Model {
@@ -9,26 +11,24 @@ public class SudokuModel implements Model {
 		return size;
 	}
 
-	private int subSize;
-	public int getSubSize() {
-		return subSize;
+	private int blockSize;
+	public int getBlockSize() {
+		return blockSize;
 	}
 
-	public int getNumberOfBlocksInARow()
+	public int getNumberOfBlocksPerRow()
 	{
-		return getSize()/getSubSize();
+		return getSize()/getBlockSize();
 	}
 
-	public int getNumberOfBlocksInACol()
+	public int getNumberOfBlocksPerCol()
 	{
-		return getSize()/getSubSize();
+		return getSize()/getBlockSize();
 	}
 	
+	Vector<Vector<SudokuEntry>> arraySudokuEntries;
 	
-	private Integer[][] iValues;
-	private Integer[][] stepValues;
-	private int         step;
-	
+	LinkedList<SudokuEntry> oldSudokuEntries;
 	
 	public SudokuModel(int _size, int _subSize)
 	{
@@ -39,18 +39,22 @@ public class SudokuModel implements Model {
 
 	public void reInit(int _size, int _subSize) {
 		size = _size;
-		subSize = _subSize;
-		iValues = new Integer[size][size];
-		stepValues = new Integer[size][size];
-		step = -1;
+		blockSize = _subSize;
+		arraySudokuEntries = new Vector<Vector<SudokuEntry>>();
+		arraySudokuEntries.ensureCapacity(size);
+		oldSudokuEntries = new LinkedList<SudokuEntry>();
+		
 		if (alViews==null) alViews = new ArrayList<View>();
 		
 		for (int i = 0; i<size; i++)
 		{
+			Vector<SudokuEntry> rowSudokuEntries = new Vector<SudokuEntry>();
+			rowSudokuEntries.ensureCapacity(size);
+			arraySudokuEntries.add(i, rowSudokuEntries);
 			for (int j=0; j<size; j++)
 			{
-				iValues[i][j] = new Integer(step);
-				stepValues[i][j] = new Integer(step);
+				SudokuEntry se = new SudokuEntry(i,j);
+				rowSudokuEntries.add(j,se);
 			}
 		}
 	}
@@ -61,58 +65,71 @@ public class SudokuModel implements Model {
 			v.update();
 	}
 	
-	public void setEmptyValue(int i, int j)
+	private boolean inBounds(int i, int j)
 	{
-		iValues[i][j] = new Integer(-1);
-		stepValues[i][j] = -1;
-		updateViews();
-	}
-	
-	
-	public void setFixedValue(int i, int j, int value)
-	{
-		iValues[i][j] = new Integer(value);
-		stepValues[i][j] = 0;
-		updateViews();
-	}
-	
-	public void setSuggestedValue(int i, int j, int value)
-	{
-		iValues[i][j] = new Integer(value);
-		if (step<0) step=1;
-		stepValues[i][j]=step++;
-		updateViews();
-	}
-	
-	public Integer getFixedValue(int i, int j)
-	{
-		if (stepValues[i][j].intValue()==0)
-			return iValues[i][j];
-		return new Integer(-1);
-	}
-
-	public Integer getSuggestedValue(int i, int j)
-	{
-		if (stepValues[i][j].intValue()>0)
-			return iValues[i][j];
-		return new Integer(-1);
-	}
-	
-	public boolean isConsistentModel(int i, int j)
-	{
-		int v=iValues[i][j].intValue();
-		int sv = stepValues[i][j].intValue();
-		if (v<-1 || v==0 || v>size || sv<-1) return false;
-		if (sv<0 && v>=0) return false;
-		if (sv>=0 && v<0) return false;
+		try {
+			arraySudokuEntries.get(i).get(j);
+		} catch (IndexOutOfBoundsException e) {
+			e.printStackTrace();
+			return false;
+		}
 		return true;
 	}
 	
-	public boolean isConsistentModel()
+	public SudokuEntry getSudokuEntry(int i, int j)
+	{
+		if (!inBounds(i,j)) return null;
+		return arraySudokuEntries.get(i).get(j);
+	}
+	
+	public static final int FIXED=1;
+	public static final int SUGGESTED=2;
+	public static final int EMPTY=3;
+	
+	private SudokuEntry setNewValue(int i, int j, int value, int flagFixedSuggestedEmpty)
+	{
+		if (!inBounds(i,j)) return null;
+		SudokuEntry se = getSudokuEntry(i, j);
+		oldSudokuEntries.push(se);
+		se = new SudokuEntry(i,j);
+		if (flagFixedSuggestedEmpty!=EMPTY)
+		{
+			se.setValue(value);
+			if (flagFixedSuggestedEmpty==FIXED)
+				se.makeFixed();
+		}
+		arraySudokuEntries.get(i).set(j,se);
+		updateViews();
+		return se;
+	}
+	
+	public SudokuEntry setEmptyValue(int i, int j)
+	{
+		return setNewValue(i,j,-1,EMPTY);
+	}
+	
+	public SudokuEntry setFixedValue(int i, int j, int value)
+	{
+		return setNewValue(i,j,value,FIXED);
+	}
+	
+	public SudokuEntry setSuggestedValue(int i, int j, int value)
+	{
+		return setNewValue(i,j,value,SUGGESTED);
+	}
+
+	public boolean isValidModel(int i, int j)
+	// Achtung: Ein Modell, in dem der Anwender einen Denkfehler gemacht hat, ist valide. 
+	//          Hat er aber eine unerlaubte Zahl eingetragen (z.B. 2-, 0 oder etwas größeres als size) ==> nicht valide.
+	{
+		return getSudokuEntry(i,j).isValid(1, getSize());
+	}
+	
+	public boolean isValidModel()
 	{
 		for (int i=0; i<this.size; i++)
 			for (int j=0; j<this.size; j++)
-				if (!isConsistentModel(i,j)) return false;
+				if (!isValidModel(i,j)) return false;
 		return true;
 	}
 	
@@ -122,8 +139,9 @@ public class SudokuModel implements Model {
 		{
 			for (int j=0; j<size; j++)
 			{
-				if (stepValues[i][j]>0)
-					stepValues[i][j] = new Integer(0);
+				SudokuEntry se = getSudokuEntry(i, j);
+				if (!se.isEmpty())
+					se.makeFixed();
 			}
 		}
 		updateViews();
@@ -131,33 +149,30 @@ public class SudokuModel implements Model {
 
 	@Override
 	public void registerView(View _v) {
-		// TODO Auto-generated method stub
 		alViews.add(_v);
 	}
 		
 	public Integer getValue(int row, int col)
 	{
-		if (stepValues[row][col].intValue()>=0)
-			return iValues[row][col];
-		return new Integer(-1);
+		return getSudokuEntry(row, col).getValue();
 	}
 	
 	public boolean isFixed(int row, int col)
 	{
-		return stepValues[row][col]==0;
+		return getSudokuEntry(row, col).isFixed();
+	}
+	
+	public boolean isEmpty(int row, int col)
+	{
+		return getSudokuEntry(row, col).isEmpty();
 	}
 	
 	public void undo()
 	{
-		if (step==0) return;
-		for (int i=0; i<this.getSize(); i++)
-			for (int j=0; j<this.getSize(); j++)
-				if (stepValues[i][j]>=step-1)
-				{
-					stepValues[i][j]=-1;
-					iValues[i][j]=new Integer(-1);
-				}
-		step--;
+		if (oldSudokuEntries.size()==0) return;
+		SudokuEntry ose = oldSudokuEntries.pop();
+		Vector<SudokuEntry> alSe = arraySudokuEntries.get(ose.getRow());
+		alSe.set(ose.getCol(), ose);
 		updateViews();
 	}
 	
@@ -165,17 +180,17 @@ public class SudokuModel implements Model {
 	{
 		String s = new String();
 		
-		s+= this.getSize() + " " + this.getSubSize() + "\n\n";
+		s+= this.getSize() + " " + this.getBlockSize() + "\n\n";
 				
 		for (int i=0; i<this.size; i++)
 		{
 			for (int j=0; j<this.size; j++)
 			{
-				int v = this.getValue(i, j).intValue();
-				if (v==-1)
+				SudokuEntry se = this.getSudokuEntry(i, j);
+				if (se.isEmpty())
 					s+= " _";
-				else if (v>0 && v<=this.getSize())
-					s+= " " + v;
+				else if (se.isValid(1, getSize()))
+					s+= " " + se.getValue();
 				else 
 					s+= " ?";
 			}
@@ -184,18 +199,40 @@ public class SudokuModel implements Model {
 		return s;
 	}
 	
-	public String toStringWithStepValues()
+	public String toStringWithFlags()
 	{
 		String s = this.toString() + "\n";
 		for (int i=0; i<this.size; i++)
 		{
 			for (int j=0; j<this.size; j++)
 			{
-				if (stepValues[i][j]>=0) s+=" ";
-				s+=" "+stepValues[i][j];
+				SudokuEntry se = this.getSudokuEntry(i, j);
+				if (se.isEmpty()) s+=" _";
+				else if (se.isFixed()) s+=" F";
+				else s+=" S";
 			}
 			s+="\n";
 		}
+		return s;
+	}
+	
+	public String toDumpString()
+	{
+		String s = this.toString() + "\n";
+		for (int i=0; i<this.size; i++)
+		{
+			for (int j=0; j<this.size; j++)
+			{
+				SudokuEntry se = this.getSudokuEntry(i, j);
+				s+=se.toDumpString();
+			}
+			s+="\n";
+		}
+		
+		s+="Old Values:\n{";
+		for (int i=0; i<oldSudokuEntries.size();i++)
+			s+=oldSudokuEntries.get(i).toDumpString();
+		s+="}\n";
 		return s;
 	}
 	
@@ -217,13 +254,9 @@ public class SudokuModel implements Model {
 	public static SudokuModel createCorruptModel1()
 	{
 		SudokuModel sm = createTestModel1();
-		sm.stepValues[0][0]=-1;
+		SudokuEntry se = sm.getSudokuEntry(7, 2);
+		se.makeFixed();
 		return sm;
 	}
-	
-	public int getStepValue(int i, int j)
-	{ 
-		return stepValues[i][j].intValue();
-	}
-	
+		
 }

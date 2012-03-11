@@ -25,7 +25,6 @@ public class SudokuFileReader {
 	    int j=0;
 	    while (st.hasMoreTokens()) {
 	    	  String s = st.nextToken();
-	    	  System.out.println(s);
 	    	  if (s.equals("_"))
 	    		  sm.setEmptyValue(i, j);
 	    	  else
