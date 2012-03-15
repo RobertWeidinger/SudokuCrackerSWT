@@ -2,12 +2,13 @@ package de.rw.sudoku.model.iterators;
 
 import de.rw.sudoku.model.SudokuCoords;
 
-public class SudokuIteratorWhole extends SudokuIterator {
+public class SudokuIteratorCol extends SudokuIterator {
 
 	private SudokuCoords current;
 	
-	public SudokuIteratorWhole(int sudokuSize, int sudokuBlockSize) {
-		super(sudokuSize, sudokuBlockSize, new SudokuCoords(0,0));
+	public SudokuIteratorCol(int sudokuSize, int sudokuBlockSize,
+			int col) {
+		super(sudokuSize, sudokuBlockSize, new SudokuCoords(0,col));
 		current = this.getStart();
 	}
 
@@ -20,20 +21,11 @@ public class SudokuIteratorWhole extends SudokuIterator {
 
 	@Override
 	public SudokuCoords next() {
-		// TODO Auto-generated method stub
 		if (!hasNext()) return null;
 		SudokuCoords result = current;
-		int row=current.getRow();
-		int col=current.getCol();
-		if (col<getSudokuSize()-1) 
-			col++;
-		else
-		{
-			col=0;
-			row++;
-		}
-		current = new SudokuCoords(row,col);
+		current = new SudokuCoords(current.getRow()+1,current.getCol());
 		return result;
-	}
+		}
 
 }
+

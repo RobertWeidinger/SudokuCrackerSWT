@@ -7,9 +7,9 @@ import org.junit.Test;
 
 import de.rw.sudoku.model.SudokuCoords;
 import de.rw.sudoku.model.SudokuModel;
-import de.rw.sudoku.model.iterators.SudokuIteratorRow;
+import de.rw.sudoku.model.iterators.SudokuIteratorCol;
 
-public class SudokuIteratorRowTest {
+public class SudokuIteratorColTest {
 
 	private SudokuModel sm;
 	
@@ -19,18 +19,17 @@ public class SudokuIteratorRowTest {
 	}
 	@Test
 	public void testNext() {
-		SudokuIteratorRow sir = new SudokuIteratorRow(sm.getSize(), sm.getBlockSize(), 3);
+		SudokuIteratorCol sir = new SudokuIteratorCol(sm.getSize(), sm.getBlockSize(), 3);
 		int i=1;
 		while (sir.hasNext())
 		{
 			SudokuCoords sc = sir.next();
 			if (i==2)
-				Assert.assertEquals(1, sc.getCol());
+				Assert.assertEquals(1, sc.getRow());
 			else if (i==9)
-				Assert.assertEquals(8, sc.getCol());
+				Assert.assertEquals(8, sc.getRow());
 			i++;
 		}
 		Assert.assertEquals(10, i);
 	}
-
 }

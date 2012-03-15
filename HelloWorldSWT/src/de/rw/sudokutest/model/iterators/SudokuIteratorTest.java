@@ -38,5 +38,9 @@ public class SudokuIteratorTest {
 								new SudokuCoords(0,0),
 								SudokuIterator.SubStructures.WHOLE);
 		Assert.assertEquals(0, si.next().getCol());
+		si = SudokuIterator.createIterator(sm.getSize(),sm.getBlockSize(),
+				new SudokuCoords(3,0),
+				SudokuIterator.SubStructures.ROW);
+		Assert.assertEquals(0, si.next().getCol());
 	}
 }

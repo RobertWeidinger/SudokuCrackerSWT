@@ -1,7 +1,6 @@
-package de.rw.sudokutest.model.iterators;
+package de.rw.sudoku.model.iterators;
 
 import de.rw.sudoku.model.SudokuCoords;
-import de.rw.sudoku.model.iterators.SudokuIterator;
 
 public class SudokuIteratorRow extends SudokuIterator {
 
@@ -14,7 +13,7 @@ public class SudokuIteratorRow extends SudokuIterator {
 	
 	@Override
 	public boolean hasNext() {
-		if (current.getCol()==getSudokuSize()-1)
+		if (current.getCol()>getSudokuSize()-1)
 			return false;
 		return true;
 	}

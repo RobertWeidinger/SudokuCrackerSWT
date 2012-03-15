@@ -22,6 +22,7 @@ public class SudokuIteratorWholeTest {
 	public void testNext() {
 		SudokuIteratorWhole sia = new SudokuIteratorWhole(sm.getSize(), sm.getBlockSize());
 		int i=1;
+		boolean b81=false;
 		while (sia.hasNext())
 		{
 			SudokuCoords sc = sia.next();
@@ -39,9 +40,11 @@ public class SudokuIteratorWholeTest {
 			{
 				Assert.assertEquals(8, sc.getRow());
 				Assert.assertEquals(8, sc.getCol());
+				b81=true;
 			}
 			i++;
 		}
+		Assert.assertTrue(b81);
 	}
 
 }

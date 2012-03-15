@@ -4,7 +4,6 @@ import java.util.EnumSet;
 import java.util.Iterator;
 
 import de.rw.sudoku.model.SudokuCoords;
-import de.rw.sudokutest.model.iterators.SudokuIteratorRow;
 
 public abstract class SudokuIterator implements Iterator<SudokuCoords> {
 
@@ -66,6 +65,10 @@ public abstract class SudokuIterator implements Iterator<SudokuCoords> {
 			si = new SudokuIteratorWhole(size, blockSize);
 		case ROW:
 			si = new SudokuIteratorRow(size,blockSize,sudokuCoords.getRow());
+		case COL:
+			si = new SudokuIteratorCol(size, blockSize, sudokuCoords.getCol());
+		case BLOCK:
+			si = new SudokuIteratorBlock(size, blockSize, sudokuCoords);
 		}
 		return si;
 	}
