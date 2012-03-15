@@ -10,6 +10,9 @@ import de.rw.sudokutest.algorithms.SudokuSiblingCrackerTest;
 import de.rw.sudokutest.crackerMain.SudokuCrackerSWTTest;
 import de.rw.sudokutest.model.SudokuFieldValuesTest;
 import de.rw.sudokutest.model.SudokuModelTest;
+import de.rw.sudokutest.model.iterators.SudokuIteratorRowTest;
+import de.rw.sudokutest.model.iterators.SudokuIteratorTest;
+import de.rw.sudokutest.model.iterators.SudokuIteratorWholeTest;
 import de.rw.sudokutest.model.iterators.SudokuScannerForBlockTest;
 import de.rw.sudokutest.views.SudokuViewTest;
 
@@ -23,7 +26,10 @@ import de.rw.sudokutest.views.SudokuViewTest;
 	SudokuFileReaderTest.class,
 	SudokuFieldValuesTest.class,
 	SudokuSiblingCrackerTest.class,
-	SudokuScannerForBlockTest.class
+	SudokuScannerForBlockTest.class,
+	SudokuIteratorTest.class,
+	SudokuIteratorWholeTest.class,
+	SudokuIteratorRowTest.class
 	})
 public class AllTests {
 
