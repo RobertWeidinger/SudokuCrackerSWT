@@ -42,9 +42,8 @@ public class SudokuSiblingCracker {
 					if (i!=sfv1.getRow() && i!=sfv2.getRow())
 						rowWithoutNumber = i;
 				}
-				int colRes = sh.findUniquePlaceForNumberInRowPart(rowWithoutNumber, 
+				int colRes = sh.findUniquePlaceForValueInRowPart(rowWithoutNumber, 
 									colBlockWithoutNumber*sm.getBlockSize(),
-									(colBlockWithoutNumber+1)*sm.getBlockSize()-1,
 									number);
 				if (colRes>=0)
 				{
@@ -75,9 +74,8 @@ public class SudokuSiblingCracker {
 					if (j!=sfv1.getCol() && j!=sfv2.getCol())
 						colWithoutNumber = j;
 				}
-				int rowRes = sh.findUniquePlaceForNumberInColPart(colWithoutNumber, 
+				int rowRes = sh.findUniquePlaceForValueInColPart(colWithoutNumber, 
 									rowBlockWithoutNumber*sm.getBlockSize(),
-									(rowBlockWithoutNumber+1)*sm.getBlockSize()-1,
 									number);
 				if (rowRes>=0)
 				{

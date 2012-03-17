@@ -15,8 +15,8 @@ import de.rw.sudokutest.model.iterators.SudokuIteratorColTest;
 import de.rw.sudokutest.model.iterators.SudokuIteratorRowTest;
 import de.rw.sudokutest.model.iterators.SudokuIteratorTest;
 import de.rw.sudokutest.model.iterators.SudokuIteratorWholeTest;
-import de.rw.sudokutest.model.iterators.SudokuScannerForBlockTest;
 import de.rw.sudokutest.views.SudokuViewTest;
+import de.rw.sudokutest.zUnused.SudokuScannerForBlockTest;
 
 
 @RunWith(Suite.class)

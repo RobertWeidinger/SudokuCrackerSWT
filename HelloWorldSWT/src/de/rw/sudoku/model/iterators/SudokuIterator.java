@@ -12,7 +12,7 @@ public abstract class SudokuIterator implements Iterator<SudokuCoords> {
 	private SudokuCoords start;
 	
 	public enum SubStructures {
- 		WHOLE, ROW, COL, BLOCK;
+ 		WHOLE, ROW, COL, BLOCK, ROWPART, COLPART;
  
  		public static final EnumSet<SubStructures> ALL = EnumSet.range(WHOLE, BLOCK);
  		public static final EnumSet<SubStructures> REAL = EnumSet.range(ROW, BLOCK);
@@ -63,12 +63,22 @@ public abstract class SudokuIterator implements Iterator<SudokuCoords> {
 		{
 		case WHOLE:
 			si = new SudokuIteratorWhole(size, blockSize);
+			break;
 		case ROW:
 			si = new SudokuIteratorRow(size,blockSize,sudokuCoords.getRow());
+			break;
 		case COL:
 			si = new SudokuIteratorCol(size, blockSize, sudokuCoords.getCol());
+			break;
 		case BLOCK:
 			si = new SudokuIteratorBlock(size, blockSize, sudokuCoords);
+			break;
+		case ROWPART:
+			si = new SudokuIteratorRowPart(size, blockSize, sudokuCoords);
+			break;
+		case COLPART:
+			si = new SudokuIteratorColPart(size, blockSize, sudokuCoords);
+			break;
 		}
 		return si;
 	}

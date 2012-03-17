@@ -108,9 +108,19 @@ public class SudokuModel implements Model {
 		return setNewValue(i,j,-1,EMPTY);
 	}
 	
+	public SudokuEntry setEmptyValue(SudokuCoords sc)
+	{
+		return setEmptyValue(sc.getRow(),sc.getCol());
+	}
+	
 	public SudokuEntry setFixedValue(int i, int j, int value)
 	{
 		return setNewValue(i,j,value,FIXED);
+	}
+	
+	public SudokuEntry setFixedValue(SudokuCoords sc, int value)
+	{
+		return setFixedValue(sc.getRow(),sc.getCol(), value);
 	}
 	
 	public SudokuEntry setSuggestedValue(int i, int j, int value)
@@ -118,6 +128,11 @@ public class SudokuModel implements Model {
 		return setNewValue(i,j,value,SUGGESTED);
 	}
 
+	public SudokuEntry setSuggestedValue(SudokuCoords sc, int value)
+	{
+		return setSuggestedValue(sc.getRow(),sc.getCol(), value);
+	}
+	
 	public boolean isValidModel(int i, int j)
 	// Achtung: Ein Modell, in dem der Anwender einen Denkfehler gemacht hat, ist valide. 
 	//          Hat er aber eine unerlaubte Zahl eingetragen (z.B. 2-, 0 oder etwas größeres als size) ==> nicht valide.
@@ -157,15 +172,32 @@ public class SudokuModel implements Model {
 		return getSudokuEntry(row, col).getValue();
 	}
 	
+	public Integer getValue(SudokuCoords sc)
+	{
+		return getValue(sc.getRow(),sc.getCol());
+	}
+	
+	
 	public boolean isFixed(int row, int col)
 	{
 		return getSudokuEntry(row, col).isFixed();
+	}
+	
+	public boolean isFixed(SudokuCoords sc)
+	{
+		return isFixed(sc.getRow(),sc.getCol());
 	}
 	
 	public boolean isEmpty(int row, int col)
 	{
 		return getSudokuEntry(row, col).isEmpty();
 	}
+	
+	public boolean isEmpty(SudokuCoords sc)
+	{
+		return isEmpty(sc.getRow(),sc.getCol());
+	}
+	
 	
 	public void undo()
 	{

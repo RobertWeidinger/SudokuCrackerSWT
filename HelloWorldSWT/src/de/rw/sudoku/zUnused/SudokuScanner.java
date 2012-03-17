@@ -1,4 +1,4 @@
-package de.rw.sudoku.model.iterators;
+package de.rw.sudoku.zUnused;
 
 import de.rw.sudoku.model.SudokuModel;
 

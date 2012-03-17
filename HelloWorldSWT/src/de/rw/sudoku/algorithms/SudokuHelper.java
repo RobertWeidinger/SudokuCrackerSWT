@@ -1,8 +1,11 @@
 package de.rw.sudoku.algorithms;
 import java.util.LinkedList;
 
+import de.rw.sudoku.model.SudokuCoords;
 import de.rw.sudoku.model.SudokuFieldValues;
 import de.rw.sudoku.model.SudokuModel;
+import de.rw.sudoku.model.iterators.SudokuIterator;
+import de.rw.sudoku.model.iterators.SudokuIterator.SubStructures;
 
 
 public class SudokuHelper {
@@ -12,32 +15,40 @@ public class SudokuHelper {
 	public SudokuHelper(SudokuModel _sm)
 	{sm=_sm;}
 	
+/*	
+	private SudokuCoords findValueInLine(int rowOrCol, Integer value, SubStructures typeRowOrCol)
+	{
+		SudokuCoords start = new SudokuCoords(typeRowOrCol==SubStructures.ROW ? rowOrCol : 0 ,
+											  typeRowOrCol==SubStructures.COL ? rowOrCol : 0);
+		SudokuIterator si = SudokuIterator.createIterator(sm.getSize(), sm.getBlockSize(), start, typeRowOrCol);
+		while (si.hasNext())
+		{
+			SudokuCoords sc = si.next();
+			if (value.equals(sm.getValue(sc.getRow(), sc.getCol())))
+				return sc;
+		}
+		return null;
+	}
+	
 	public int findValueInRow(int row, Integer value)
 	{
-		for (int j=0; j<sm.getSize(); j++)
-		{
-			if (value.equals(sm.getValue(row, j)))
-				return j;
-		}
+		SudokuCoords sc = findValueInLine(row, value, SubStructures.ROW);
+		if (sc!=null) return sc.getCol();
 		return -1;
 	}
 	
-	public int[] findValueInBlock(int row1stField, int col1stField, Integer value)
-	// result[0]=Zeile, result[1]=Spalte
+	public SudokuCoords findValueInBlock(SudokuCoords block1stRowCol, Integer value)
 	{
-		int res[] = new int[2];
-		res[0]=-1;
-		res[1]=-1;
-		for (int i=row1stField; i<row1stField+sm.getBlockSize();i++)
-			for (int j=col1stField; j<col1stField+sm.getBlockSize(); j++)
-				if (value.equals(sm.getValue(i, j)))
-				{
-					res[0]=i;
-					res[1]=j;
-					return res;
-				}
-		return res;
+		SudokuIteratorBlock sib = new SudokuIteratorBlock(sm.getSize(), sm.getBlockSize(), block1stRowCol);
+		while (sib.hasNext())
+		{
+			SudokuCoords sc = sib.next();
+			if (value.equals(sm.getValue(sc)))
+				return sc;
+		}
+		return null;
 	}
+*/
 	
 	public LinkedList<SudokuFieldValues> findSiblingsInRows(int rowBlock, // 0,1,2
 								  				Integer number)
@@ -77,47 +88,63 @@ public class SudokuHelper {
 		return res;
 	}
 	
-	public int findUniquePlaceForNumberInRowPart(int row, int startCol, int endCol, Integer number)
+	public int findUniquePlaceForValueInRowPart(int row, int startCol, Integer value)
 	{
-		int numberOfFreePlaces=0;
-		int colRes = -1;
-		for (int i=startCol; i<=endCol; i++)
-		{
-			if (number.equals(sm.getValue(row, i))) return -1;
-			if (sm.isEmpty(row, i))
-			{
-				LinkedList<SudokuFieldValues> ll = findConflicts(row, i, number);
-				if (ll.size()==0) // no conflict
-				{
-					numberOfFreePlaces++;
-					colRes = i;
-				}
-			}
-		}
-		if (numberOfFreePlaces==1) return colRes;
-		return -1;
+		SudokuCoords sc = findUniquePlaceForValueInSubStruct(new SudokuCoords(row,startCol),value,SubStructures.ROWPART);
+		if (sc==null) return -1;
+		return sc.getCol();
 	}
 	
-	public int findUniquePlaceForNumberInColPart(int col, int startRow, int endRow, Integer number)
+	public int findUniquePlaceForValueInColPart(int col, int startRow, Integer value)
 	{
+		SudokuCoords sc = findUniquePlaceForValueInSubStruct(new SudokuCoords(startRow,col),value,SubStructures.COLPART);
+		if (sc==null) return -1;
+		return sc.getRow();
+	}
+
+	public int findUniquePlaceForValueInCol(int col, Integer value)
+	{
+		SudokuCoords sc = findUniquePlaceForValueInSubStruct(new SudokuCoords(0,col),value,SubStructures.COL);
+		if (sc==null) return -1;
+		return sc.getRow();
+	}
+	
+	public int findUniquePlaceForValueInRow(int row, Integer value)
+	{
+		SudokuCoords sc = findUniquePlaceForValueInSubStruct(new SudokuCoords(row,0),value,SubStructures.ROW);
+		if (sc==null) return -1;
+		return sc.getCol();
+	}
+	
+	public SudokuCoords findUniquePlaceForValueInBlock(SudokuCoords scInBlock, Integer value)
+	{
+		return findUniquePlaceForValueInSubStruct(scInBlock,value,SubStructures.BLOCK);
+	}
+	
+	public SudokuCoords findUniquePlaceForValueInSubStruct(SudokuCoords start, Integer value, SubStructures typeSubStruct) {
+		
+		SudokuIterator si = SudokuIterator.createIterator(sm.getSize(), sm.getBlockSize(), start, typeSubStruct);
 		int numberOfFreePlaces=0;
-		int rowRes = -1;
-		for (int i=startRow; i<=endRow; i++)
+		SudokuCoords scRes = null;
+		while (si.hasNext())
 		{
-			if (number.equals(sm.getValue(i,col))) return -1;
-			if (sm.isEmpty(i,col))
+			SudokuCoords sc = si.next();
+			if (value.equals(sm.getValue(sc))) return null;
+			if (sm.isEmpty(sc))
 			{
-				LinkedList<SudokuFieldValues> ll = findConflicts(i, col, number);
+				LinkedList<SudokuFieldValues> ll = findConflicts(sc.getRow(), sc.getCol(), value);
 				if (ll.size()==0) // no conflict
 				{
 					numberOfFreePlaces++;
-					rowRes = i;
+					scRes = sc;
 				}
 			}
 		}
-		if (numberOfFreePlaces==1) return rowRes;
-		return -1;
+		if (numberOfFreePlaces==1) return scRes;
+		return null;
 	}
+
+	
 	
 	public int[] blockCoords(int row, int col)
 	{
@@ -174,5 +201,7 @@ public class SudokuHelper {
 			}
 		return ll;
 	}
+
+
 	
 }

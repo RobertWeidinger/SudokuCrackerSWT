@@ -1,4 +1,4 @@
-package de.rw.sudokutest.model.iterators;
+package de.rw.sudokutest.zUnused;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -10,8 +10,8 @@ import org.junit.Test;
 
 import de.rw.sudoku.algorithms.SudokuFileReader;
 import de.rw.sudoku.model.SudokuModel;
-import de.rw.sudoku.model.iterators.ScannerAction;
-import de.rw.sudoku.model.iterators.SudokuScannerForBlock;
+import de.rw.sudoku.zUnused.ScannerAction;
+import de.rw.sudoku.zUnused.SudokuScannerForBlock;
 
 public class SudokuScannerForBlockTest {
 

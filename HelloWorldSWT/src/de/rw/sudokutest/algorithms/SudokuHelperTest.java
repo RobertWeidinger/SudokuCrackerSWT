@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import de.rw.sudoku.algorithms.SudokuFileReader;
 import de.rw.sudoku.algorithms.SudokuHelper;
+import de.rw.sudoku.model.SudokuCoords;
 import de.rw.sudoku.model.SudokuFieldValues;
 import de.rw.sudoku.model.SudokuModel;
 
@@ -24,7 +25,7 @@ public class SudokuHelperTest extends TestCase {
 		sm = SudokuModel.createTestModel1();
 		sh = new SudokuHelper(sm);
 	}
-
+/*
 	@Test
 	public void testFindValueInRow() {
 		int col = sh.findValueInRow(2, 3);
@@ -35,17 +36,17 @@ public class SudokuHelperTest extends TestCase {
 
 	@Test
 	public void testFindValueInBlock() {
-		int res[]=sh.findValueInBlock(3, 0, 3);
-		Assert.assertEquals(3, res[0]);
-		Assert.assertEquals(2, res[1]);
-		res=sh.findValueInBlock(6, 3, 3);
-		Assert.assertEquals(-1, res[0]);
-		Assert.assertEquals(-1, res[1]);
-		res=sh.findValueInBlock(6, 3, 6);
-		Assert.assertEquals(6, res[0]);
-		Assert.assertEquals(5, res[1]);
+		//System.out.println(sm.toStringWithFlags());
+		SudokuCoords sc =sh.findValueInBlock(new SudokuCoords(3, 0), 3);
+		Assert.assertEquals(3, sc.getRow());
+		Assert.assertEquals(2, sc.getCol());
+		sc=sh.findValueInBlock(new SudokuCoords(6, 3), 3);
+		Assert.assertNull(sc);
+		sc=sh.findValueInBlock(new SudokuCoords(6, 3), 6);
+		Assert.assertEquals(6, sc.getRow());
+		Assert.assertEquals(5, sc.getCol());
 	}
-	
+*/	
 	@Test
 	public void testFindSiblingsInRows() {
 		LinkedList<SudokuFieldValues> ll = sh.findSiblingsInRows(0, 9);
@@ -81,30 +82,48 @@ public class SudokuHelperTest extends TestCase {
 	}
 
 	@Test
-	public void testFindUniquePlaceForNumberInRowPart() {
-		int res = sh.findUniquePlaceForNumberInRowPart(5, 3, 5, 8);
+	public void testFindUniquePlaceForValueInRowPart() {
+		int res = sh.findUniquePlaceForValueInRowPart(5, 3, 8);
 		Assert.assertEquals(3, res);
-		res = sh.findUniquePlaceForNumberInRowPart(3, 3, 5, 8);
+		res = sh.findUniquePlaceForValueInRowPart(3, 3, 8);
 		Assert.assertEquals(-1, res);
-		res = sh.findUniquePlaceForNumberInRowPart(5, 3, 5, 4);
+		res = sh.findUniquePlaceForValueInRowPart(5, 3, 4);
 		Assert.assertEquals(-1, res);
-		res = sh.findUniquePlaceForNumberInRowPart(6, 6, 8, 9);
+		res = sh.findUniquePlaceForValueInRowPart(6, 6, 9);
 		Assert.assertEquals(7, res);
 	}
 
 	@Test
-	public void testFindUniquePlaceForNumberInColPart() {
+	public void testFindUniquePlaceForValueInColPart() {
 		System.out.print(sm.toStringWithFlags());
-		int res = sh.findUniquePlaceForNumberInColPart(3, 3, 5, 8);
+		int res = sh.findUniquePlaceForValueInColPart(3, 3, 8);
 		Assert.assertEquals(5, res);
-		res = sh.findUniquePlaceForNumberInColPart(5, 3, 5, 8);
+		res = sh.findUniquePlaceForValueInColPart(5, 3, 8);
 		Assert.assertEquals(-1, res);
-		res = sh.findUniquePlaceForNumberInColPart(3, 3, 5, 4);
+		res = sh.findUniquePlaceForValueInColPart(3, 3, 4);
 		Assert.assertEquals(-1, res);
 		
 		sm.setSuggestedValue(7, 0, 5);
-		res = sh.findUniquePlaceForNumberInColPart(8, 6, 8, 5);
+		res = sh.findUniquePlaceForValueInColPart(8, 6, 5);
 		Assert.assertEquals(6, res);
+	}
+	
+	@Test
+	public void testfindUniquePlaceForValueInCol_or_Row_or_Block() {
+		try {
+			SudokuFileReader.readSudokuFromFile(sm, "src\\sz20120224.txt");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			Assert.assertTrue(false);
+		}
+		sh = new SudokuHelper(sm);
+		int res = sh.findUniquePlaceForValueInCol(/*col=*/1,/*number=*/new Integer(9));
+		Assert.assertEquals(7, res);
+		res = sh.findUniquePlaceForValueInRow(4, new Integer(3));
+		Assert.assertEquals(7, res);
+		SudokuCoords sc = sh.findUniquePlaceForValueInBlock(new SudokuCoords(6,0), new Integer(9));
+		Assert.assertEquals(new SudokuCoords(7,1), sc);
 	}
 	
 	@Test 
