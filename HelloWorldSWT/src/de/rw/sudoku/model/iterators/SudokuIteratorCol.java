@@ -27,5 +27,9 @@ public class SudokuIteratorCol extends SudokuIterator {
 		return result;
 		}
 
+	public static SudokuCoords getSubStructBase(SudokuCoords sc) {
+		return new SudokuCoords(0, sc.getCol());
+	}
+
 }
 

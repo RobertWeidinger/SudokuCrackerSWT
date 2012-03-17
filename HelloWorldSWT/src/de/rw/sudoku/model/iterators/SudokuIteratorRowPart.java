@@ -10,7 +10,7 @@ public class SudokuIteratorRowPart extends SudokuIterator {
 	public SudokuIteratorRowPart(int sudokuSize, int sudokuBlockSize,
 			SudokuCoords start) {
 		super(sudokuSize, sudokuBlockSize, start);
-		rowPartStart = new SudokuCoords(start.getRow(), start.getCol()/sudokuBlockSize*sudokuBlockSize);
+		rowPartStart = getSubStructBase(sudokuBlockSize, start);
 		current = start;
 	}
 
@@ -27,6 +27,11 @@ public class SudokuIteratorRowPart extends SudokuIterator {
 		SudokuCoords result = current;
 		current = new SudokuCoords(current.getRow(),current.getCol()+1);
 		return result;
+	}
+
+	public static SudokuCoords getSubStructBase(int blockSize, SudokuCoords sc) {
+		// TODO Auto-generated method stub
+		return new SudokuCoords(sc.getRow(), sc.getCol()/blockSize*blockSize);
 	}
 
 }

@@ -15,41 +15,6 @@ public class SudokuHelper {
 	public SudokuHelper(SudokuModel _sm)
 	{sm=_sm;}
 	
-/*	
-	private SudokuCoords findValueInLine(int rowOrCol, Integer value, SubStructures typeRowOrCol)
-	{
-		SudokuCoords start = new SudokuCoords(typeRowOrCol==SubStructures.ROW ? rowOrCol : 0 ,
-											  typeRowOrCol==SubStructures.COL ? rowOrCol : 0);
-		SudokuIterator si = SudokuIterator.createIterator(sm.getSize(), sm.getBlockSize(), start, typeRowOrCol);
-		while (si.hasNext())
-		{
-			SudokuCoords sc = si.next();
-			if (value.equals(sm.getValue(sc.getRow(), sc.getCol())))
-				return sc;
-		}
-		return null;
-	}
-	
-	public int findValueInRow(int row, Integer value)
-	{
-		SudokuCoords sc = findValueInLine(row, value, SubStructures.ROW);
-		if (sc!=null) return sc.getCol();
-		return -1;
-	}
-	
-	public SudokuCoords findValueInBlock(SudokuCoords block1stRowCol, Integer value)
-	{
-		SudokuIteratorBlock sib = new SudokuIteratorBlock(sm.getSize(), sm.getBlockSize(), block1stRowCol);
-		while (sib.hasNext())
-		{
-			SudokuCoords sc = sib.next();
-			if (value.equals(sm.getValue(sc)))
-				return sc;
-		}
-		return null;
-	}
-*/
-	
 	public LinkedList<SudokuFieldValues> findSiblingsInRows(int rowBlock, // 0,1,2
 								  				Integer number)
 	{
@@ -160,48 +125,26 @@ public class SudokuHelper {
 		
 		if (number.intValue()<0) return ll;
 		
-		// Suche in Zeile
-		for (int j=0; j<sm.getSize(); j++)
+		for (final SudokuIterator.SubStructures subStruct : SudokuIterator.SubStructures.REAL)
 		{
-			if (j==col) continue;
-			if (number.equals(sm.getValue(row, j)))
+			SudokuCoords subStructBase = 
+					SudokuIterator.getSubStructBase(sm.getBlockSize(), new SudokuCoords(row,col), subStruct);
+			SudokuIterator si = SudokuIterator.createIterator(sm.getSize(), sm.getBlockSize(), subStructBase, subStruct);
+			while (si.hasNext())
 			{
-				LinkedList<Integer> llI = new LinkedList<Integer>();
-				llI.add(number);
-				ll.add(new SudokuFieldValues(row, j, llI));
-			}
-		}
-		
-		// Suche in Spalte
-		for (int i=0; i<sm.getSize(); i++)
-		{
-			if (i==row) continue;
-			if (number.equals(sm.getValue(i, col)))
-			{
-				LinkedList<Integer> llI = new LinkedList<Integer>();
-				llI.add(number);
-				ll.add(new SudokuFieldValues(i, col, llI));
-			}
-		}
-		
-		// Suche in Block
-		int iBlockCoords[] = blockCoords(row, col);
-		for (int i=iBlockCoords[0]*sm.getBlockSize(); i<(iBlockCoords[0]+1)*sm.getBlockSize(); i++ )
-			for (int j=iBlockCoords[1]*sm.getBlockSize(); j<(iBlockCoords[1]+1)*sm.getBlockSize(); j++)
-			{
-				if (i==row && j==col) continue;
-				if (number.equals(sm.getValue(i,j)))
+				SudokuCoords sc = si.next();
+				if (sc.equals(new SudokuCoords(row,col))) continue;
+				if (number.equals(sm.getValue(sc)))
 				{
 					LinkedList<Integer> llI = new LinkedList<Integer>();
 					llI.add(number);
-					SudokuFieldValues sfv = new SudokuFieldValues(i, j, llI);
+					SudokuFieldValues sfv = new SudokuFieldValues(sc.getRow(), sc.getCol(), llI);
 					if (!ll.contains(sfv))
-						ll.add(new SudokuFieldValues(i, j, llI));
+						ll.add(sfv);
 				}
 			}
+		}
 		return ll;
 	}
-
-
 	
 }

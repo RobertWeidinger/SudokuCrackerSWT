@@ -26,5 +26,9 @@ public class SudokuIteratorRow extends SudokuIterator {
 		return result;
 	}
 
+	public static SudokuCoords getSubStructBase(SudokuCoords sc) {
+		return new SudokuCoords(sc.getRow(),0);
+	}
+
 }
 

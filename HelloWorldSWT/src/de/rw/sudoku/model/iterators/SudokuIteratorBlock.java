@@ -5,9 +5,7 @@ import de.rw.sudoku.model.SudokuCoords;
 public class SudokuIteratorBlock extends SudokuIterator {
 
 	private SudokuCoords current;
-	//private int sudokuBlockSize;
 	private SudokuCoords blockStart=null;
-	//private SudokuCoords start;
 	
 	public static SudokuCoords getBlockStartStatic(int _sudokuBlockSize, SudokuCoords _start)
 	{
@@ -42,6 +40,11 @@ public class SudokuIteratorBlock extends SudokuIterator {
 		else 
 			current = new SudokuCoords(current.getRow(), current.getCol()+1);
 		return result;
+	}
+
+	public static SudokuCoords getSubStructBase(int sudokuBlockSize, SudokuCoords sc) {
+		// TODO Auto-generated method stub
+		return getBlockStartStatic(sudokuBlockSize, sc);
 	}
 	
 }

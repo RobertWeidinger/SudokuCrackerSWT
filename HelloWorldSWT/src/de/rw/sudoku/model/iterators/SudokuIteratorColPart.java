@@ -10,7 +10,7 @@ public class SudokuIteratorColPart extends SudokuIterator {
 	public SudokuIteratorColPart(int sudokuSize, int sudokuBlockSize,
 			SudokuCoords start) {
 		super(sudokuSize, sudokuBlockSize, start);
-		colPartStart = new SudokuCoords(start.getRow()/sudokuBlockSize*sudokuBlockSize, start.getCol());
+		colPartStart = getSubStructBase(sudokuBlockSize, start);
 		current = start;
 	}
 
@@ -29,37 +29,10 @@ public class SudokuIteratorColPart extends SudokuIterator {
 		return result;
 	}
 
-}
-
-/*
- 
-public class SudokuIteratorRowPart extends SudokuIterator {
-
-	private SudokuCoords rowPartStart;
-	private SudokuCoords current;
-	
-	public SudokuIteratorRowPart(int sudokuSize, int sudokuBlockSize,
-			SudokuCoords start) {
-		super(sudokuSize, sudokuBlockSize, start);
-		rowPartStart = new SudokuCoords(start.getRow(), start.getCol()/sudokuBlockSize*sudokuBlockSize);
-		current = start;
-	}
-
-	@Override
-	public boolean hasNext() {
-		if (current.getCol()>=rowPartStart.getCol()/getSudokuBlockSize()*(getSudokuBlockSize()+1))
-			return false;
-		return true;
-	}
-
-	@Override
-	public SudokuCoords next() {
-		if (!hasNext()) return null;
-		SudokuCoords result = current;
-		current = new SudokuCoords(current.getRow(),current.getCol()+1);
-		return result;
+	public static SudokuCoords getSubStructBase(int blockSize, SudokuCoords sc) {
+		// TODO Auto-generated method stub
+		return new SudokuCoords(sc.getRow()/blockSize*blockSize, sc.getCol());
 	}
 
 }
 
-*/

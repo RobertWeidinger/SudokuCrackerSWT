@@ -36,4 +36,9 @@ public class SudokuIteratorWhole extends SudokuIterator {
 		return result;
 	}
 
+	public static SudokuCoords getSubStructBase(SudokuCoords sc) {
+		// TODO Auto-generated method stub
+		return new SudokuCoords(0,0);
+	}
+
 }
