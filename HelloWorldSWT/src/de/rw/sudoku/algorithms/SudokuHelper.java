@@ -31,43 +31,6 @@ public class SudokuHelper {
 		return scResult;
 	}
 	
-	public LinkedList<SudokuFieldValues> findSiblingsInRows(int rowBlock, // 0,1,2
-								  				Integer number)
-	{
-		LinkedList<SudokuFieldValues> res = new LinkedList<SudokuFieldValues>();
-		for (int i=rowBlock*sm.getBlockSize(); i<(rowBlock+1)*sm.getBlockSize();i++)
-		{
-			for (int j=0; j<sm.getSize(); j++)
-				if (number.equals(sm.getValue(i, j)))
-				{
-					SudokuFieldValues sfv = new SudokuFieldValues(i, j);
-					sfv.addValue(number);
-					res.add(sfv);
-				}
-		}
-		if (res.size()<2)
-			res.clear();
-		return res;
-	}
-	
-	public LinkedList<SudokuFieldValues> findSiblingsInCols(int colBlock, // 0,1,2
-				Integer number)
-	{
-		LinkedList<SudokuFieldValues> res = new LinkedList<SudokuFieldValues>();
-		for (int c=colBlock*sm.getBlockSize(); c<(colBlock+1)*sm.getBlockSize();c++)
-			{
-			for (int r=0; r<sm.getSize(); r++)
-				if (number.equals(sm.getValue(r, c)))
-				{
-				SudokuFieldValues sfv = new SudokuFieldValues(r, c);
-				sfv.addValue(number);
-				res.add(sfv);
-				}
-			}
-		if (res.size()<2)
-		res.clear();
-		return res;
-	}
 	
 	public int findUniquePlaceForValueInRowPart(int row, int startCol, Integer value)
 	{

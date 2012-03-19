@@ -1,6 +1,7 @@
-package de.rw.sudoku.algorithms;
+package de.rw.sudoku.zUnused;
 import java.util.LinkedList;
 
+import de.rw.sudoku.algorithms.SudokuHelper;
 import de.rw.sudoku.model.SudokuFieldValues;
 import de.rw.sudoku.model.SudokuModel;
 

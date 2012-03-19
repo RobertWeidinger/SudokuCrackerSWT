@@ -8,7 +8,6 @@ import de.rw.sudoku.views.BruteForceAlgorithmButton;
 import de.rw.sudoku.views.FixButton;
 import de.rw.sudoku.views.LoadFileButton;
 import de.rw.sudoku.views.QuitButton;
-import de.rw.sudoku.views.SiblingAlgorithmButton;
 import de.rw.sudoku.views.SudokuDumpView;
 import de.rw.sudoku.views.SudokuView;
 import de.rw.sudoku.views.UndoButton;
@@ -62,8 +61,6 @@ public class SudokuCrackerSWT {
         
         new UndoButton					(shell, SWT.PUSH, sm, 500, 300, 80, 30);
 
-        new SiblingAlgorithmButton		(shell, SWT.PUSH, sm, 500, 400, 80, 30);
-        
         new BruteForceAlgorithmButton	(shell, SWT.PUSH, sm, 500, 500, 80, 30);
         
         new QuitButton					(shell, SWT.PUSH, sm, 500, 600, 80, 30);

@@ -7,7 +7,6 @@ import org.junit.runners.Suite.SuiteClasses;
 import de.rw.sudokutest.algorithms.SudokuBruteForceCrackerTest;
 import de.rw.sudokutest.algorithms.SudokuFileReaderTest;
 import de.rw.sudokutest.algorithms.SudokuHelperTest;
-import de.rw.sudokutest.algorithms.SudokuSiblingCrackerTest;
 import de.rw.sudokutest.crackerMain.SudokuCrackerSWTTest;
 import de.rw.sudokutest.model.SudokuFieldValuesTest;
 import de.rw.sudokutest.model.SudokuModelTest;
@@ -30,7 +29,6 @@ import de.rw.sudokutest.zUnused.SudokuScannerForBlockTest;
 	SudokuViewTest.class, 
 	SudokuFileReaderTest.class,
 	SudokuFieldValuesTest.class,
-	SudokuSiblingCrackerTest.class,
 	SudokuScannerForBlockTest.class,
 	SudokuIteratorTest.class,
 	SudokuIteratorWholeTest.class,

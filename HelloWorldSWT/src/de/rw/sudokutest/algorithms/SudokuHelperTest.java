@@ -27,40 +27,6 @@ public class SudokuHelperTest extends TestCase {
 	}
 
 	@Test
-	public void testFindSiblingsInRows() {
-		LinkedList<SudokuFieldValues> ll = sh.findSiblingsInRows(0, 9);
-		Assert.assertEquals(2, ll.size());
-		SudokuFieldValues sfv = ll.getFirst();
-		Assert.assertEquals(0, sfv.getRow());
-		Assert.assertEquals(0, sfv.getCol());
-		Assert.assertEquals(9, sfv.getValues().getFirst().intValue());
-		sfv = ll.getLast();
-		Assert.assertEquals(2, sfv.getRow());
-		Assert.assertEquals(8, sfv.getCol());
-		Assert.assertEquals(9, sfv.getValues().getFirst().intValue());
-		
-		ll = sh.findSiblingsInRows(0, 8);
-		Assert.assertEquals(0,ll.size());
-	}
-
-	@Test
-	public void testFindSiblingsInCols() {
-		LinkedList<SudokuFieldValues> ll = sh.findSiblingsInCols(2, 1);
-		Assert.assertEquals(2, ll.size());
-		SudokuFieldValues sfv = ll.getFirst();
-		Assert.assertEquals(0, sfv.getRow());
-		Assert.assertEquals(7, sfv.getCol());
-		Assert.assertEquals(1, sfv.getValues().getFirst().intValue());
-		sfv = ll.getLast();
-		Assert.assertEquals(8, sfv.getRow());
-		Assert.assertEquals(8, sfv.getCol());
-		Assert.assertEquals(1, sfv.getValues().getFirst().intValue());
-		
-		ll = sh.findSiblingsInCols(0, 8);
-		Assert.assertEquals(0,ll.size());
-	}
-
-	@Test
 	public void testFindUniquePlaceForValueInRowPart() {
 		int res = sh.findUniquePlaceForValueInRowPart(5, 3, 8);
 		Assert.assertEquals(3, res);
