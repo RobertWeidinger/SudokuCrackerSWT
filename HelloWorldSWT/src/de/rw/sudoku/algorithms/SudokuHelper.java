@@ -15,6 +15,22 @@ public class SudokuHelper {
 	public SudokuHelper(SudokuModel _sm)
 	{sm=_sm;}
 	
+	public SudokuCoords findValueInSubStruct(SudokuCoords start,
+			SubStructures type, Integer value) {
+		SudokuIterator si = SudokuIterator.createIterator(sm.getSize(), sm.getBlockSize(), start, type);
+		SudokuCoords scResult = null;
+		while (si.hasNext())
+		{
+			SudokuCoords sc = si.next();
+			if (value.equals(sm.getValue(sc)))
+			{
+				scResult = sc;
+				break;
+			}
+		}
+		return scResult;
+	}
+	
 	public LinkedList<SudokuFieldValues> findSiblingsInRows(int rowBlock, // 0,1,2
 								  				Integer number)
 	{

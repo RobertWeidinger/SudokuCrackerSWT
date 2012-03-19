@@ -4,6 +4,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
 import de.rw.sudoku.model.SudokuModel;
+import de.rw.sudoku.views.BruteForceAlgorithmButton;
 import de.rw.sudoku.views.FixButton;
 import de.rw.sudoku.views.LoadFileButton;
 import de.rw.sudoku.views.QuitButton;
@@ -55,15 +56,17 @@ public class SudokuCrackerSWT {
         sdv.update();
         
         
-        new LoadFileButton(shell, SWT.PUSH, sm, 500, 100, 80, 30);
+        new LoadFileButton				(shell, SWT.PUSH, sm, 500, 100, 80, 30);
                 
-        new FixButton(shell, SWT.PUSH, sm, 500, 200, 80, 30);
+        new FixButton					(shell, SWT.PUSH, sm, 500, 200, 80, 30);
         
-        new UndoButton(shell, SWT.PUSH, sm, 500, 300, 80, 30);
+        new UndoButton					(shell, SWT.PUSH, sm, 500, 300, 80, 30);
 
-        new SiblingAlgorithmButton(shell, SWT.PUSH, sm, 500, 400, 80, 30);
+        new SiblingAlgorithmButton		(shell, SWT.PUSH, sm, 500, 400, 80, 30);
         
-        new QuitButton(shell, SWT.PUSH, sm, 500, 500, 80, 30);
+        new BruteForceAlgorithmButton	(shell, SWT.PUSH, sm, 500, 500, 80, 30);
+        
+        new QuitButton					(shell, SWT.PUSH, sm, 500, 600, 80, 30);
         
 
     }

@@ -25,28 +25,7 @@ public class SudokuHelperTest extends TestCase {
 		sm = SudokuModel.createTestModel1();
 		sh = new SudokuHelper(sm);
 	}
-/*
-	@Test
-	public void testFindValueInRow() {
-		int col = sh.findValueInRow(2, 3);
-		Assert.assertEquals(-1, col);
-		col = sh.findValueInRow(4, 5);
-		Assert.assertEquals(4,col);
-	}
 
-	@Test
-	public void testFindValueInBlock() {
-		//System.out.println(sm.toStringWithFlags());
-		SudokuCoords sc =sh.findValueInBlock(new SudokuCoords(3, 0), 3);
-		Assert.assertEquals(3, sc.getRow());
-		Assert.assertEquals(2, sc.getCol());
-		sc=sh.findValueInBlock(new SudokuCoords(6, 3), 3);
-		Assert.assertNull(sc);
-		sc=sh.findValueInBlock(new SudokuCoords(6, 3), 6);
-		Assert.assertEquals(6, sc.getRow());
-		Assert.assertEquals(5, sc.getCol());
-	}
-*/	
 	@Test
 	public void testFindSiblingsInRows() {
 		LinkedList<SudokuFieldValues> ll = sh.findSiblingsInRows(0, 9);

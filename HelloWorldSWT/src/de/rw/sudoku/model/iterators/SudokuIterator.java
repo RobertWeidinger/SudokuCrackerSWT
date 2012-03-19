@@ -82,6 +82,24 @@ public abstract class SudokuIterator implements Iterator<SudokuCoords> {
 		}
 		return si;
 	}
+	
+	public static SudokuIterator createIteratorSubStruct(int size, int blockSize, SubStructures type)
+	{
+		SudokuIterator si=null;
+		switch (type)
+		{
+		case ROW:
+			si = new SubStructIteratorRows(size,blockSize);
+			break;
+		case COL:
+			si = new SubStructIteratorCols(size, blockSize);
+			break;
+		case BLOCK:
+			si = new SubStructIteratorBlocks(size, blockSize);
+			break;
+		}
+		return si;
+	}
  	
 	public static SudokuCoords getSubStructBase(int blockSize, SudokuCoords sc, SubStructures type)
 	{
