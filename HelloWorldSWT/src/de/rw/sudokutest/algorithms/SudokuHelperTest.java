@@ -20,6 +20,7 @@ public class SudokuHelperTest extends TestCase {
 	private SudokuModel sm;
 	private SudokuHelper sh;
 
+	@Override
 	@Before
 	public void setUp() throws Exception {
 		sm = SudokuModel.createTestModel1();

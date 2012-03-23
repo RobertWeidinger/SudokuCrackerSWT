@@ -1,6 +1,9 @@
 package de.rw.sudoku.model;
 
-public class SudokuCoords {
+public class SudokuCoords implements Comparable<SudokuCoords>{
+	
+	private final static int COMPCONST = 100;
+
 	private int row;
 	private int col;
 	public SudokuCoords(int row, int col) {
@@ -22,8 +25,18 @@ public class SudokuCoords {
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
-		return "[" + getRow() + ","+ getCol()+"]";
+		return "(" + getRow() + ","+ getCol()+")";
+	}
+	@Override
+	public int compareTo(SudokuCoords sc2) {
+		// TODO Auto-generated method stub
+		int cThis = this.getRow()*COMPCONST+this.getCol();
+		int cSc2 = sc2.getRow()*COMPCONST+sc2.getCol();
+		if (cThis<cSc2) return -1;
+		if (cThis>cSc2) return 1;
+		return 0;
 	}
 
+	
 	
 }

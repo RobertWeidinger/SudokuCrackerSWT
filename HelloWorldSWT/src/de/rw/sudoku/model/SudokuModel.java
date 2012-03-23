@@ -228,6 +228,7 @@ public class SudokuModel implements Model {
 		return getSudokuEntry(row, col).getPossibleValues();
 	}
 	
+	@Override
 	public String toString()
 	{
 		String s = new String();
