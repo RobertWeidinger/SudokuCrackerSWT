@@ -69,6 +69,18 @@ public class PossiblePlacesList {
 			return numOfPlaces;
 		return -1;
 	}
+	
+	public static List<PossiblePlacesList> reduceToImportantClusters(List<PossiblePlacesList> lppl)
+	{
+		Iterator<PossiblePlacesList> it = lppl.iterator();
+		while (it.hasNext())
+		{
+			PossiblePlacesList ppl = it.next();
+			if (ppl.isNCluster()<=0)
+				it.remove();
+		}
+		return lppl;
+	}
 
 	public PossiblePlaces get(int index)
 	{

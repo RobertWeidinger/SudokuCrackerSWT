@@ -6,6 +6,7 @@ import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import de.rw.sudoku.model.SudokuCoords;
 import de.rw.sudoku.model.SudokuModel;
 
 
@@ -75,15 +76,31 @@ public class SudokuModelTest {
 	@Test
 	public void testRemovePossibleValue() {
 		sm.setFixedValue(3,2,5);
-		sm.addPossibleValue(3,2,1);
-		sm.addPossibleValue(3,2,2);
-		sm.addPossibleValue(3,2,3);
-		sm.removePossibleValue(3,2,2);
-		ArrayList<Integer> alPossibleValues = sm.getPossibleValues(3,2);
+		sm.addBlockingValue(3,2,1);
+		sm.addBlockingValue(3,2,2);
+		sm.addBlockingValue(3,2,3);
+		sm.removeBlockingValue(3,2,2);
+		ArrayList<Integer> alPossibleValues = sm.getBlockingValues(3,2);
 		Assert.assertEquals(2, alPossibleValues.size());
 		Integer i0 = alPossibleValues.get(0);
 		Integer i1 = alPossibleValues.get(1);
 		Assert.assertEquals(1, i0.intValue());
 		Assert.assertEquals(3, i1.intValue());
+	}
+	
+	@Test
+	public void testEqualBlockingValues()
+	{
+		sm.addBlockingValue(3, 2, 1);
+		sm.addBlockingValue(3, 2, 2);
+		sm.addBlockingValue(3, 2, 5);
+		sm.addBlockingValue(0, 5, 5);
+		sm.addBlockingValue(0, 5, 1);
+		sm.addBlockingValue(0, 5, 2);
+		boolean bEqual = sm.equalBlockingValues(new SudokuCoords(3,2), new SudokuCoords(0,5));
+		Assert.assertTrue(bEqual);
+		sm.removeBlockingValue(3, 2, 2);
+		bEqual = sm.equalBlockingValues(new SudokuCoords(3,2), new SudokuCoords(0,5));
+		Assert.assertFalse(bEqual);
 	}
 }

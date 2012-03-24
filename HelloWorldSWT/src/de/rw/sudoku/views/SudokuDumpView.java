@@ -50,7 +50,7 @@ public class SudokuDumpView implements View {
 		Text _t = new Text(getParent(), SWT.READ_ONLY | SWT.MULTI);
 		setText(_t);
 		getText().setSize(200,400);
-		getText().setLocation(700,30);
+		getText().setLocation(850,30);
 		getText().setBackground(new Color(getParent().getBackground().getDevice(),220,220,220));
 		getModel().registerView(this);
 	}

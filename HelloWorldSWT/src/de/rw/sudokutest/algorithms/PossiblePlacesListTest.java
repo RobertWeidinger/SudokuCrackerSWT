@@ -64,5 +64,19 @@ public class PossiblePlacesListTest {
 		pplLoc = lppl.get(1);
 		Assert.assertEquals(-1,pplLoc.isNCluster());
 	}
+	
+	@Test
+	public void testReduceToImportantClusters()
+	{
+		List<PossiblePlacesList> lppl = ppl.getClusters();
+		lppl = PossiblePlacesList.reduceToImportantClusters(lppl);
+		Assert.assertEquals(1, lppl.size());
+		PossiblePlacesList pplLoc = lppl.get(0);
+		Assert.assertEquals(6,pplLoc.get(0).getValue().intValue());
+		Assert.assertEquals(2,pplLoc.get(0).getNumberOfPlaces().intValue());
+		Assert.assertEquals(7,pplLoc.get(1).getValue().intValue());
+		Assert.assertEquals(2,pplLoc.get(1).getNumberOfPlaces().intValue());
+	}
+	
 
 }

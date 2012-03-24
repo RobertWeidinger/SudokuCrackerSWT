@@ -1,6 +1,6 @@
 package de.rw.sudoku.algorithms;
 
-import java.util.LinkedList;
+import java.util.List;
 
 import de.rw.sudoku.model.SudokuCoords;
 import de.rw.sudoku.model.SudokuFieldValues;
@@ -21,6 +21,7 @@ public class SudokuBruteForceCracker {
 
 	public int bruteForceOnSubStruct(SudokuCoords start, SubStructures type)
 	{
+		System.out.println("SudokuBruteForceCracker.bruteForceOnSubStruct("+ start + "," + type + ")");
 		int iNumOfValuesFound = 0;
 		for (int value=1; value<=sm.getSize(); value++)
 		{
@@ -32,9 +33,12 @@ public class SudokuBruteForceCracker {
 			while (si.hasNext())
 			{
 				SudokuCoords sc = si.next();
-				if (!sm.isEmpty(sc))
+				boolean isEmpty = sm.isEmpty(sc);
+				boolean isBlocked = sm.isBlocked(sc);
+				boolean blockingValuesContainValue = sm.getBlockingValues(sc.getRow(), sc.getCol()).contains(value);
+				if (!isEmpty || (isBlocked && !blockingValuesContainValue))
 					continue;
-				LinkedList<SudokuFieldValues> llSfv = sh.findConflicts(sc.getRow(), sc.getCol(), value);
+				List<SudokuFieldValues> llSfv = sh.findConflicts(sc.getRow(), sc.getCol(), value);
 				if (llSfv.isEmpty())
 				{
 					iCountFieldsWithoutConflict++;
@@ -45,6 +49,7 @@ public class SudokuBruteForceCracker {
 			}
 			if (iCountFieldsWithoutConflict==1)
 			{
+				System.out.println("sm.setSuggestedValue(" +scWithoutConflicts + " ,"+ value +");");
 				sm.setSuggestedValue(scWithoutConflicts, value);
 				iNumOfValuesFound++;
 			}
@@ -54,6 +59,7 @@ public class SudokuBruteForceCracker {
 
 	public int oneIteration()
 	{
+		System.out.println("SudokuBruteForceCracker.oneIteration()");
 		int res = 0;
 
 		for (final SudokuIterator.SubStructures subStruct : SudokuIterator.SubStructures.REAL)

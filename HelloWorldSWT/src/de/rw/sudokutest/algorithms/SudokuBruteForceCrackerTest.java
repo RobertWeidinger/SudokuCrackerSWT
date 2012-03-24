@@ -45,6 +45,8 @@ public class SudokuBruteForceCrackerTest {
 		Assert.assertEquals(9, sm.getValue(7,1).intValue());
 		Assert.assertEquals(2, sm.getValue(8,3).intValue());
 		Assert.assertEquals(3, sm.getValue(4,7).intValue());
+		sbfc.oneIteration();
+		Assert.assertEquals(2, sm.getValue(4,2).intValue());
 	}
 
 }

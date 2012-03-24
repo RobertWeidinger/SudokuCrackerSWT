@@ -18,6 +18,7 @@ public class SudokuView implements View {
 	private Color colorEditable;
 	private Color colorFixed;
 	private Color colorError;
+	private Color colorBlocked;
 	
 	public Composite getParent() {
 		return parent;
@@ -34,6 +35,10 @@ public class SudokuView implements View {
 	public Color getColorError() {
 		return colorError;
 	}
+	
+	public Color getColorBlocked() {
+		return colorBlocked;
+	}
 
 	private static Point textSize=new Point(30,30);
 	private static int textInterspace=10;
@@ -47,6 +52,7 @@ public class SudokuView implements View {
 		colorEditable =new Color(parent.getBackground().getDevice(),255,255,255);
 		colorFixed = new Color(parent.getBackground().getDevice(),128,255,128);
 		colorError = new Color(parent.getBackground().getDevice(),128,128,255);
+		colorBlocked = new Color(parent.getBackground().getDevice(),255,166,166);
 		int additionalRowSpace=0;
 		for (int i=0; i<sm.getSize(); i++)
 		{
@@ -87,6 +93,8 @@ public class SudokuView implements View {
 					sut.setPropertiesFixed();
 				else if (!sm.isValidModel(i, j))
 					sut.setPropertiesError();
+				else if (sm.isBlocked(i, j))
+					sut.setPropertiesBlocked();
 				else
 					sut.setPropertiesEditable();
 				

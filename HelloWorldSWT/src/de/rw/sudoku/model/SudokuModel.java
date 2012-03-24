@@ -3,6 +3,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Vector;
 
+import de.rw.sudoku.model.iterators.SudokuIterator;
+import de.rw.sudoku.model.iterators.SudokuIterator.SubStructures;
 import de.rw.sudoku.views.View;
 
 
@@ -80,6 +82,11 @@ public class SudokuModel implements Model {
 	{
 		if (!inBounds(i,j)) return null;
 		return arraySudokuEntries.get(i).get(j);
+	}
+	
+	private SudokuEntry getSudokuEntry(SudokuCoords sc)
+	{
+		return getSudokuEntry(sc.getRow(), sc.getCol());
 	}
 	
 	public static final int FIXED=1;
@@ -198,6 +205,17 @@ public class SudokuModel implements Model {
 		return isEmpty(sc.getRow(),sc.getCol());
 	}
 	
+	public boolean isBlocked(int row, int col)
+	{
+		return getSudokuEntry(row,col).isBlocked();
+	}
+	
+	public boolean isBlocked(SudokuCoords sc)
+	{
+		return isBlocked(sc.getRow(), sc.getCol());
+	}
+	
+	
 	
 	public void undo()
 	{
@@ -213,19 +231,36 @@ public class SudokuModel implements Model {
 		return getSudokuEntry(row, col).toDisplayString(1, getSize());
 	}
 	
-	public void addPossibleValue(int row, int col, int value)
+	public void addBlockingValue(int row, int col, int value)
 	{
-		getSudokuEntry(row, col).addPossibleValue(value);
+		getSudokuEntry(row, col).addBlockingValue(value);
+		updateViews();
 	}
 	
-	public void removePossibleValue(int row, int col, int value)
+	public void removeBlockingValue(int row, int col, int value)
 	{
-		getSudokuEntry(row, col).removePossibleValue(value);
+		getSudokuEntry(row, col).removeBlockingValue(value);
 	}
 	
-	public ArrayList<Integer> getPossibleValues(int row, int col)
+	public ArrayList<Integer> getBlockingValues(int row, int col)
 	{
-		return getSudokuEntry(row, col).getPossibleValues();
+		return getSudokuEntry(row, col).getBlockingValues();
+	}
+	
+	public void clearBlockingValues()
+	{
+		SudokuIterator it = SudokuIterator.createIterator(getSize(), getBlockSize(), new SudokuCoords(0,0), SubStructures.WHOLE);
+		while (it.hasNext())
+		{
+			SudokuCoords sc = it.next();
+			this.getSudokuEntry(sc.getRow(), sc.getCol()).clearBlockingValues();
+		}
+		updateViews();
+	}
+	
+	public boolean equalBlockingValues(SudokuCoords sc1, SudokuCoords sc2)
+	{
+		return getSudokuEntry(sc1).equalBlockingValues(getSudokuEntry(sc2));
 	}
 	
 	@Override
@@ -260,8 +295,9 @@ public class SudokuModel implements Model {
 			for (int j=0; j<this.size; j++)
 			{
 				SudokuEntry se = this.getSudokuEntry(i, j);
-				if (se.isEmpty()) s+=" _";
+				if (se.isBlocked()) s+=" B";
 				else if (se.isFixed()) s+=" F";
+				else if (se.isEmpty()) s+=" _";
 				else s+=" S";
 			}
 			s+="\n";

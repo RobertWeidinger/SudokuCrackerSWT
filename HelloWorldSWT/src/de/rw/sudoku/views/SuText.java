@@ -75,6 +75,12 @@ public class SuText {
 		this.getText().setBackground(sv.getColorError());
 		this.getText().setEditable(true);
 	}
+	
+	public void setPropertiesBlocked()
+	{
+		this.getText().setBackground(sv.getColorBlocked());
+		this.getText().setEditable(false);
+	}
 
 	public void setSize(Point size)
 	{
