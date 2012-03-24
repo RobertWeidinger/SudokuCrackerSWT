@@ -107,16 +107,12 @@ public class PossiblePlacesAlgorithm {
 
 	}
 
-	private boolean blockingValuesEqualClusterValues(PossiblePlacesList ppl,
-			SudokuCoords sc) {
-		// <FEHLT: wenn bei sc die blocking Values genau denen des Clusters entsprechen ==> doIt bleibt true >
+	private boolean blockingValuesEqualClusterValues(PossiblePlacesList ppl, SudokuCoords sc) {
 		boolean blockingValuesEqualClusterValues = false;
 		ArrayList<Integer> alBlockingValuesAtSc = sm.getBlockingValues(sc.getRow(), sc.getCol());
-		// Collections.sort(alBlockingValuesAtSc);
 		ArrayList<Integer> alValuesOfPPL = new ArrayList<Integer>();
 		for (int j=0; j<ppl.size(); j++)
 			alValuesOfPPL.add(ppl.get(j).getValue());
-		// Collections.sort(alValuesOfPPL);
 		if (alBlockingValuesAtSc.containsAll(alValuesOfPPL) && alValuesOfPPL.containsAll(alBlockingValuesAtSc))
 			blockingValuesEqualClusterValues = true;
 		return blockingValuesEqualClusterValues;
