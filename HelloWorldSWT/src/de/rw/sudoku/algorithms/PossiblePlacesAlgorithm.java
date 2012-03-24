@@ -15,6 +15,11 @@ public class PossiblePlacesAlgorithm {
 		sm=_sm;
 	}
 	
+	private void log(String s)
+	{
+		// System.out.println(s);
+	}
+	
 	public List<PossiblePlacesList> findPossiblePlacesClustersOnSubStruct(SudokuCoords subStructStart, SubStructures type)
 	{
 		PossiblePlacesList ppl = new PossiblePlacesList();
@@ -29,8 +34,12 @@ public class PossiblePlacesAlgorithm {
 			while (si.hasNext())
 			{
 				SudokuCoords sc = si.next();
-				if (sm.isEmpty(sc) && !sm.isBlocked(sc) && sh.findConflicts(sc.getRow(), sc.getCol(), value).size()==0)
-					pp.addSudokuCoords(sc);
+				//if (sm.isEmpty(sc) && !sm.isBlocked(sc) && sh.findConflicts(sc.getRow(), sc.getCol(), value).size()==0)
+				if (!sm.isEmpty(sc)) continue;
+				if (sm.isBlocked(sc) && !sm.getBlockingValues(sc.getRow(), sc.getCol()).contains(value)) continue;
+				if (sh.findConflicts(sc.getRow(), sc.getCol(), value).size()>0) continue;
+				
+				pp.addSudokuCoords(sc);
 			}
 			ppl.addValueAndPossiblePlaces(pp);
 		}
@@ -42,30 +51,52 @@ public class PossiblePlacesAlgorithm {
 
 	public int oneIteration()
 	{
+		log("====== PossiblePlacesAlgorithm.oneIteration() ======");
 		int res = 0;
 
 		for (final SudokuIterator.SubStructures subStruct : SudokuIterator.SubStructures.REAL) // Schleife über Typen ROW, COL, BLOCK
 		{
+			log("== Schleife über "+ subStruct +"s ==");
 			// Temporär start
-			if (!subStruct.equals(SudokuIterator.SubStructures.BLOCK)) continue;
+			// if (!subStruct.equals(SudokuIterator.SubStructures.BLOCK)) continue;
 			// Temporär ende
 			SudokuIterator subStructIt = 
 					SudokuIterator.createIteratorSubStruct(sm.getSize(), sm.getBlockSize(), subStruct);
 			while (subStructIt.hasNext()) // Schleife über die Rows oder die Cols oder die Blocks
 			{
 				SudokuCoords scStart = subStructIt.next();
+				log("= "+subStruct+"["+scStart+"] = Schleife über Cluster");
 				List<PossiblePlacesList> lppl = findPossiblePlacesClustersOnSubStruct(scStart, subStruct); // Liste von Clustern
 				Iterator<PossiblePlacesList> itCluster = lppl.iterator();
 				while (itCluster.hasNext()) // Schleife über die Cluster
 				{
 					PossiblePlacesList ppl = itCluster.next();
-					for (int i=0; i<ppl.size(); i++) // Schleife über die Elemente eines Clusters
+					log("Cluster= "+ppl);
+					boolean doIt = true;
+					for (int i=0; i<ppl.size(); i++) // Schleife über die Elemente eines Clusters, prüfen ob Konflikte mit bereits blockierten Feldern
 					{
 						PossiblePlaces pp = ppl.get(i);
 						Iterator<SudokuCoords> scIt = pp.getListSudokuCoords().iterator();
 						while (scIt.hasNext())
 						{
 							SudokuCoords sc = scIt.next();
+							if (sm.isBlocked(sc))
+							{
+								log("Konflikt mit BlockedValues bei "+sc+". Kein Eintrag des Clusters.");
+								doIt = false;
+							}
+						}
+					}
+					if (!doIt) continue;
+					
+					for (int i=0; i<ppl.size(); i++) // Schleife über die Elemente eines Clusters, blockingValues setzen.
+					{
+						PossiblePlaces pp = ppl.get(i);
+						Iterator<SudokuCoords> scIt = pp.getListSudokuCoords().iterator();
+						while (scIt.hasNext())
+						{
+							SudokuCoords sc = scIt.next();
+							log("sm.addBlockingValue("+sc.getRow()+", "+sc.getCol()+", "+pp.getValue()+");");
 							sm.addBlockingValue(sc.getRow(), sc.getCol(), pp.getValue());
 							res++;
 						}

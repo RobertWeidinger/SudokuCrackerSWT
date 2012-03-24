@@ -19,9 +19,14 @@ public class SudokuBruteForceCracker {
 		this.sh = new SudokuHelper(this.sm);
 	}
 
+	private void log(String s)
+	{
+		// System.out.println(s);
+	}
+
 	public int bruteForceOnSubStruct(SudokuCoords start, SubStructures type)
 	{
-		System.out.println("SudokuBruteForceCracker.bruteForceOnSubStruct("+ start + "," + type + ")");
+		log("SudokuBruteForceCracker.bruteForceOnSubStruct("+ start + "," + type + ")");
 		int iNumOfValuesFound = 0;
 		for (int value=1; value<=sm.getSize(); value++)
 		{
@@ -49,7 +54,7 @@ public class SudokuBruteForceCracker {
 			}
 			if (iCountFieldsWithoutConflict==1)
 			{
-				System.out.println("sm.setSuggestedValue(" +scWithoutConflicts + " ,"+ value +");");
+				log("sm.setSuggestedValue(" +scWithoutConflicts + " ,"+ value +");");
 				sm.setSuggestedValue(scWithoutConflicts, value);
 				iNumOfValuesFound++;
 			}
@@ -59,7 +64,7 @@ public class SudokuBruteForceCracker {
 
 	public int oneIteration()
 	{
-		System.out.println("SudokuBruteForceCracker.oneIteration()");
+		log("SudokuBruteForceCracker.oneIteration()");
 		int res = 0;
 
 		for (final SudokuIterator.SubStructures subStruct : SudokuIterator.SubStructures.REAL)
