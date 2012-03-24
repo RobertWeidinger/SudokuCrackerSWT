@@ -1,5 +1,6 @@
 package de.rw.sudoku.algorithms;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -34,7 +35,6 @@ public class PossiblePlacesAlgorithm {
 			while (si.hasNext())
 			{
 				SudokuCoords sc = si.next();
-				//if (sm.isEmpty(sc) && !sm.isBlocked(sc) && sh.findConflicts(sc.getRow(), sc.getCol(), value).size()==0)
 				if (!sm.isEmpty(sc)) continue;
 				if (sm.isBlocked(sc) && !sm.getBlockingValues(sc.getRow(), sc.getCol()).contains(value)) continue;
 				if (sh.findConflicts(sc.getRow(), sc.getCol(), value).size()>0) continue;
@@ -57,9 +57,6 @@ public class PossiblePlacesAlgorithm {
 		for (final SudokuIterator.SubStructures subStruct : SudokuIterator.SubStructures.REAL) // Schleife über Typen ROW, COL, BLOCK
 		{
 			log("== Schleife über "+ subStruct +"s ==");
-			// Temporär start
-			// if (!subStruct.equals(SudokuIterator.SubStructures.BLOCK)) continue;
-			// Temporär ende
 			SudokuIterator subStructIt = 
 					SudokuIterator.createIteratorSubStruct(sm.getSize(), sm.getBlockSize(), subStruct);
 			while (subStructIt.hasNext()) // Schleife über die Rows oder die Cols oder die Blocks
@@ -82,6 +79,8 @@ public class PossiblePlacesAlgorithm {
 							SudokuCoords sc = scIt.next();
 							if (sm.isBlocked(sc))
 							{
+								if (blockingValuesEqualClusterValues(ppl, sc)) continue;
+								
 								log("Konflikt mit BlockedValues bei "+sc+". Kein Eintrag des Clusters.");
 								doIt = false;
 							}
@@ -106,6 +105,21 @@ public class PossiblePlacesAlgorithm {
 		}
 		return res;
 
+	}
+
+	private boolean blockingValuesEqualClusterValues(PossiblePlacesList ppl,
+			SudokuCoords sc) {
+		// <FEHLT: wenn bei sc die blocking Values genau denen des Clusters entsprechen ==> doIt bleibt true >
+		boolean blockingValuesEqualClusterValues = false;
+		ArrayList<Integer> alBlockingValuesAtSc = sm.getBlockingValues(sc.getRow(), sc.getCol());
+		// Collections.sort(alBlockingValuesAtSc);
+		ArrayList<Integer> alValuesOfPPL = new ArrayList<Integer>();
+		for (int j=0; j<ppl.size(); j++)
+			alValuesOfPPL.add(ppl.get(j).getValue());
+		// Collections.sort(alValuesOfPPL);
+		if (alBlockingValuesAtSc.containsAll(alValuesOfPPL) && alValuesOfPPL.containsAll(alBlockingValuesAtSc))
+			blockingValuesEqualClusterValues = true;
+		return blockingValuesEqualClusterValues;
 	}
 	
 }

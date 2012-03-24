@@ -60,7 +60,8 @@ class SudokuEntry {
 
 	protected void addBlockingValue(int value)
 	{
-		blockingValues.add(new Integer(value));
+		if (!blockingValues.contains(new Integer(value)) )
+			blockingValues.add(new Integer(value));
 		Collections.sort(blockingValues); // Voraussetzung für den Vergleich!!!
 	}
 	
