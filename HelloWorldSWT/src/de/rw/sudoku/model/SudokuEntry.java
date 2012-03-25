@@ -2,37 +2,39 @@ package de.rw.sudoku.model;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.StringTokenizer;
 
 
-class SudokuEntry {
+public class SudokuEntry {
 
-	private int row=-1;
-	private int col=-1;
+	private SudokuCoords sc=null;
 	private Integer value = null;
 	private boolean isFixed = false;
 	private ArrayList<Integer> blockingValues = null;
 	
-	protected SudokuEntry(int _row, int _col)
+	static private void log(String s)
+	{ System.out.println(s); }
+	
+	protected SudokuEntry(SudokuCoords _sc)
 	{
 		blockingValues = new ArrayList<Integer>();
-		row=_row;
-		col=_col;
+		sc = _sc;
 	}
 
 	protected int getRow() {
-		return row;
+		return sc.getRow();
 	}
 
 	protected int getCol() {
-		return col;
+		return sc.getCol();
 	}
 
 	protected Integer getValue() {
 		return value;
 	}
 
-	protected void setValue(int value) {
-		this.value = new Integer(value);
+	protected void setValue(Integer value) {
+		this.value = value;
 	}
 	
 	protected void setEmpty()
@@ -58,16 +60,16 @@ class SudokuEntry {
 		return blockingValues;
 	}
 
-	protected void addBlockingValue(int value)
+	protected void addBlockingValue(Integer value)
 	{
-		if (!blockingValues.contains(new Integer(value)) )
-			blockingValues.add(new Integer(value));
+		if (!blockingValues.contains(value) )
+			blockingValues.add(value);
 		Collections.sort(blockingValues); // Voraussetzung für den Vergleich!!!
 	}
 	
-	protected void removeBlockingValue(int value)
+	protected void removeBlockingValue(Integer value)
 	{
-		blockingValues.remove(new Integer(value));
+		blockingValues.remove(value);
 	}
 	
 	protected void clearBlockingValues()
@@ -121,20 +123,101 @@ class SudokuEntry {
 		return getValue().toString();
 	}
 	
+	final static String KLAMMERAUF = new String("{");
+	final static String KLAMMERZU = new String("}");
+	final static String ROWKENNZ = new String("r=");
+	final static String COLKENNZ = new String("c=");
+	final static String VALKENNZ = new String("v=");
+	final static String EMPTYVAL = new String("_");
+	final static String TYPEKENNZ = new String("type=");
+	final static String FIXEDKENNZ = new String("F");
+	final static String EMPTYKENNZ = new String("E");
+	final static String BLOCKEDKENNZ = new String("B");
+	final static String SUGGESTEDKENNZ = new String("S");
+	final static String BLOCKVALKENNZ = new String("blockedValues={");
+	
 	protected String toDumpString()
 	{
-		String s = new String(" {");
-		s+="r=" + row + " c=" + col;
-		s+=" v=" + ((isEmpty())? "null": value.intValue());
-		s+=" type=" + (isFixed()? "F": (isEmpty()? "E" : "S"));
-		s+=" possValues={";
+		String s = new String(" "+KLAMMERAUF);
+		s+=" "+ROWKENNZ+" " + getRow() + " "+COLKENNZ+" " + getCol();
+		s+=" "+VALKENNZ+" " + ((isEmpty())? EMPTYVAL: value.intValue());
+		s+=" "+TYPEKENNZ+" ";
+		if (isFixed()) s+= FIXEDKENNZ;
+		else if (isEmpty()) s+=EMPTYKENNZ;
+		else if (isBlocked()) s+=BLOCKEDKENNZ;
+		else s+=SUGGESTEDKENNZ; 
+		s+=" "+BLOCKVALKENNZ+" ";
 		for (int i=0; i<blockingValues.size(); i++)
 		{
-			s+=blockingValues.get(i).intValue();
-			if (i<blockingValues.size()-1) s+=", ";
+			s+=blockingValues.get(i).intValue()+" ";
 		}
-		s+="}}";
+		s+=KLAMMERZU+" "+KLAMMERZU+" ";
 		return s;
 	}
 	
+	private static boolean nextToken(StringTokenizer st, String expected)
+	{
+		String s = st.nextToken();
+		if (!s.equals(expected))
+		{
+			log("Fehler bei "+ expected);
+			return false;
+		}
+		return true;
+	}
+	
+	protected static SudokuEntry scanFromDumpString(String s)
+	{
+		SudokuEntry se = null;
+		StringTokenizer st = new StringTokenizer(s);
+		nextToken(st,KLAMMERAUF);
+		nextToken(st,ROWKENNZ);
+		Integer row = Integer.valueOf(st.nextToken());
+		nextToken(st,COLKENNZ);
+		Integer col = Integer.valueOf(st.nextToken());
+		nextToken(st,VALKENNZ);
+		String val = st.nextToken();
+		Integer value = null;
+		if (!val.equals(EMPTYVAL)) value = Integer.valueOf(val);
+		nextToken(st,TYPEKENNZ);
+		String type = st.nextToken();
+
+		se = new SudokuEntry(new SudokuCoords(row,col));
+		if (value!=null) se.setValue(value);
+		if (type.equals(FIXEDKENNZ)) se.makeFixed();
+		
+		nextToken(st,BLOCKVALKENNZ);
+		String token=null;
+		while (!(token=st.nextToken()).equals(KLAMMERZU))
+			se.addBlockingValue(Integer.valueOf(token));
+			
+		nextToken(st,KLAMMERZU);
+		
+		return se;
+	}
+	
+// ===== Testmethode =====
+
+	static public int testDumpToStringAndScan1() // Erg.=Zahl der erfolgreichen Tests
+	{
+		String sIn1 = new String(" { r= 5 c= 4 v= 9 type= F blockedValues={ } } ");
+		SudokuEntry se = scanFromDumpString(sIn1);
+		String sOut1 = se.toDumpString();
+		log(sOut1);
+		if (!sIn1.equals(sOut1)) return 0;
+		
+		sIn1 = new String(" { r= 5 c= 4 v= _ type= E blockedValues={ } } ");
+		se = scanFromDumpString(sIn1);
+		sOut1 = se.toDumpString();
+		log(sOut1);
+		if (!sIn1.equals(sOut1)) return 1;
+
+		sIn1 = new String(" { r= 5 c= 4 v= _ type= E blockedValues={ 2 4 6 8 } } ");
+		se = scanFromDumpString(sIn1);
+		sOut1 = se.toDumpString();
+		log(sOut1);
+		if (!sIn1.equals(sOut1)) return 2;
+	
+		return 3;
+	}
 }

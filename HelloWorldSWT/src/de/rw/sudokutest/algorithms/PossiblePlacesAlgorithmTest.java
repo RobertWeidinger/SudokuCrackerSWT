@@ -13,7 +13,7 @@ import de.rw.sudoku.algorithms.PossiblePlaces;
 import de.rw.sudoku.algorithms.PossiblePlacesAlgorithm;
 import de.rw.sudoku.algorithms.PossiblePlacesList;
 import de.rw.sudoku.algorithms.SudokuBruteForceCracker;
-import de.rw.sudoku.algorithms.SudokuFileReader;
+import de.rw.sudoku.io.SudokuFileReaderWriter;
 import de.rw.sudoku.model.SudokuCoords;
 import de.rw.sudoku.model.SudokuModel;
 import de.rw.sudoku.model.iterators.SudokuIterator.SubStructures;
@@ -26,7 +26,7 @@ public class PossiblePlacesAlgorithmTest {
 	public void setUp() throws Exception {
 		sm = new SudokuModel(9,3);
 		try {
-			SudokuFileReader.readSudokuFromFile(sm, "src\\sz20120224.txt");
+			SudokuFileReaderWriter.readSudokuFromFile(sm, "src\\sz20120224.txt");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

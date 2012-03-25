@@ -37,7 +37,7 @@ public class SudokuModel implements Model {
 			arraySudokuEntries.add(i, rowSudokuEntries);
 			for (int j=0; j<size; j++)
 			{
-				SudokuEntry se = new SudokuEntry(i,j);
+				SudokuEntry se = new SudokuEntry(new SudokuCoords(i,j));
 				rowSudokuEntries.add(j,se);
 			}
 		}
@@ -88,12 +88,12 @@ public class SudokuModel implements Model {
 	public static final int SUGGESTED=2;
 	public static final int EMPTY=3;
 	
-	private SudokuEntry setNewValue(SudokuCoords sc, int value, int flagFixedSuggestedEmpty)
+	private SudokuEntry setNewValue(SudokuCoords sc, Integer value, int flagFixedSuggestedEmpty)
 	{
 		if (!inBounds(sc)) return null;
 		SudokuEntry se = getSudokuEntry(sc);
 		oldSudokuEntries.push(se);
-		se = new SudokuEntry(sc.getRow(),sc.getCol());
+		se = new SudokuEntry(sc);
 		if (flagFixedSuggestedEmpty!=EMPTY)
 		{
 			se.setValue(value);
@@ -110,12 +110,12 @@ public class SudokuModel implements Model {
 		return setNewValue(sc,-1,EMPTY);
 	}
 	
-	public SudokuEntry setFixedValue(SudokuCoords sc, int value)
+	public SudokuEntry setFixedValue(SudokuCoords sc, Integer value)
 	{
 		return setNewValue(sc,value,FIXED);
 	}
 	
-	public SudokuEntry setSuggestedValue(SudokuCoords sc, int value)
+	public SudokuEntry setSuggestedValue(SudokuCoords sc, Integer value)
 	{
 		return setNewValue(sc,value,SUGGESTED);
 	}
@@ -187,13 +187,13 @@ public class SudokuModel implements Model {
 		return getSudokuEntry(sc).toDisplayString(1, getSize());
 	}
 	
-	public void addBlockingValue(SudokuCoords sc, int value)
+	public void addBlockingValue(SudokuCoords sc, Integer value)
 	{
 		getSudokuEntry(sc).addBlockingValue(value);
 		updateViews();
 	}
 	
-	public void removeBlockingValue(SudokuCoords sc, int value)
+	public void removeBlockingValue(SudokuCoords sc, Integer value)
 	{
 		getSudokuEntry(sc).removeBlockingValue(value);
 	}
@@ -247,7 +247,7 @@ public class SudokuModel implements Model {
 		{
 			SudokuCoords sc = it.next();
 			SudokuEntry se = this.getSudokuEntry(sc);
-			if (se.isBlocked()) s+=" B";
+			if (se.isBlocked()) s+=" _";
 			else if (se.isFixed()) s+=" F";
 			else if (se.isEmpty()) s+=" _";
 			else s+=" S";

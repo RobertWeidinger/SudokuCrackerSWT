@@ -8,10 +8,11 @@ import de.rw.sudokutest.algorithms.PossiblePlacesAlgorithmTest;
 import de.rw.sudokutest.algorithms.PossiblePlacesListTest;
 import de.rw.sudokutest.algorithms.PossiblePlacesTest;
 import de.rw.sudokutest.algorithms.SudokuBruteForceCrackerTest;
-import de.rw.sudokutest.algorithms.SudokuFileReaderTest;
 import de.rw.sudokutest.algorithms.SudokuHelperTest;
 import de.rw.sudokutest.crackerMain.SudokuCrackerSWTTest;
+import de.rw.sudokutest.io.SudokuFileReaderWriterTest;
 import de.rw.sudokutest.model.SudokuCoordsTest;
+import de.rw.sudokutest.model.SudokuEntryTest;
 import de.rw.sudokutest.model.SudokuFieldValuesTest;
 import de.rw.sudokutest.model.SudokuModelTest;
 import de.rw.sudokutest.model.iterators.SubStructIteratorColsTest;
@@ -28,10 +29,12 @@ import de.rw.sudokutest.zUnused.SudokuScannerForBlockTest;
 @RunWith(Suite.class)
 @SuiteClasses({ 
 	SudokuCrackerSWTTest.class, 
+	SudokuCoordsTest.class,
+	SudokuEntryTest.class,
 	SudokuHelperTest.class, 
 	SudokuModelTest.class, 
 	SudokuViewTest.class, 
-	SudokuFileReaderTest.class,
+	SudokuFileReaderWriterTest.class,
 	SudokuFieldValuesTest.class,
 	SudokuScannerForBlockTest.class,
 	SudokuIteratorTest.class,
@@ -42,10 +45,9 @@ import de.rw.sudokutest.zUnused.SudokuScannerForBlockTest;
 	SudokuBruteForceCrackerTest.class,
 	SubStructIteratorRowsTest.class,
 	SubStructIteratorColsTest.class,
-	SudokuCoordsTest.class,
 	PossiblePlacesTest.class,
 	PossiblePlacesListTest.class,
-	PossiblePlacesAlgorithmTest.class
+	PossiblePlacesAlgorithmTest.class,
 	})
 public class AllTests {
 

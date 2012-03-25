@@ -10,7 +10,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
 
-import de.rw.sudoku.algorithms.SudokuFileReader;
+import de.rw.sudoku.io.SudokuFileReaderWriter;
 import de.rw.sudoku.model.SudokuModel;
 
 /**
@@ -50,7 +50,7 @@ public class LoadFileButton {
             	if (strFile != null)
             	{
             		try {
-						SudokuFileReader.readSudokuFromFile(sm, strFile);
+						SudokuFileReaderWriter.readSudokuFromFile(sm, strFile);
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();

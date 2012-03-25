@@ -9,8 +9,8 @@ import junit.framework.TestCase;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.rw.sudoku.algorithms.SudokuFileReader;
 import de.rw.sudoku.algorithms.SudokuHelper;
+import de.rw.sudoku.io.SudokuFileReaderWriter;
 import de.rw.sudoku.model.SudokuCoords;
 import de.rw.sudoku.model.SudokuFieldValues;
 import de.rw.sudoku.model.SudokuModel;
@@ -31,7 +31,7 @@ public class SudokuHelperTest extends TestCase {
 	
 	private void readSZ20120224() {
 		try {
-			SudokuFileReader.readSudokuFromFile(sm, "src\\sz20120224.txt");
+			SudokuFileReaderWriter.readSudokuFromFile(sm, "src\\sz20120224.txt");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

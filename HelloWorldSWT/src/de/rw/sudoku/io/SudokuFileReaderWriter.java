@@ -1,4 +1,4 @@
-package de.rw.sudoku.algorithms;
+package de.rw.sudoku.io;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -8,7 +8,7 @@ import de.rw.sudoku.model.SudokuCoords;
 import de.rw.sudoku.model.SudokuModel;
 
 
-public class SudokuFileReader {
+public class SudokuFileReaderWriter {
 
 	public static void readSudokuFromFile(SudokuModel sm, String longPath) throws IOException
 	{
@@ -34,8 +34,7 @@ public class SudokuFileReader {
 	    	  else
 	    	  {
 	    		  Integer intg = Integer.valueOf(s);
-	    		  int i2 = intg.intValue();
-	    		  sm.setFixedValue(new SudokuCoords(i, j), i2);
+	    		  sm.setFixedValue(new SudokuCoords(i, j), intg);
 	    	  }
 	    	  if (j==size-1)
 	    	  {
@@ -46,4 +45,11 @@ public class SudokuFileReader {
 	    		  j++;
 	    	}		
 	}
+	
+	public static void writeSudokuToFile(SudokuModel sm, String longPath) throws IOException
+	{
+		
+	}
+	
+	
 }

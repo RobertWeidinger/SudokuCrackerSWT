@@ -1,4 +1,4 @@
-package de.rw.sudokutest.algorithms;
+package de.rw.sudokutest.io;
 import java.io.IOException;
 
 import junit.framework.Assert;
@@ -7,12 +7,12 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.rw.sudoku.algorithms.SudokuFileReader;
+import de.rw.sudoku.io.SudokuFileReaderWriter;
 import de.rw.sudoku.model.SudokuCoords;
 import de.rw.sudoku.model.SudokuModel;
 
 
-public class SudokuFileReaderTest {
+public class SudokuFileReaderWriterTest {
 
 	@Before
 	public void setUp() throws Exception {
@@ -26,7 +26,7 @@ public class SudokuFileReaderTest {
 	public void testReadSudokuFromFile() {
 		SudokuModel sm = new SudokuModel(9,3);
 		try {
-			SudokuFileReader.readSudokuFromFile(sm, "src\\sz20120224.txt");
+			SudokuFileReaderWriter.readSudokuFromFile(sm, "src\\sz20120224.txt");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
