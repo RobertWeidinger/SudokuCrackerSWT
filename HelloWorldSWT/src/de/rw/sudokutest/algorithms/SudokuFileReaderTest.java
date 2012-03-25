@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.rw.sudoku.algorithms.SudokuFileReader;
+import de.rw.sudoku.model.SudokuCoords;
 import de.rw.sudoku.model.SudokuModel;
 
 
@@ -30,7 +31,7 @@ public class SudokuFileReaderTest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		Assert.assertEquals(2, sm.getValue(3, 5).intValue());
+		Assert.assertEquals(2, sm.getValue(new SudokuCoords(3, 5)).intValue());
 		Assert.assertEquals(true, sm.isValidModel());
 	}
 

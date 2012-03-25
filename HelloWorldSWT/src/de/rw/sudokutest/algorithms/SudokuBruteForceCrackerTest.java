@@ -34,19 +34,19 @@ public class SudokuBruteForceCrackerTest {
 	@Test
 	public void testBruteForceOnSubStruct() {
 		sbfc.bruteForceOnSubStruct(new SudokuCoords(3, 6), SubStructures.BLOCK);
-		Assert.assertEquals(3, sm.getValue(4,7).intValue());
+		Assert.assertEquals(3, sm.getValue(new SudokuCoords(4,7)).intValue());
 	}
 
 	
 	@Test
 	public void testOneIteration() {
 		sbfc.oneIteration();
-		Assert.assertEquals(7, sm.getValue(5,0).intValue());
-		Assert.assertEquals(9, sm.getValue(7,1).intValue());
-		Assert.assertEquals(2, sm.getValue(8,3).intValue());
-		Assert.assertEquals(3, sm.getValue(4,7).intValue());
+		Assert.assertEquals(7, sm.getValue(new SudokuCoords(5,0)).intValue());
+		Assert.assertEquals(9, sm.getValue(new SudokuCoords(7,1)).intValue());
+		Assert.assertEquals(2, sm.getValue(new SudokuCoords(8,3)).intValue());
+		Assert.assertEquals(3, sm.getValue(new SudokuCoords(4,7)).intValue());
 		sbfc.oneIteration();
-		Assert.assertEquals(2, sm.getValue(4,2).intValue());
+		Assert.assertEquals(2, sm.getValue(new SudokuCoords(4,2)).intValue());
 	}
 
 }

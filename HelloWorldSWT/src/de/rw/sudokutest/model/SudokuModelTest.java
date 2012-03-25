@@ -21,39 +21,45 @@ public class SudokuModelTest {
 
 	@Test
 	public void testSetFixedValue() {
-		sm.setFixedValue(0, 5, 9);
-		Assert.assertTrue(sm.isFixed(0, 5));
+		SudokuCoords sc = new SudokuCoords(0,5);
+		sm.setFixedValue(sc, 9);
+		Assert.assertTrue(sm.isFixed(sc));
 	}
 
 	@Test
 	public void testSetEmptyValue() {
-		sm.setEmptyValue(0, 5);
-		Assert.assertTrue(sm.isEmpty(0, 5));
+		SudokuCoords sc = new SudokuCoords(0,5);
+		sm.setEmptyValue(sc);
+		Assert.assertTrue(sm.isEmpty(sc));
 	}
 
 	@Test
 	public void testSetSuggestedValue() {
-		sm.setSuggestedValue(0, 5, 9);
-		Assert.assertFalse(sm.isEmpty(0, 5));
-		Assert.assertFalse(sm.isFixed(0, 5));
+		SudokuCoords sc = new SudokuCoords(0,5);
+		sm.setSuggestedValue(sc, 9);
+		Assert.assertFalse(sm.isEmpty(sc));
+		Assert.assertFalse(sm.isFixed(sc));
 		
 	}
 
 	@Test
 	public void testMakeValuesFixed() {
+		SudokuCoords sc = new SudokuCoords(1,0);
 		sm.makeValuesFixed();
-		Assert.assertTrue(sm.isFixed(1, 0));
+		Assert.assertTrue(sm.isFixed(sc));
 	}
 
 	@Test
 	public void testGetValue() {
-		Assert.assertTrue(sm.isEmpty(2, 0));
-		Assert.assertEquals(1, sm.getValue(1, 0).intValue());
+		SudokuCoords sc = new SudokuCoords(2,0);
+		Assert.assertTrue(sm.isEmpty(sc));
+		Assert.assertEquals(1, sm.getValue(new SudokuCoords(1,0)).intValue());
 	}
 
 	@Test
 	public void testIsFixed() {
-		Assert.assertEquals(true, sm.isFixed(0, 0));
+		SudokuCoords sc = new SudokuCoords(0,0);
+		Assert.assertEquals(true, sm.isFixed(sc));
 	}
 	
 	@Test
@@ -66,21 +72,25 @@ public class SudokuModelTest {
 	
 	@Test
 	public void testUndo() {
-		Assert.assertEquals(1, sm.getValue(0,7).intValue());
-		Assert.assertFalse(sm.isFixed(0, 7));
+		SudokuCoords sc = new SudokuCoords(0,7);
+
+		Assert.assertEquals(1, sm.getValue(sc).intValue());
+		Assert.assertFalse(sm.isFixed(sc));
 		sm.undo();
-		Assert.assertTrue(sm.isEmpty(0, 7));
+		Assert.assertTrue(sm.isEmpty(sc));
 		Assert.assertTrue(sm.isValidModel());
 	}
 
 	@Test
 	public void testRemovePossibleValue() {
-		sm.setFixedValue(3,2,5);
-		sm.addBlockingValue(3,2,1);
-		sm.addBlockingValue(3,2,2);
-		sm.addBlockingValue(3,2,3);
-		sm.removeBlockingValue(3,2,2);
-		ArrayList<Integer> alPossibleValues = sm.getBlockingValues(3,2);
+		SudokuCoords sc = new SudokuCoords(3,2);
+
+		sm.setFixedValue(sc,5);
+		sm.addBlockingValue(sc,1);
+		sm.addBlockingValue(sc,2);
+		sm.addBlockingValue(sc,3);
+		sm.removeBlockingValue(sc,2);
+		ArrayList<Integer> alPossibleValues = sm.getBlockingValues(sc);
 		Assert.assertEquals(2, alPossibleValues.size());
 		Integer i0 = alPossibleValues.get(0);
 		Integer i1 = alPossibleValues.get(1);
@@ -91,16 +101,18 @@ public class SudokuModelTest {
 	@Test
 	public void testEqualBlockingValues()
 	{
-		sm.addBlockingValue(3, 2, 1);
-		sm.addBlockingValue(3, 2, 2);
-		sm.addBlockingValue(3, 2, 5);
-		sm.addBlockingValue(0, 5, 5);
-		sm.addBlockingValue(0, 5, 1);
-		sm.addBlockingValue(0, 5, 2);
-		boolean bEqual = sm.equalBlockingValues(new SudokuCoords(3,2), new SudokuCoords(0,5));
+		SudokuCoords sc = new SudokuCoords(3,2);
+		SudokuCoords sc2 = new SudokuCoords(0,5);
+		sm.addBlockingValue(sc, 1);
+		sm.addBlockingValue(sc, 2);
+		sm.addBlockingValue(sc, 5);
+		sm.addBlockingValue(sc2, 5);
+		sm.addBlockingValue(sc2, 1);
+		sm.addBlockingValue(sc2, 2);
+		boolean bEqual = sm.equalBlockingValues(sc, sc2);
 		Assert.assertTrue(bEqual);
-		sm.removeBlockingValue(3, 2, 2);
-		bEqual = sm.equalBlockingValues(new SudokuCoords(3,2), new SudokuCoords(0,5));
+		sm.removeBlockingValue(sc, 2);
+		bEqual = sm.equalBlockingValues(sc, sc2);
 		Assert.assertFalse(bEqual);
 	}
 }

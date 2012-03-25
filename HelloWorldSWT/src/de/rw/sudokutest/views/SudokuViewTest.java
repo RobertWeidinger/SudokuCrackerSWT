@@ -7,6 +7,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import de.rw.sudoku.model.SudokuCoords;
 import de.rw.sudoku.model.SudokuModel;
 import de.rw.sudoku.views.SuText;
 import de.rw.sudoku.views.SudokuView;
@@ -34,7 +35,7 @@ public class SudokuViewTest {
 
 	@Test
 	public void testSudokuView() {
-		SuText st = sv.getSuText(0, 0);
+		SuText st = sv.getSuText(new SudokuCoords(0, 0));
 		String s = st.getString();
 		Assert.assertEquals("9", s);
 	}
@@ -42,8 +43,9 @@ public class SudokuViewTest {
 	@Test
 	public void testUpdate() {
 		SudokuModel sm = sv.getModel();
-		sm.setFixedValue(5, 0, 5);
-		SuText st = sv.getSuText(5, 0);
+		SudokuCoords sc = new SudokuCoords(5,0);
+		sm.setFixedValue(sc, 5);
+		SuText st = sv.getSuText(sc);
 		String s = st.getString();
 		Assert.assertEquals("5", s );
 	}

@@ -78,7 +78,7 @@ public class SudokuHelper {
 			if (value.equals(sm.getValue(sc))) return null;
 			if (sm.isEmpty(sc) && !sm.isBlocked(sc))
 			{
-				List<SudokuFieldValues> ll = findConflicts(sc.getRow(), sc.getCol(), value);
+				List<SudokuFieldValues> ll = findConflicts(sc, value);
 				if (ll.size()==0) // no conflict
 				{
 					numberOfFreePlaces++;
@@ -91,11 +91,11 @@ public class SudokuHelper {
 	}
 
 		
-	public List<SudokuCoords> findSiblingBlockingValuesInSubStruct(int row, int col, SudokuIterator.SubStructures subStructType)
+	public List<SudokuCoords> findSiblingBlockingValuesInSubStruct(SudokuCoords start, SudokuIterator.SubStructures subStructType)
 	{
 		List<SudokuCoords> lSc = new LinkedList<SudokuCoords>();
-		if (sm.getBlockingValues(row, col).size()==0) return lSc;
-		SudokuCoords sc = new SudokuCoords(row,col);
+		if (sm.getBlockingValues(start).size()==0) return lSc;
+		SudokuCoords sc = new SudokuCoords(start);
 		SudokuCoords scBase = SudokuIterator.getSubStructBase(sm.getBlockSize(), sc, subStructType);
 		SudokuIterator si = SudokuIterator.createIterator(sm.getSize(), sm.getBlockSize(), scBase, subStructType);
 		while (si.hasNext())
@@ -108,27 +108,27 @@ public class SudokuHelper {
 		return lSc;
 	}
 	
-	public List<SudokuFieldValues> findConflicts(int row, int col, Integer number)
+	public List<SudokuFieldValues> findConflicts(SudokuCoords start, Integer number)
 	{
 		List<SudokuFieldValues> ll = new LinkedList<SudokuFieldValues>();
 		
 		if (number.intValue()<0) return ll;
-		if (sm.isBlocked(row, col) && sm.getBlockingValues(row, col).contains(number)) return ll;
+		if (sm.isBlocked(start) && sm.getBlockingValues(start).contains(number)) return ll;
 		
 		for (final SudokuIterator.SubStructures subStruct : SudokuIterator.SubStructures.REAL)
 		{
 			SudokuCoords subStructBase = 
-					SudokuIterator.getSubStructBase(sm.getBlockSize(), new SudokuCoords(row,col), subStruct);
+					SudokuIterator.getSubStructBase(sm.getBlockSize(), new SudokuCoords(start), subStruct);
 			SudokuIterator si = SudokuIterator.createIterator(sm.getSize(), sm.getBlockSize(), subStructBase, subStruct);
 			while (si.hasNext())
 			{
 				SudokuCoords sc = si.next();
-				if (sc.equals(new SudokuCoords(row,col))) continue;
+				if (sc.equals(new SudokuCoords(start))) continue;
 				boolean bConflict=number.equals(sm.getValue(sc));
 				if (!bConflict && sm.isBlocked(sc))
 				{
-					List<SudokuCoords> lSc = findSiblingBlockingValuesInSubStruct(sc.getRow(), sc.getCol(), subStruct);
-					ArrayList<Integer> blockingValues = sm.getBlockingValues(sc.getRow(), sc.getCol());
+					List<SudokuCoords> lSc = findSiblingBlockingValuesInSubStruct(sc, subStruct);
+					ArrayList<Integer> blockingValues = sm.getBlockingValues(sc);
 					if (lSc.size()+1==blockingValues.size())
 					{
 						for (Integer i: blockingValues)

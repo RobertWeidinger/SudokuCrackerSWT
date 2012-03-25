@@ -62,7 +62,7 @@ public class SudokuHelperTest extends TestCase {
 		res = sh.findUniquePlaceForValueInColPart(3, 3, 4);
 		Assert.assertEquals(-1, res);
 		
-		sm.setSuggestedValue(7, 0, 5);
+		sm.setSuggestedValue(new SudokuCoords(7, 0), 5);
 		res = sh.findUniquePlaceForValueInColPart(8, 6, 5);
 		Assert.assertEquals(6, res);
 	}
@@ -84,36 +84,36 @@ public class SudokuHelperTest extends TestCase {
 	{
 		readSZ20120224();
 		setSomeBlockingValuesInSZ20120224();
-		List<SudokuCoords> lSc = sh.findSiblingBlockingValuesInSubStruct(3,4,SubStructures.BLOCK);
+		List<SudokuCoords> lSc = sh.findSiblingBlockingValuesInSubStruct(new SudokuCoords(3,4),SubStructures.BLOCK);
 		Assert.assertEquals(2, lSc.size());
 		
-		lSc = sh.findSiblingBlockingValuesInSubStruct(7, 8, SubStructures.ROW);
+		lSc = sh.findSiblingBlockingValuesInSubStruct(new SudokuCoords(7, 8), SubStructures.ROW);
 		Assert.assertEquals(1, lSc.size());
 		
-		lSc = sh.findSiblingBlockingValuesInSubStruct(5, 8, SubStructures.COL);
+		lSc = sh.findSiblingBlockingValuesInSubStruct(new SudokuCoords(5, 8), SubStructures.COL);
 		Assert.assertEquals(0, lSc.size());
 	}
 
 	private void setSomeBlockingValuesInSZ20120224() {
-		sm.addBlockingValue(7, 6, new Integer(1));
-		sm.addBlockingValue(7, 6, new Integer(2));
-		sm.addBlockingValue(7, 8, new Integer(1));
-		sm.addBlockingValue(7, 8, new Integer(2));
+		sm.addBlockingValue(new SudokuCoords(7, 6), new Integer(1));
+		sm.addBlockingValue(new SudokuCoords(7, 6), new Integer(2));
+		sm.addBlockingValue(new SudokuCoords(7, 8), new Integer(1));
+		sm.addBlockingValue(new SudokuCoords(7, 8), new Integer(2));
 		
-		sm.addBlockingValue(3, 4, new Integer(9));
-		sm.addBlockingValue(3, 4, new Integer(6));
-		sm.addBlockingValue(3, 4, new Integer(5));
-		sm.addBlockingValue(5, 3, new Integer(9));
-		sm.addBlockingValue(5, 3, new Integer(6));
-		sm.addBlockingValue(5, 3, new Integer(5));
-		sm.addBlockingValue(5, 5, new Integer(9));
-		sm.addBlockingValue(5, 5, new Integer(6));
-		sm.addBlockingValue(5, 5, new Integer(5));
+		sm.addBlockingValue(new SudokuCoords(3, 4), new Integer(9));
+		sm.addBlockingValue(new SudokuCoords(3, 4), new Integer(6));
+		sm.addBlockingValue(new SudokuCoords(3, 4), new Integer(5));
+		sm.addBlockingValue(new SudokuCoords(5, 3), new Integer(9));
+		sm.addBlockingValue(new SudokuCoords(5, 3), new Integer(6));
+		sm.addBlockingValue(new SudokuCoords(5, 3), new Integer(5));
+		sm.addBlockingValue(new SudokuCoords(5, 5), new Integer(9));
+		sm.addBlockingValue(new SudokuCoords(5, 5), new Integer(6));
+		sm.addBlockingValue(new SudokuCoords(5, 5), new Integer(5));
 		
-		sm.addBlockingValue(1, 4, new Integer(4));
-		sm.addBlockingValue(1, 4, new Integer(7));
-		sm.addBlockingValue(1, 5, new Integer(4));
-		sm.addBlockingValue(1, 5, new Integer(7));
+		sm.addBlockingValue(new SudokuCoords(1, 4), new Integer(4));
+		sm.addBlockingValue(new SudokuCoords(1, 4), new Integer(7));
+		sm.addBlockingValue(new SudokuCoords(1, 5), new Integer(4));
+		sm.addBlockingValue(new SudokuCoords(1, 5), new Integer(7));
 		
 	}
 	
@@ -121,48 +121,48 @@ public class SudokuHelperTest extends TestCase {
 	public void testFindConflicts()
 	{
 		readSZ20120224();
-		LinkedList<SudokuFieldValues> ll = (LinkedList<SudokuFieldValues>)sh.findConflicts(0, 0, 6);
+		LinkedList<SudokuFieldValues> ll = (LinkedList<SudokuFieldValues>)sh.findConflicts(new SudokuCoords(0, 0), 6);
 		Assert.assertEquals(0,ll.size());
-		ll = (LinkedList<SudokuFieldValues>)sh.findConflicts(1, 3, 2);
+		ll = (LinkedList<SudokuFieldValues>)sh.findConflicts(new SudokuCoords(1, 3), 2);
 		Assert.assertEquals(1,ll.size());
 		SudokuFieldValues sfv = ll.getFirst();
 		Assert.assertEquals(2, sfv.getRow());
 		Assert.assertEquals(4, sfv.getCol());
 		Assert.assertEquals(2, sfv.getValues().getFirst().intValue());
 		
-		ll = (LinkedList<SudokuFieldValues>)sh.findConflicts(8, 2, 3);
+		ll = (LinkedList<SudokuFieldValues>)sh.findConflicts(new SudokuCoords(8, 2), 3);
 		Assert.assertEquals(1,ll.size());
 		sfv = ll.getFirst();
 		Assert.assertEquals(3, sfv.getRow());
 		Assert.assertEquals(2, sfv.getCol());
 		Assert.assertEquals(3, sfv.getValues().getFirst().intValue());
 		
-		ll = (LinkedList<SudokuFieldValues>)sh.findConflicts(2, 3, 2);
+		ll = (LinkedList<SudokuFieldValues>)sh.findConflicts(new SudokuCoords(2, 3), 2);
 		Assert.assertEquals(1, ll.size());
 		
 		
 		// Conflicts im Zsh. m. blocking Values:
 		setSomeBlockingValuesInSZ20120224();
 		
-		List<SudokuFieldValues> lSfv = sh.findConflicts(7, 5, new Integer(1));
+		List<SudokuFieldValues> lSfv = sh.findConflicts(new SudokuCoords(7, 5), new Integer(1));
 		Assert.assertTrue(lSfv.size()>0);
 		
-		lSfv = sh.findConflicts(4, 8, new Integer(1));
+		lSfv = sh.findConflicts(new SudokuCoords(4, 8), new Integer(1));
 		Assert.assertTrue(lSfv.size()==0);
 		
-		lSfv = sh.findConflicts(4, 4, new Integer(6));
+		lSfv = sh.findConflicts(new SudokuCoords(4, 4), new Integer(6));
 		Assert.assertTrue(lSfv.size()>0);
 		
-		lSfv = sh.findConflicts(5, 8, new Integer(6));
+		lSfv = sh.findConflicts(new SudokuCoords(5, 8), new Integer(6));
 		Assert.assertTrue(lSfv.size()==0);
 
-		lSfv = sh.findConflicts(1, 4, new Integer(4));
+		lSfv = sh.findConflicts(new SudokuCoords(1, 4), new Integer(4));
 		Assert.assertTrue(lSfv.size()==0);
 		
 		// und noch ein Test:
 		sm = new SudokuModel(9,3);
 		sh = new SudokuHelper(sm);
-		ll = (LinkedList<SudokuFieldValues>)sh.findConflicts(0, 0, -1);
+		ll = (LinkedList<SudokuFieldValues>)sh.findConflicts(new SudokuCoords(0, 0), -1);
 		Assert.assertEquals(0,ll.size());
 	}
 

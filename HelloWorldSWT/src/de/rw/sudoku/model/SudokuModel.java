@@ -67,10 +67,10 @@ public class SudokuModel implements Model {
 			v.update();
 	}
 	
-	private boolean inBounds(int i, int j)
+	private boolean inBounds(SudokuCoords sc)
 	{
 		try {
-			arraySudokuEntries.get(i).get(j);
+			arraySudokuEntries.get(sc.getRow()).get(sc.getCol());
 		} catch (IndexOutOfBoundsException e) {
 			e.printStackTrace();
 			return false;
@@ -78,93 +78,71 @@ public class SudokuModel implements Model {
 		return true;
 	}
 	
-	private SudokuEntry getSudokuEntry(int i, int j)
-	{
-		if (!inBounds(i,j)) return null;
-		return arraySudokuEntries.get(i).get(j);
-	}
 	
 	private SudokuEntry getSudokuEntry(SudokuCoords sc)
 	{
-		return getSudokuEntry(sc.getRow(), sc.getCol());
-	}
+		if (!inBounds(sc)) return null;
+		return arraySudokuEntries.get(sc.getRow()).get(sc.getCol());	}
 	
 	public static final int FIXED=1;
 	public static final int SUGGESTED=2;
 	public static final int EMPTY=3;
 	
-	private SudokuEntry setNewValue(int i, int j, int value, int flagFixedSuggestedEmpty)
+	private SudokuEntry setNewValue(SudokuCoords sc, int value, int flagFixedSuggestedEmpty)
 	{
-		if (!inBounds(i,j)) return null;
-		SudokuEntry se = getSudokuEntry(i, j);
+		if (!inBounds(sc)) return null;
+		SudokuEntry se = getSudokuEntry(sc);
 		oldSudokuEntries.push(se);
-		se = new SudokuEntry(i,j);
+		se = new SudokuEntry(sc.getRow(),sc.getCol());
 		if (flagFixedSuggestedEmpty!=EMPTY)
 		{
 			se.setValue(value);
 			if (flagFixedSuggestedEmpty==FIXED)
 				se.makeFixed();
 		}
-		arraySudokuEntries.get(i).set(j,se);
+		arraySudokuEntries.get(sc.getRow()).set(sc.getCol(),se);
 		updateViews();
 		return se;
 	}
 	
-	public SudokuEntry setEmptyValue(int i, int j)
-	{
-		return setNewValue(i,j,-1,EMPTY);
-	}
-	
 	public SudokuEntry setEmptyValue(SudokuCoords sc)
 	{
-		return setEmptyValue(sc.getRow(),sc.getCol());
-	}
-	
-	public SudokuEntry setFixedValue(int i, int j, int value)
-	{
-		return setNewValue(i,j,value,FIXED);
+		return setNewValue(sc,-1,EMPTY);
 	}
 	
 	public SudokuEntry setFixedValue(SudokuCoords sc, int value)
 	{
-		return setFixedValue(sc.getRow(),sc.getCol(), value);
+		return setNewValue(sc,value,FIXED);
 	}
 	
-	public SudokuEntry setSuggestedValue(int i, int j, int value)
-	{
-		return setNewValue(i,j,value,SUGGESTED);
-	}
-
 	public SudokuEntry setSuggestedValue(SudokuCoords sc, int value)
 	{
-		return setSuggestedValue(sc.getRow(),sc.getCol(), value);
+		return setNewValue(sc,value,SUGGESTED);
 	}
 	
-	public boolean isValidModel(int i, int j)
+	public boolean isValidModel(SudokuCoords sc)
 	// Achtung: Ein Modell, in dem der Anwender einen Denkfehler gemacht hat, ist valide. 
 	//          Hat er aber eine unerlaubte Zahl eingetragen (z.B. 2-, 0 oder etwas größeres als size) ==> nicht valide.
 	{
-		return getSudokuEntry(i,j).isValid(1, getSize());
+		return getSudokuEntry(sc).isValid(1, getSize());
 	}
 	
 	public boolean isValidModel()
 	{
-		for (int i=0; i<this.size; i++)
-			for (int j=0; j<this.size; j++)
-				if (!isValidModel(i,j)) return false;
+		SudokuIterator si = SudokuIterator.createIterator(getSize(), getBlockSize(), new SudokuCoords(0,0), SudokuIterator.SubStructures.WHOLE);
+		while (si.hasNext())
+			if (!isValidModel(si.next())) return false;
 		return true;
 	}
 	
 	public void makeValuesFixed()
 	{
-		for (int i = 0; i<size; i++)
+		SudokuIterator si = SudokuIterator.createIterator(getSize(), getBlockSize(), new SudokuCoords(0,0), SudokuIterator.SubStructures.WHOLE);
+		while (si.hasNext())
 		{
-			for (int j=0; j<size; j++)
-			{
-				SudokuEntry se = getSudokuEntry(i, j);
-				if (!se.isEmpty())
-					se.makeFixed();
-			}
+			SudokuEntry se = getSudokuEntry(si.next());
+			if (!se.isEmpty())
+				se.makeFixed();
 		}
 		updateViews();
 	}
@@ -174,48 +152,26 @@ public class SudokuModel implements Model {
 		alViews.add(_v);
 	}
 		
-	public Integer getValue(int row, int col)
-	{
-		return getSudokuEntry(row, col).getValue();
-	}
-	
 	public Integer getValue(SudokuCoords sc)
 	{
-		return getValue(sc.getRow(),sc.getCol());
+		return getSudokuEntry(sc).getValue();
 	}
 	
-	
-	public boolean isFixed(int row, int col)
-	{
-		return getSudokuEntry(row, col).isFixed();
-	}
-	
+
 	public boolean isFixed(SudokuCoords sc)
 	{
-		return isFixed(sc.getRow(),sc.getCol());
-	}
-	
-	public boolean isEmpty(int row, int col)
-	{
-		return getSudokuEntry(row, col).isEmpty();
+		return getSudokuEntry(sc).isFixed();
 	}
 	
 	public boolean isEmpty(SudokuCoords sc)
 	{
-		return isEmpty(sc.getRow(),sc.getCol());
-	}
-	
-	public boolean isBlocked(int row, int col)
-	{
-		return getSudokuEntry(row,col).isBlocked();
+		return getSudokuEntry(sc).isEmpty();
 	}
 	
 	public boolean isBlocked(SudokuCoords sc)
 	{
-		return isBlocked(sc.getRow(), sc.getCol());
+		return getSudokuEntry(sc).isBlocked();
 	}
-	
-	
 	
 	public void undo()
 	{
@@ -226,35 +182,32 @@ public class SudokuModel implements Model {
 		updateViews();
 	}
 	
-	public String entryToDisplayString(int row, int col)
+	public String entryToDisplayString(SudokuCoords sc)
 	{
-		return getSudokuEntry(row, col).toDisplayString(1, getSize());
+		return getSudokuEntry(sc).toDisplayString(1, getSize());
 	}
 	
-	public void addBlockingValue(int row, int col, int value)
+	public void addBlockingValue(SudokuCoords sc, int value)
 	{
-		getSudokuEntry(row, col).addBlockingValue(value);
+		getSudokuEntry(sc).addBlockingValue(value);
 		updateViews();
 	}
 	
-	public void removeBlockingValue(int row, int col, int value)
+	public void removeBlockingValue(SudokuCoords sc, int value)
 	{
-		getSudokuEntry(row, col).removeBlockingValue(value);
+		getSudokuEntry(sc).removeBlockingValue(value);
 	}
 	
-	public ArrayList<Integer> getBlockingValues(int row, int col)
+	public ArrayList<Integer> getBlockingValues(SudokuCoords sc)
 	{
-		return getSudokuEntry(row, col).getBlockingValues();
+		return getSudokuEntry(sc).getBlockingValues();
 	}
 	
 	public void clearBlockingValues()
 	{
 		SudokuIterator it = SudokuIterator.createIterator(getSize(), getBlockSize(), new SudokuCoords(0,0), SubStructures.WHOLE);
 		while (it.hasNext())
-		{
-			SudokuCoords sc = it.next();
-			this.getSudokuEntry(sc.getRow(), sc.getCol()).clearBlockingValues();
-		}
+			this.getSudokuEntry(it.next()).clearBlockingValues();
 		updateViews();
 	}
 	
@@ -270,19 +223,18 @@ public class SudokuModel implements Model {
 		
 		s+= this.getSize() + " " + this.getBlockSize() + "\n\n";
 				
-		for (int i=0; i<this.size; i++)
+		SudokuIterator it = SudokuIterator.createIterator(getSize(), getBlockSize(), new SudokuCoords(0,0), SubStructures.WHOLE);
+		while (it.hasNext())
 		{
-			for (int j=0; j<this.size; j++)
-			{
-				SudokuEntry se = this.getSudokuEntry(i, j);
-				if (se.isEmpty())
-					s+= " _";
-				else if (se.isValid(1, getSize()))
-					s+= " " + se.getValue();
-				else 
-					s+= " ?";
-			}
-			s+="\n";
+			SudokuCoords sc = it.next();
+			SudokuEntry se = this.getSudokuEntry(sc);
+			if (se.isEmpty())
+				s+= " _";
+			else if (se.isValid(1, getSize()))
+				s+= " " + se.getValue();
+			else 
+				s+= " ?";
+			if (sc.getCol()==getSize()-1) s+="\n";
 		}
 		return s;
 	}
@@ -290,17 +242,17 @@ public class SudokuModel implements Model {
 	public String toStringWithFlags()
 	{
 		String s = this.toString() + "\n";
-		for (int i=0; i<this.size; i++)
+		SudokuIterator it = SudokuIterator.createIterator(getSize(), getBlockSize(), new SudokuCoords(0,0), SubStructures.WHOLE);
+		while (it.hasNext())
 		{
-			for (int j=0; j<this.size; j++)
-			{
-				SudokuEntry se = this.getSudokuEntry(i, j);
-				if (se.isBlocked()) s+=" B";
-				else if (se.isFixed()) s+=" F";
-				else if (se.isEmpty()) s+=" _";
-				else s+=" S";
-			}
-			s+="\n";
+			SudokuCoords sc = it.next();
+			SudokuEntry se = this.getSudokuEntry(sc);
+			if (se.isBlocked()) s+=" B";
+			else if (se.isFixed()) s+=" F";
+			else if (se.isEmpty()) s+=" _";
+			else s+=" S";
+		
+			if (sc.getCol()==getSize()-1) s+="\n";
 		}
 		return s;
 	}
@@ -308,14 +260,13 @@ public class SudokuModel implements Model {
 	public String toDumpString()
 	{
 		String s = this.toString() + "\n";
-		for (int i=0; i<this.size; i++)
+		SudokuIterator it = SudokuIterator.createIterator(getSize(), getBlockSize(), new SudokuCoords(0,0), SubStructures.WHOLE);
+		while (it.hasNext())
 		{
-			for (int j=0; j<this.size; j++)
-			{
-				SudokuEntry se = this.getSudokuEntry(i, j);
-				s+=se.toDumpString();
-			}
-			s+="\n";
+			SudokuCoords sc = it.next();
+			SudokuEntry se = this.getSudokuEntry(sc);
+			s+=se.toDumpString();
+			if (sc.getCol()==getSize()-1) s+="\n";
 		}
 		
 		s+="Old Values:\n{";
@@ -331,19 +282,19 @@ public class SudokuModel implements Model {
 		SudokuModel sm = new SudokuModel(9,3);
 		for (int i=0; i<sm.getSize(); i++)
 		{
-			sm.setFixedValue(i, i, 9-i);
+			sm.setFixedValue(new SudokuCoords(i,i), 9-i);
 			if (i<sm.getSize()-1)
-				sm.setSuggestedValue(i+1, i, i+1);
+				sm.setSuggestedValue(new SudokuCoords(i+1,i), i+1);
 		}
-		sm.setFixedValue(2, 8, 9);
-		sm.setSuggestedValue(0, 7, 1);
+		sm.setFixedValue(new SudokuCoords(2,8), 9);
+		sm.setSuggestedValue(new SudokuCoords(0,7), 1);
 		return sm;
 	}
 
 	public static SudokuModel createCorruptModel1()
 	{
 		SudokuModel sm = createTestModel1();
-		SudokuEntry se = sm.getSudokuEntry(7, 2);
+		SudokuEntry se = sm.getSudokuEntry(new SudokuCoords(7,2));
 		se.makeFixed();
 		return sm;
 	}

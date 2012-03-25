@@ -36,8 +36,8 @@ public class PossiblePlacesAlgorithm {
 			{
 				SudokuCoords sc = si.next();
 				if (!sm.isEmpty(sc)) continue;
-				if (sm.isBlocked(sc) && !sm.getBlockingValues(sc.getRow(), sc.getCol()).contains(value)) continue;
-				if (sh.findConflicts(sc.getRow(), sc.getCol(), value).size()>0) continue;
+				if (sm.isBlocked(sc) && !sm.getBlockingValues(sc).contains(value)) continue;
+				if (sh.findConflicts(sc, value).size()>0) continue;
 				
 				pp.addSudokuCoords(sc);
 			}
@@ -96,7 +96,7 @@ public class PossiblePlacesAlgorithm {
 						{
 							SudokuCoords sc = scIt.next();
 							log("sm.addBlockingValue("+sc.getRow()+", "+sc.getCol()+", "+pp.getValue()+");");
-							sm.addBlockingValue(sc.getRow(), sc.getCol(), pp.getValue());
+							sm.addBlockingValue(sc, pp.getValue());
 							res++;
 						}
 					}
@@ -109,7 +109,7 @@ public class PossiblePlacesAlgorithm {
 
 	private boolean blockingValuesEqualClusterValues(PossiblePlacesList ppl, SudokuCoords sc) {
 		boolean blockingValuesEqualClusterValues = false;
-		ArrayList<Integer> alBlockingValuesAtSc = sm.getBlockingValues(sc.getRow(), sc.getCol());
+		ArrayList<Integer> alBlockingValuesAtSc = sm.getBlockingValues(sc);
 		ArrayList<Integer> alValuesOfPPL = new ArrayList<Integer>();
 		for (int j=0; j<ppl.size(); j++)
 			alValuesOfPPL.add(ppl.get(j).getValue());

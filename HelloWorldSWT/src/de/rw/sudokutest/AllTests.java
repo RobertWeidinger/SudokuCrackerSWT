@@ -4,6 +4,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
+import de.rw.sudokutest.algorithms.PossiblePlacesAlgorithmTest;
 import de.rw.sudokutest.algorithms.PossiblePlacesListTest;
 import de.rw.sudokutest.algorithms.PossiblePlacesTest;
 import de.rw.sudokutest.algorithms.SudokuBruteForceCrackerTest;
@@ -43,7 +44,8 @@ import de.rw.sudokutest.zUnused.SudokuScannerForBlockTest;
 	SubStructIteratorColsTest.class,
 	SudokuCoordsTest.class,
 	PossiblePlacesTest.class,
-	PossiblePlacesListTest.class
+	PossiblePlacesListTest.class,
+	PossiblePlacesAlgorithmTest.class
 	})
 public class AllTests {
 

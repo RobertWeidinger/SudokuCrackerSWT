@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.rw.sudoku.crackerMain.SudokuCrackerSWT;
+import de.rw.sudoku.model.SudokuCoords;
 import de.rw.sudoku.views.SuText;
 import de.rw.sudoku.views.SudokuDumpView;
 import de.rw.sudoku.views.SudokuView;
@@ -32,7 +33,7 @@ public class SudokuCrackerSWTTest {
 	@Test
 	public void testInitUI() {
 		SudokuView sv = sc.getSv();
-		SuText sut = sv.getSuText(0,0);
+		SuText sut = sv.getSuText(new SudokuCoords(0,0));
 		Assert.assertEquals("",sut.getString());
 		SudokuDumpView sdv = sc.getSdv();
 		String s = sdv.getString();

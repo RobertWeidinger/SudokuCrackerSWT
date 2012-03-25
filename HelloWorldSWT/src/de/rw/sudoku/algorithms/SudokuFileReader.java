@@ -4,6 +4,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.StringTokenizer;
 
+import de.rw.sudoku.model.SudokuCoords;
 import de.rw.sudoku.model.SudokuModel;
 
 
@@ -29,12 +30,12 @@ public class SudokuFileReader {
 	    while (st.hasMoreTokens()) {
 	    	  String s = st.nextToken();
 	    	  if (s.equals("_"))
-	    		  sm.setEmptyValue(i, j);
+	    		  sm.setEmptyValue(new SudokuCoords(i, j));
 	    	  else
 	    	  {
 	    		  Integer intg = Integer.valueOf(s);
 	    		  int i2 = intg.intValue();
-	    		  sm.setFixedValue(i, j, i2);
+	    		  sm.setFixedValue(new SudokuCoords(i, j), i2);
 	    	  }
 	    	  if (j==size-1)
 	    	  {

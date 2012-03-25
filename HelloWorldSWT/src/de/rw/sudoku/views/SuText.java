@@ -4,27 +4,27 @@ import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Text;
 
+import de.rw.sudoku.model.SudokuCoords;
+
 
 public class SuText {
 
 	private Text t;
-	private int row;
-	private int col;
+	private SudokuCoords sc;
 	private ModifyListener ml;
 	private SudokuView sv;
 	
 	public int getRow() {
-		return row;
+		return sc.getRow();
 	}
 
 	public int getCol() {
-		return col;
+		return sc.getCol();
 	}
 	
-	public SuText(SudokuView _sv, int style, int _row, int _col) {
+	public SuText(SudokuView _sv, int style, SudokuCoords _sc) {
 		sv = _sv;
-		row = _row;
-		col = _col;
+		sc = _sc;
 		t = new Text(sv.getParent(), style);
 		// TODO Auto-generated constructor stub
 		ml = new ModifyListener(){
@@ -38,7 +38,7 @@ public class SuText {
 					// TODO Auto-generated catch block
 					i = -1;
 				}
-				sv.updateModel(row, col, i, false);
+				sv.updateModel(sc, i, false);
 			}};
 		
 		t.addModifyListener(ml);

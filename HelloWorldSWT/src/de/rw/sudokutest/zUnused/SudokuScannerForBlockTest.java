@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.rw.sudoku.algorithms.SudokuFileReader;
+import de.rw.sudoku.model.SudokuCoords;
 import de.rw.sudoku.model.SudokuModel;
 import de.rw.sudoku.zUnused.ScannerAction;
 import de.rw.sudoku.zUnused.SudokuScannerForBlock;
@@ -34,7 +35,7 @@ public class SudokuScannerForBlockTest {
 				new ScannerAction<ArrayList<Integer>>(sm,valuesInBlock){
 					@Override
 					public boolean act(int row, int col, ArrayList<Integer> _valuesInBlock) {
-						_valuesInBlock.add(sm.getValue(row, col));
+						_valuesInBlock.add(sm.getValue(new SudokuCoords(row, col)));
 						return true;
 					}
 				});

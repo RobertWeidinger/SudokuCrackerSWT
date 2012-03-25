@@ -11,6 +11,13 @@ public class SudokuCoords implements Comparable<SudokuCoords>{
 		this.row = row;
 		this.col = col;
 	}
+	
+	public SudokuCoords(SudokuCoords sc)
+	{
+		super();
+		this.row = sc.getRow();
+		this.col = sc.getCol();
+	}
 	public int getRow() {
 		return row;
 	}

@@ -6,7 +6,9 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 
 import de.rw.sudoku.algorithms.SudokuHelper;
+import de.rw.sudoku.model.SudokuCoords;
 import de.rw.sudoku.model.SudokuModel;
+import de.rw.sudoku.model.iterators.SudokuIterator;
 
 
 public class SudokuView implements View {
@@ -63,7 +65,7 @@ public class SudokuView implements View {
 			{
 				if (j%sm.getBlockSize()==0)
 					additionalColSpace+=5;
-				textArray[i][j]=new SuText(this, SWT.SINGLE,i,j);
+				textArray[i][j]=new SuText(this, SWT.SINGLE, new SudokuCoords(i,j));
 				SuText sut = textArray[i][j];
 				sut.setSize(textSize);
 				sut.setLocation(textInterspace+j*(textSize.x+textInterspace)+additionalColSpace,
@@ -83,42 +85,43 @@ public class SudokuView implements View {
 	{
 		updateModelSuppressed = true;
 		SudokuHelper sh = new SudokuHelper(getModel());
-		for (int i=0; i<sm.getSize(); i++)
-			for (int j=0; j<sm.getSize(); j++)
-			{
-				SuText sut = textArray[i][j];
-				String s = sm.entryToDisplayString(i, j);
-				sut.setTextIfNew(s);
-				if (sm.isFixed(i, j))//(se.isFixed())
-					sut.setPropertiesFixed();
-				else if (!sm.isValidModel(i, j))
-					sut.setPropertiesError();
-				else if (sm.isBlocked(i, j))
-					sut.setPropertiesBlocked();
-				else
-					sut.setPropertiesEditable();
-				
-				if (!sm.isEmpty(i, j) && sh.findConflicts(i, j, sm.getValue(i, j)).size()>0)
-					sut.setPropertiesError();
-			}
+		SudokuIterator si = SudokuIterator.createIterator(getModel().getSize(), getModel().getBlockSize(), new SudokuCoords(0,0), SudokuIterator.SubStructures.WHOLE);
+		while (si.hasNext())
+		{
+			SudokuCoords sc = si.next();
+			SuText sut = textArray[sc.getRow()][sc.getCol()];
+			String s = sm.entryToDisplayString(sc);
+			sut.setTextIfNew(s);
+			if (sm.isFixed(sc))//(se.isFixed())
+				sut.setPropertiesFixed();
+			else if (!sm.isValidModel(sc))
+				sut.setPropertiesError();
+			else if (sm.isBlocked(sc))
+				sut.setPropertiesBlocked();
+			else
+				sut.setPropertiesEditable();
+			
+			if (!sm.isEmpty(sc) && sh.findConflicts(sc, sm.getValue(sc)).size()>0)
+				sut.setPropertiesError();
+		}
 		
 		updateModelSuppressed=false;
 	}
 	
-	public void updateModel(int row, int col, int value, boolean fixed)
+	public void updateModel(SudokuCoords sc, int value, boolean fixed)
 	{
 		if (updateModelSuppressed) return;
 		if (value<0)
-			sm.setEmptyValue(row, col);
+			sm.setEmptyValue(sc);
 		else if (fixed)
-			sm.setFixedValue(row, col, value);
+			sm.setFixedValue(sc, value);
 		else
-			sm.setSuggestedValue(row, col, value);
+			sm.setSuggestedValue(sc, value);
 	}
 
-	public SuText getSuText(int i, int j)
+	public SuText getSuText(SudokuCoords sc)
 	{
-		return textArray[i][j];
+		return textArray[sc.getRow()][sc.getCol()];
 	}
 	
 // Testmethode
