@@ -1,6 +1,7 @@
 package de.rw.sudoku.model;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.StringTokenizer;
 import java.util.Vector;
 
 import de.rw.sudoku.model.iterators.SudokuIterator;
@@ -15,6 +16,9 @@ public class SudokuModel implements Model {
 	private int blockSize;
 	Vector<Vector<SudokuEntry>> arraySudokuEntries;
 	LinkedList<SudokuEntry> oldSudokuEntries;
+
+	private static void log(String s)
+	{ System.out.println(s); }
 	
 	public SudokuModel(int _size, int _subSize)
 	{
@@ -82,7 +86,15 @@ public class SudokuModel implements Model {
 	private SudokuEntry getSudokuEntry(SudokuCoords sc)
 	{
 		if (!inBounds(sc)) return null;
-		return arraySudokuEntries.get(sc.getRow()).get(sc.getCol());	}
+		return arraySudokuEntries.get(sc.getRow()).get(sc.getCol());
+	}
+	
+	private void setSudokuEntry(SudokuEntry se)
+	{
+		if (inBounds(se.getSudokuCoords()))
+			arraySudokuEntries.get(se.getRow()).set(se.getCol(), se);
+		updateViews();
+	}
 	
 	public static final int FIXED=1;
 	public static final int SUGGESTED=2;
@@ -221,7 +233,7 @@ public class SudokuModel implements Model {
 	{
 		String s = new String();
 		
-		s+= this.getSize() + " " + this.getBlockSize() + "\n\n";
+		s+= this.getSize() + " " + this.getBlockSize() + System.getProperty("line.separator")+ System.getProperty("line.separator");
 				
 		SudokuIterator it = SudokuIterator.createIterator(getSize(), getBlockSize(), new SudokuCoords(0,0), SubStructures.WHOLE);
 		while (it.hasNext())
@@ -234,14 +246,14 @@ public class SudokuModel implements Model {
 				s+= " " + se.getValue();
 			else 
 				s+= " ?";
-			if (sc.getCol()==getSize()-1) s+="\n";
+			if (sc.getCol()==getSize()-1) s+=System.getProperty("line.separator");
 		}
 		return s;
 	}
 	
 	public String toStringWithFlags()
 	{
-		String s = this.toString() + "\n";
+		String s = this.toString() + System.getProperty("line.separator");
 		SudokuIterator it = SudokuIterator.createIterator(getSize(), getBlockSize(), new SudokuCoords(0,0), SubStructures.WHOLE);
 		while (it.hasNext())
 		{
@@ -252,28 +264,58 @@ public class SudokuModel implements Model {
 			else if (se.isEmpty()) s+=" _";
 			else s+=" S";
 		
-			if (sc.getCol()==getSize()-1) s+="\n";
+			if (sc.getCol()==getSize()-1) s+=System.getProperty("line.separator");
 		}
 		return s;
 	}
 	
+	final static String FILEFORMATVERSION=new String("FileFormatVersion=2.0");
+	
 	public String toDumpString()
 	{
-		String s = this.toString() + "\n";
+		String s = FILEFORMATVERSION + System.getProperty("line.separator") + 
+				this.getSize()+" "+ this.getBlockSize() + System.getProperty("line.separator");
 		SudokuIterator it = SudokuIterator.createIterator(getSize(), getBlockSize(), new SudokuCoords(0,0), SubStructures.WHOLE);
 		while (it.hasNext())
 		{
 			SudokuCoords sc = it.next();
 			SudokuEntry se = this.getSudokuEntry(sc);
-			s+=se.toDumpString();
-			if (sc.getCol()==getSize()-1) s+="\n";
+			s+=se.toDumpString()+" ";
+			if (sc.getCol()==getSize()-1) s+=System.getProperty("line.separator");
 		}
 		
-		s+="Old Values:\n{";
+/*		s+="Old Values:"+System.getProperty("line.separator")+"{";
 		for (int i=0; i<oldSudokuEntries.size();i++)
 			s+=oldSudokuEntries.get(i).toDumpString();
-		s+="}\n";
+		s+="}"+System.getProperty("line.separator");
+*/
 		return s;
+	}
+	
+	static public boolean scanFromDumpString(SudokuModel sm, String s)
+	{
+		int size = -1;
+		int blockSize = -1;
+	    StringTokenizer st = new StringTokenizer(s);
+	    if (!st.nextToken().equals(FILEFORMATVERSION)) return false;
+	    if (st.hasMoreTokens()) size = Integer.valueOf(st.nextToken()).intValue();
+	    if (st.hasMoreTokens()) blockSize = Integer.valueOf(st.nextToken()).intValue();
+	    
+	    sm.reInit(size, blockSize);
+	    for (int i=0; i<size; i++)
+	    	for (int j=0; j<size; j++)
+		    {
+		    	SudokuEntry se = SudokuEntry.scanFromDumpString(st);
+		    	if (se.getRow()!=i || se.getCol()!=j)
+		    	{
+		    		log("Fehler beim Einlesen von Objekt (Position stimmt nicht): "+se);
+		    		sm.reInit(size, blockSize);
+		    		return false;
+		    	}
+		    	sm.setSudokuEntry(se);
+		    }
+	    
+	    return true;
 	}
 	
 // ========================= Testhilfsmethoden =================================================================	

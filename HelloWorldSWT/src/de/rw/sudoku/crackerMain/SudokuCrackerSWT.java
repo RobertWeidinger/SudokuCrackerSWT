@@ -13,6 +13,7 @@ import de.rw.sudoku.views.QuitButton;
 import de.rw.sudoku.views.SudokuDumpView;
 import de.rw.sudoku.views.SudokuView;
 import de.rw.sudoku.views.UndoButton;
+import de.rw.sudoku.views.WriteFileButton;
 
 
 public class SudokuCrackerSWT {
@@ -56,6 +57,7 @@ public class SudokuCrackerSWT {
         sv.update();
         sdv.update();
         
+        new WriteFileButton				(shell, SWT.PUSH, sm, 500,  50, 120, 30);
         
         new LoadFileButton				(shell, SWT.PUSH, sm, 500, 100, 120, 30);
                 

@@ -98,7 +98,7 @@ public class PossiblePlacesList {
 		Iterator<PossiblePlaces> it = listPossiblePlaces.iterator();
 		String s = new String();
 		while (it.hasNext())
-			s+= it.next().toString() + "\n"; 
+			s+= it.next().toString() + System.getProperty("line.separator");; 
 		return s;
 	}
 	
@@ -108,7 +108,7 @@ public class PossiblePlacesList {
 		Iterator<PossiblePlacesList> it = lppl.iterator();
 		String s = new String();
 		while (it.hasNext())
-			s+=it.next().toString() + "\n";
+			s+=it.next().toString() + System.getProperty("line.separator");;
 		return s;
 	}
 	

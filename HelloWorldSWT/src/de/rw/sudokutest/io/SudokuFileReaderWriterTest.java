@@ -26,13 +26,31 @@ public class SudokuFileReaderWriterTest {
 	public void testReadSudokuFromFile() {
 		SudokuModel sm = new SudokuModel(9,3);
 		try {
-			SudokuFileReaderWriter.readSudokuFromFile(sm, "src\\sz20120224.txt");
+			SudokuFileReaderWriter.readSudokuFromFile(sm, "D:\\dokus\\Robert\\SoftwareEntwicklung\\Testdaten\\sz20120224_Format2.0.txt");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		Assert.assertEquals(2, sm.getValue(new SudokuCoords(3, 5)).intValue());
 		Assert.assertEquals(true, sm.isValidModel());
+	}
+	
+	@Test
+	public void testWriteSudokuToFile()
+	{
+		String longPath = new String("src\\modifiedTestModel1.txt");
+		SudokuModel sm = SudokuModel.createTestModel1();
+		sm.addBlockingValue(new SudokuCoords(7,1), 2);
+		sm.addBlockingValue(new SudokuCoords(7,1), 4);
+		sm.addBlockingValue(new SudokuCoords(7,1), 6);
+		
+		try {
+			SudokuFileReaderWriter.writeSudokuToFile(sm, longPath);
+		} catch (IOException e) {
+			Assert.fail("Exception beim Schreiben ins File");
+			e.printStackTrace();
+		}
+		// FEHLT: Datei mit Zieldatei vergleichen.
 	}
 
 }

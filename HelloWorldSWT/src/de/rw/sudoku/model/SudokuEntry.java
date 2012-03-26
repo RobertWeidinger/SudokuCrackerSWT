@@ -28,6 +28,11 @@ public class SudokuEntry {
 	protected int getCol() {
 		return sc.getCol();
 	}
+	
+	protected SudokuCoords getSudokuCoords()
+	{
+		return this.sc;
+	}
 
 	protected Integer getValue() {
 		return value;
@@ -144,7 +149,7 @@ public class SudokuEntry {
 		s+=" "+TYPEKENNZ+" ";
 		if (isFixed()) s+= FIXEDKENNZ;
 		else if (isEmpty()) s+=EMPTYKENNZ;
-		else if (isBlocked()) s+=BLOCKEDKENNZ;
+//		else if (isBlocked()) s+=BLOCKEDKENNZ; // Hier kommt er eh nie hin...
 		else s+=SUGGESTEDKENNZ; 
 		s+=" "+BLOCKVALKENNZ+" ";
 		for (int i=0; i<blockingValues.size(); i++)
@@ -166,10 +171,9 @@ public class SudokuEntry {
 		return true;
 	}
 	
-	protected static SudokuEntry scanFromDumpString(String s)
+	protected static SudokuEntry scanFromDumpString(StringTokenizer st)
 	{
 		SudokuEntry se = null;
-		StringTokenizer st = new StringTokenizer(s);
 		nextToken(st,KLAMMERAUF);
 		nextToken(st,ROWKENNZ);
 		Integer row = Integer.valueOf(st.nextToken());
@@ -201,19 +205,22 @@ public class SudokuEntry {
 	static public int testDumpToStringAndScan1() // Erg.=Zahl der erfolgreichen Tests
 	{
 		String sIn1 = new String(" { r= 5 c= 4 v= 9 type= F blockedValues={ } } ");
-		SudokuEntry se = scanFromDumpString(sIn1);
+		StringTokenizer st = new StringTokenizer(sIn1);
+		SudokuEntry se = scanFromDumpString(st);
 		String sOut1 = se.toDumpString();
 		log(sOut1);
 		if (!sIn1.equals(sOut1)) return 0;
 		
 		sIn1 = new String(" { r= 5 c= 4 v= _ type= E blockedValues={ } } ");
-		se = scanFromDumpString(sIn1);
+		st = new StringTokenizer(sIn1);
+		se = scanFromDumpString(st);
 		sOut1 = se.toDumpString();
 		log(sOut1);
 		if (!sIn1.equals(sOut1)) return 1;
 
 		sIn1 = new String(" { r= 5 c= 4 v= _ type= E blockedValues={ 2 4 6 8 } } ");
-		se = scanFromDumpString(sIn1);
+		st = new StringTokenizer(sIn1);
+		se = scanFromDumpString(st);
 		sOut1 = se.toDumpString();
 		log(sOut1);
 		if (!sIn1.equals(sOut1)) return 2;
