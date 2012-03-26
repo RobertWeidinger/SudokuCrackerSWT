@@ -26,7 +26,7 @@ public class SudokuFileReaderWriterTest {
 	public void testReadSudokuFromFile() {
 		SudokuModel sm = new SudokuModel(9,3);
 		try {
-			SudokuFileReaderWriter.readSudokuFromFile(sm, "D:\\dokus\\Robert\\SoftwareEntwicklung\\Testdaten\\sz20120224_Format2.0.txt");
+			SudokuFileReaderWriter.readSudokuFromFile(sm, "src\\de\\rw\\sudokutest\\zzTestdata\\sz20120224_Format2.0.txt");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -38,7 +38,7 @@ public class SudokuFileReaderWriterTest {
 	@Test
 	public void testWriteSudokuToFile()
 	{
-		String longPath = new String("src\\modifiedTestModel1.txt");
+		String longPath = new String("..\\..\\..\\ergdata\\modifiedTestModel1.txt");
 		SudokuModel sm = SudokuModel.createTestModel1();
 		sm.addBlockingValue(new SudokuCoords(7,1), 2);
 		sm.addBlockingValue(new SudokuCoords(7,1), 4);
