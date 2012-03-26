@@ -16,6 +16,11 @@ public class PossiblePlacesListTest {
 
 	private PossiblePlacesList ppl=null;
 	
+	private void log(String s)
+	{
+	//	System.out.println(s);
+	}
+	
 	@Before
 	public void setUp() throws Exception {
 		ppl = new PossiblePlacesList();
@@ -32,14 +37,14 @@ public class PossiblePlacesListTest {
 		pp.addSudokuCoords(new SudokuCoords(1,1));
 		pp.addSudokuCoords(new SudokuCoords(0,0));
 		ppl.addValueAndPossiblePlaces(pp);
-		System.out.println("setUp - ppl:");
-		System.out.println(ppl.toString());
+		log("setUp - ppl:");
+		log(ppl.toString());
 	}
 
 	@Test
 	public void testGetClusters() {
-		System.out.println("testGetClusters:");
-		System.out.println(ppl.getClusterToString());
+		log("testGetClusters:");
+		log(ppl.getClusterToString());
 		List<PossiblePlacesList> lppl = ppl.getClusters();
 		Iterator<PossiblePlacesList> it = lppl.iterator();
 		Assert.assertTrue(it.hasNext());

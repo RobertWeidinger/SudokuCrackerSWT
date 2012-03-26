@@ -110,9 +110,30 @@ public class SudokuModelTest {
 		sm.addBlockingValue(sc2, 1);
 		sm.addBlockingValue(sc2, 2);
 		boolean bEqual = sm.equalBlockingValues(sc, sc2);
-		Assert.assertTrue(bEqual);
+		Assert.assertEquals(true,bEqual);
 		sm.removeBlockingValue(sc, 2);
 		bEqual = sm.equalBlockingValues(sc, sc2);
-		Assert.assertFalse(bEqual);
+		Assert.assertEquals(false,bEqual);
+	}
+	
+	@Test
+	public void testEqualsIgnoringOldValues()
+	{
+		SudokuModel sm1 = SudokuModel.createTestModel1();
+		SudokuModel sm2 = SudokuModel.createTestModel1();
+		SudokuCoords sc = new SudokuCoords(3,2);
+		sm1.addBlockingValue(sc, 1);
+		sm1.addBlockingValue(sc, 2);
+		sm1.addBlockingValue(sc, 5);
+		sm2.addBlockingValue(sc, 1);
+		sm2.addBlockingValue(sc, 2);
+		sm2.addBlockingValue(sc, 5);
+		
+		boolean bEqual = sm1.equalsIgnoringOldValues(sm2);
+		Assert.assertEquals(true,bEqual);
+		
+		sm1.removeBlockingValue(sc, 2);
+		bEqual = sm1.equalsIgnoringOldValues(sm2);
+		Assert.assertEquals(false,bEqual);
 	}
 }

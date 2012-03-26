@@ -13,7 +13,9 @@ public class SudokuEntry {
 	private ArrayList<Integer> blockingValues = null;
 	
 	static private void log(String s)
-	{ System.out.println(s); }
+	{ 
+	//	System.out.println(s); 
+	}
 	
 	protected SudokuEntry(SudokuCoords _sc)
 	{
@@ -113,6 +115,23 @@ public class SudokuEntry {
 		return true;
 	}
 	
+	
+	@Override
+	public boolean equals(Object _se2) {
+		if (! (_se2 instanceof SudokuEntry)) return false;
+		SudokuEntry se2 = (SudokuEntry) _se2;
+		if (! (this.getSudokuCoords().equals(se2.getSudokuCoords()))) return false;
+		
+		if (getValue()!=se2.getValue()) return false;
+		if (getValue()!=null && getValue().intValue()!=se2.getValue().intValue()) return false;
+		
+		if (this.isFixed()!=se2.isFixed()) return false;
+		
+		ArrayList<Integer> blv = getBlockingValues();
+		ArrayList<Integer> blv2 = se2.getBlockingValues();
+		return blv.containsAll(blv2) && blv2.containsAll(blv);
+	}
+
 	protected String toDisplayString(int minValue, int maxValue)
 	{
 		if (isBlocked())
@@ -226,5 +245,37 @@ public class SudokuEntry {
 		if (!sIn1.equals(sOut1)) return 2;
 	
 		return 3;
+	}
+	
+	static public int testEquals() // Erg.=Zahl der erfolgreichen Tests
+	{
+		SudokuEntry se1 = new SudokuEntry(new SudokuCoords(1, 4));
+		SudokuEntry se2 = new SudokuEntry(new SudokuCoords(1, 4));
+		if (!se1.equals(se2)) return 0;
+		se1.addBlockingValue(1);
+		se1.addBlockingValue(3);
+		se1.addBlockingValue(5);
+		se2.addBlockingValue(1);
+		se2.addBlockingValue(3);
+		se2.addBlockingValue(5);
+		if (!se1.equals(se2)) return 1;
+		
+		SudokuEntry se3 = new SudokuEntry(new SudokuCoords(1, 2));
+		se3.addBlockingValue(1);
+		se3.addBlockingValue(3);
+		se3.addBlockingValue(5);
+		if (se1.equals(se3)) return 2;
+		
+		SudokuEntry se5 = new SudokuEntry(new SudokuCoords(1, 4));
+		SudokuEntry se6 = new SudokuEntry(new SudokuCoords(1, 4));
+		se5.setValue(5);
+		se6.setValue(6);
+		if (se5.equals(se6)) return 3;
+		
+		SudokuEntry se7 = new SudokuEntry(new SudokuCoords(1, 4));
+		se7.setValue(5);
+		if (!se5.equals(se7)) return 4;
+		
+		return 5;
 	}
 }

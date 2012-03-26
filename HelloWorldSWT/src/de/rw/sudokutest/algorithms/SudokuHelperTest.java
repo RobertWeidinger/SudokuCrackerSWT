@@ -22,6 +22,12 @@ public class SudokuHelperTest extends TestCase {
 	private SudokuModel sm;
 	private SudokuHelper sh;
 
+	private void log(String s)
+	{
+	//	System.out.println(s);
+	}
+
+	
 	@Override
 	@Before
 	public void setUp() throws Exception {
@@ -54,7 +60,7 @@ public class SudokuHelperTest extends TestCase {
 
 	@Test
 	public void testFindUniquePlaceForValueInColPart() {
-		System.out.print(sm.toStringWithFlags());
+		log(sm.toStringWithFlags());
 		int res = sh.findUniquePlaceForValueInColPart(3, 3, 8);
 		Assert.assertEquals(5, res);
 		res = sh.findUniquePlaceForValueInColPart(5, 3, 8);

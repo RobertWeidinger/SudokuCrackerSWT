@@ -18,7 +18,9 @@ public class SudokuModel implements Model {
 	LinkedList<SudokuEntry> oldSudokuEntries;
 
 	private static void log(String s)
-	{ System.out.println(s); }
+	{ 
+	//	System.out.println(s); 
+	}
 	
 	public SudokuModel(int _size, int _subSize)
 	{
@@ -228,6 +230,18 @@ public class SudokuModel implements Model {
 		return getSudokuEntry(sc1).equalBlockingValues(getSudokuEntry(sc2));
 	}
 	
+	public boolean equalsIgnoringOldValues(SudokuModel sm2)
+	{
+		if (getSize()!=sm2.getSize() || getBlockSize()!=sm2.getBlockSize()) return false;
+		SudokuIterator it = SudokuIterator.createIterator(getSize(), getBlockSize(), new SudokuCoords(0,0), SubStructures.WHOLE);
+		while (it.hasNext())
+		{
+			SudokuCoords sc = it.next();
+			if (!getSudokuEntry(sc).equals(sm2.getSudokuEntry(sc))) return false;
+		}
+		return true;
+	}
+	
 	@Override
 	public String toString()
 	{
@@ -283,12 +297,6 @@ public class SudokuModel implements Model {
 			s+=se.toDumpString()+" ";
 			if (sc.getCol()==getSize()-1) s+=System.getProperty("line.separator");
 		}
-		
-/*		s+="Old Values:"+System.getProperty("line.separator")+"{";
-		for (int i=0; i<oldSudokuEntries.size();i++)
-			s+=oldSudokuEntries.get(i).toDumpString();
-		s+="}"+System.getProperty("line.separator");
-*/
 		return s;
 	}
 	

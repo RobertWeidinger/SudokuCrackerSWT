@@ -21,6 +21,11 @@ import de.rw.sudoku.model.iterators.SudokuIterator.SubStructures;
 public class PossiblePlacesAlgorithmTest {
 
 	private SudokuModel sm;
+
+	private void log(String s)
+	{
+	//	System.out.println(s);
+	}
 	
 	@Before
 	public void setUp() throws Exception {
@@ -47,7 +52,7 @@ public class PossiblePlacesAlgorithmTest {
 		while (itPrint.hasNext())
 		{
 			PossiblePlacesList ppl = itPrint.next();
-			System.out.println(ppl.toString());
+			log(ppl.toString());
 		}
 		// Konsolenausgabe - Ende
 		PossiblePlaces ppExpected1 = new PossiblePlaces(1);

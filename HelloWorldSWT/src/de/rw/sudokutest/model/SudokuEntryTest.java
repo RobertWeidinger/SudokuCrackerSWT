@@ -12,5 +12,11 @@ public class SudokuEntryTest {
 	public void testScanFromDumpString() {
 		Assert.assertEquals(3,SudokuEntry.testDumpToStringAndScan1());
 	}
+	
+	@Test
+	public void testEquals()
+	{
+		Assert.assertEquals(5,SudokuEntry.testEquals());
+	}
 
 }
