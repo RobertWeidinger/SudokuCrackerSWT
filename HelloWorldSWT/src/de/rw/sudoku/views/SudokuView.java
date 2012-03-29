@@ -101,7 +101,7 @@ public class SudokuView implements View {
 			else
 				sut.setPropertiesEditable();
 			
-			if (!sm.isEmpty(sc) && sh.findConflicts(sc, sm.getValue(sc)).size()>0)
+			if (!sm.noValue(sc) && sh.findConflicts(sc, sm.getValue(sc)).size()>0)
 				sut.setPropertiesError();
 		}
 		

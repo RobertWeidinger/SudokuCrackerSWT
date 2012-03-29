@@ -35,7 +35,7 @@ public class PossiblePlacesAlgorithm {
 			while (si.hasNext())
 			{
 				SudokuCoords sc = si.next();
-				if (!sm.isEmpty(sc)) continue;
+				if (!sm.noValue(sc)) continue;
 				if (sm.isBlocked(sc) && !sm.getBlockingValues(sc).contains(value)) continue;
 				if (sh.findConflicts(sc, value).size()>0) continue;
 				
@@ -96,8 +96,12 @@ public class PossiblePlacesAlgorithm {
 						{
 							SudokuCoords sc = scIt.next();
 							log("sm.addBlockingValue("+sc.getRow()+", "+sc.getCol()+", "+pp.getValue()+");");
-							sm.addBlockingValue(sc, pp.getValue());
-							res++;
+							ArrayList<Integer> l = sm.getBlockingValues(sc);
+							if (!l.contains(pp.getValue()))
+							{
+								sm.addBlockingValue(sc, pp.getValue());
+								res++;
+							}
 						}
 					}
 				}

@@ -33,7 +33,6 @@ public class PossiblePlacesAlgorithmTest {
 		try {
 			SudokuFileReaderWriter.readSudokuFromFile(sm, "src\\de\\rw\\sudokutest\\zzTestdata\\sz20120224_Format2.0.txt");
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			Assert.assertTrue(false);
 		}
@@ -76,6 +75,34 @@ public class PossiblePlacesAlgorithmTest {
 			}
 		}
 		Assert.assertTrue(false);
+	}
+	
+	
+	@Test 
+	public void testOneIterationBruteForceAndOneIterationPossiblePlaces()
+	{
+		SudokuBruteForceCracker sbfc = new SudokuBruteForceCracker(sm);
+		sbfc.oneIteration();
+		Assert.assertEquals(true, AlgorithmsTestHelper.modelIsEqualToFile(sm,"sz20120224_Format2.0_nach1BruteForce.txt"));
+		sbfc.oneIteration();
+		Assert.assertEquals(true, AlgorithmsTestHelper.modelIsEqualToFile(sm,"sz20120224_Format2.0_nach2BruteForce.txt"));
+		sbfc.oneIteration();
+		Assert.assertEquals(true, AlgorithmsTestHelper.modelIsEqualToFile(sm,"sz20120224_Format2.0_nach3BruteForce.txt"));
+		
+		PossiblePlacesAlgorithm ppa = new PossiblePlacesAlgorithm(sm);
+		ppa.oneIteration();
+		Assert.assertEquals(true, AlgorithmsTestHelper.modelIsEqualToFile(sm,"sz20120224_Format2.0_nach3BruteForce_1BlockingValues.txt"));
+		ppa.oneIteration();
+		Assert.assertEquals(true, AlgorithmsTestHelper.modelIsEqualToFile(sm,"sz20120224_Format2.0_nach3BruteForce_2BlockingValues.txt"));
+
+		sbfc.oneIteration();
+		Assert.assertEquals(true, AlgorithmsTestHelper.modelIsEqualToFile(sm,"sz20120224_Format2.0_nach3BruteForce_2BlockingValues_1BruteForce.txt"));
+		sbfc.oneIteration();
+		Assert.assertEquals(true, AlgorithmsTestHelper.modelIsEqualToFile(sm,"sz20120224_Format2.0_nach3BruteForce_2BlockingValues_2BruteForce.txt"));
+		sbfc.oneIteration();
+		Assert.assertEquals(true, AlgorithmsTestHelper.modelIsEqualToFile(sm,"sz20120224_Format2.0_nach3BruteForce_2BlockingValues_3BruteForce.txt"));
+		sbfc.oneIteration();
+		Assert.assertEquals(true, AlgorithmsTestHelper.modelIsEqualToFile(sm,"sz20120224_Format2.0_geloest.txt"));
 	}
 
 }

@@ -155,12 +155,27 @@ public class SudokuModel implements Model {
 		while (si.hasNext())
 		{
 			SudokuEntry se = getSudokuEntry(si.next());
-			if (!se.isEmpty())
+			if (!se.noValue())
 				se.makeFixed();
 		}
 		updateViews();
 	}
+	
+	public int numberOfNonEmptyFields()
+	{
+		int iCount = 0;
+		SudokuIterator si = SudokuIterator.createIterator(getSize(), getBlockSize(), new SudokuCoords(0,0), SudokuIterator.SubStructures.WHOLE);
+		while (si.hasNext())
+		{
+			SudokuEntry se = getSudokuEntry(si.next());
+			if (!se.noValue() || se.isBlocked())
+				iCount++;
+		}
+		return iCount;
+	}
 
+	
+	
 	@Override
 	public void registerView(View _v) {
 		alViews.add(_v);
@@ -177,9 +192,9 @@ public class SudokuModel implements Model {
 		return getSudokuEntry(sc).isFixed();
 	}
 	
-	public boolean isEmpty(SudokuCoords sc)
+	public boolean noValue(SudokuCoords sc)
 	{
-		return getSudokuEntry(sc).isEmpty();
+		return getSudokuEntry(sc).noValue();
 	}
 	
 	public boolean isBlocked(SudokuCoords sc)
@@ -254,7 +269,7 @@ public class SudokuModel implements Model {
 		{
 			SudokuCoords sc = it.next();
 			SudokuEntry se = this.getSudokuEntry(sc);
-			if (se.isEmpty())
+			if (se.noValue())
 				s+= " _";
 			else if (se.isValid(1, getSize()))
 				s+= " " + se.getValue();
@@ -275,7 +290,7 @@ public class SudokuModel implements Model {
 			SudokuEntry se = this.getSudokuEntry(sc);
 			if (se.isBlocked()) s+=" _";
 			else if (se.isFixed()) s+=" F";
-			else if (se.isEmpty()) s+=" _";
+			else if (se.noValue()) s+=" _";
 			else s+=" S";
 		
 			if (sc.getCol()==getSize()-1) s+=System.getProperty("line.separator");

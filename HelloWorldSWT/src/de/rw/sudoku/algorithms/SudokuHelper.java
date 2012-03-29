@@ -76,7 +76,7 @@ public class SudokuHelper {
 		{
 			SudokuCoords sc = si.next();
 			if (value.equals(sm.getValue(sc))) return null;
-			if (sm.isEmpty(sc) && !sm.isBlocked(sc))
+			if (sm.noValue(sc) && !sm.isBlocked(sc))
 			{
 				List<SudokuFieldValues> ll = findConflicts(sc, value);
 				if (ll.size()==0) // no conflict

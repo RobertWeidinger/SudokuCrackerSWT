@@ -30,14 +30,14 @@ public class SudokuModelTest {
 	public void testSetEmptyValue() {
 		SudokuCoords sc = new SudokuCoords(0,5);
 		sm.setEmptyValue(sc);
-		Assert.assertTrue(sm.isEmpty(sc));
+		Assert.assertTrue(sm.noValue(sc));
 	}
 
 	@Test
 	public void testSetSuggestedValue() {
 		SudokuCoords sc = new SudokuCoords(0,5);
 		sm.setSuggestedValue(sc, 9);
-		Assert.assertFalse(sm.isEmpty(sc));
+		Assert.assertFalse(sm.noValue(sc));
 		Assert.assertFalse(sm.isFixed(sc));
 		
 	}
@@ -52,7 +52,7 @@ public class SudokuModelTest {
 	@Test
 	public void testGetValue() {
 		SudokuCoords sc = new SudokuCoords(2,0);
-		Assert.assertTrue(sm.isEmpty(sc));
+		Assert.assertTrue(sm.noValue(sc));
 		Assert.assertEquals(1, sm.getValue(new SudokuCoords(1,0)).intValue());
 	}
 
@@ -77,7 +77,7 @@ public class SudokuModelTest {
 		Assert.assertEquals(1, sm.getValue(sc).intValue());
 		Assert.assertFalse(sm.isFixed(sc));
 		sm.undo();
-		Assert.assertTrue(sm.isEmpty(sc));
+		Assert.assertTrue(sm.noValue(sc));
 		Assert.assertTrue(sm.isValidModel());
 	}
 

@@ -38,7 +38,7 @@ public class SudokuBruteForceCracker {
 			while (si.hasNext())
 			{
 				SudokuCoords sc = si.next();
-				boolean isEmpty = sm.isEmpty(sc);
+				boolean isEmpty = sm.noValue(sc);
 				boolean isBlocked = sm.isBlocked(sc);
 				boolean blockingValuesContainValue = sm.getBlockingValues(sc).contains(value);
 				if (!isEmpty || (isBlocked && !blockingValuesContainValue))

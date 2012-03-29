@@ -4,6 +4,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
+import de.rw.sudokutest.algorithms.AlternatingAlgorithmsTest;
 import de.rw.sudokutest.algorithms.PossiblePlacesAlgorithmTest;
 import de.rw.sudokutest.algorithms.PossiblePlacesListTest;
 import de.rw.sudokutest.algorithms.PossiblePlacesTest;
@@ -48,6 +49,7 @@ import de.rw.sudokutest.zUnused.SudokuScannerForBlockTest;
 	PossiblePlacesTest.class,
 	PossiblePlacesListTest.class,
 	PossiblePlacesAlgorithmTest.class,
+	AlternatingAlgorithmsTest.class
 	})
 public class AllTests {
 

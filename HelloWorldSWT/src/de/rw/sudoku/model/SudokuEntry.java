@@ -51,7 +51,7 @@ public class SudokuEntry {
 		clearBlockingValues();
 	}
 	
-	protected boolean isEmpty() {
+	protected boolean noValue() {
 		return value==null; // && blockingValues.size()==0;
 	}
 	
@@ -109,7 +109,7 @@ public class SudokuEntry {
 		ArrayList<Integer> pV = getBlockingValues();
 		for (Integer i: pV)
 			if (i.intValue()<minValue || i.intValue()>maxValue) return false;
-		if (isEmpty() && isFixed()) return false;
+		if (noValue() && isFixed()) return false;
 		if (getValue()!=null)
 			if (getValue().intValue()<minValue || getValue().intValue()>maxValue) return false;
 		return true;
@@ -142,7 +142,7 @@ public class SudokuEntry {
 				s+= i + " ";
 			return s;
 		}
-		if (isEmpty()) return "";
+		if (noValue()) return "";
 		if (!isValid(minValue,maxValue)) return "?!?";
 		return getValue().toString();
 	}
@@ -164,10 +164,10 @@ public class SudokuEntry {
 	{
 		String s = new String(" "+KLAMMERAUF);
 		s+=" "+ROWKENNZ+" " + getRow() + " "+COLKENNZ+" " + getCol();
-		s+=" "+VALKENNZ+" " + ((isEmpty())? EMPTYVAL: value.intValue());
+		s+=" "+VALKENNZ+" " + ((noValue())? EMPTYVAL: value.intValue());
 		s+=" "+TYPEKENNZ+" ";
 		if (isFixed()) s+= FIXEDKENNZ;
-		else if (isEmpty()) s+=EMPTYKENNZ;
+		else if (noValue()) s+=EMPTYKENNZ;
 //		else if (isBlocked()) s+=BLOCKEDKENNZ; // Hier kommt er eh nie hin...
 		else s+=SUGGESTEDKENNZ; 
 		s+=" "+BLOCKVALKENNZ+" ";
