@@ -4,6 +4,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
 import de.rw.sudoku.model.SudokuModel;
+import de.rw.sudoku.views.AlternatingAlgorithmButton;
 import de.rw.sudoku.views.BlockingValuesButton;
 import de.rw.sudoku.views.BruteForceAlgorithmButton;
 import de.rw.sudoku.views.ClearBlockingValuesButton;
@@ -61,16 +62,19 @@ public class SudokuCrackerSWT {
         
         new LoadFileButton				(shell, SWT.PUSH, sm, 500, 100, 120, 30);
                 
-        new FixButton					(shell, SWT.PUSH, sm, 500, 200, 120, 30);
+        new FixButton					(shell, SWT.PUSH, sm, 500, 150, 120, 30);
         
-        new UndoButton					(shell, SWT.PUSH, sm, 500, 300, 120, 30);
+        new UndoButton					(shell, SWT.PUSH, sm, 500, 200, 120, 30);
 
-        new BlockingValuesButton		(shell, SWT.PUSH, sm, 500, 400, 120, 30);
-        new ClearBlockingValuesButton	(shell, SWT.PUSH, sm, 650, 400, 60, 30);
         
-        new BruteForceAlgorithmButton	(shell, SWT.PUSH, sm, 500, 500, 120, 30);
+        new BruteForceAlgorithmButton	(shell, SWT.PUSH, sm, 500, 250, 120, 30);
         
-        new QuitButton					(shell, SWT.PUSH, sm, 500, 600, 120, 30);
+        new BlockingValuesButton		(shell, SWT.PUSH, sm, 500, 300, 120, 30);
+        new ClearBlockingValuesButton	(shell, SWT.PUSH, sm, 650, 300,  60, 30);
+
+        new AlternatingAlgorithmButton	(shell, SWT.PUSH, sm, 500, 350, 120, 30);
+
+        new QuitButton					(shell, SWT.PUSH, sm, 500, 400, 120, 30);
         
 
     }

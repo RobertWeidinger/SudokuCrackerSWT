@@ -1,5 +1,6 @@
 package de.rw.sudoku.views;
 
+import java.io.File;
 import java.io.IOException;
 
 import org.eclipse.swt.SWT;
@@ -9,6 +10,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.swt.widgets.MessageBox;
 
 import de.rw.sudoku.io.SudokuFileReaderWriter;
 import de.rw.sudoku.model.SudokuModel;
@@ -36,7 +38,7 @@ public class WriteFileButton {
 			int setBoundsArg2, 
 			int setBoundsArg3) {
 		b = new Button(arg0,arg1);
-		// TODO Auto-generated constructor stub
+		
 		sm = _sm;
 		b.setText("Datei speichern");
         b.setBounds(setBoundsArg0, setBoundsArg1, setBoundsArg2, setBoundsArg3);
@@ -50,9 +52,18 @@ public class WriteFileButton {
             	if (strFile != null)
             	{
             		try {
-						SudokuFileReaderWriter.writeSudokuToFile(sm, strFile);
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
+            			File f = new File(strFile);
+            			if (f.exists())
+            			{
+            				MessageBox mb = new MessageBox(Display.getCurrent().getActiveShell(), SWT.OK | SWT.CANCEL);
+            				mb.setText("Datei speichern");
+            				mb.setMessage("Wollen Sie " + strFile + " überschreiben?");
+            				if (mb.open()==SWT.CANCEL) return;
+             		        
+            			}
+           				SudokuFileReaderWriter.writeSudokuToFile(sm, strFile);
+					} 
+            		catch (IOException e1) {
 						e1.printStackTrace();
 					}
             	}
