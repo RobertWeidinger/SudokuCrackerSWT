@@ -48,8 +48,16 @@ public class PossiblePlacesAlgorithm {
 		lppl = PossiblePlacesList.reduceToImportantClusters(lppl);
 		return lppl;
 	}
-
+	
 	public int oneIteration()
+	{
+		sm.notifyAlgorithmStart();
+		int i = oneIterationInternal();
+		sm.notifyAlgorithmStop();
+		return i;
+	}
+
+	protected int oneIterationInternal()
 	{
 		log("====== PossiblePlacesAlgorithm.oneIteration() ======");
 		int res = 0;

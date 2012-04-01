@@ -15,6 +15,15 @@ public class AlternatingAlgorithms {
 
 	public boolean run()
 	{
+		sm.notifyAlgorithmStart();
+		boolean b = runInternal();
+		sm.notifyAlgorithmStop();
+		return b;
+	}
+
+	
+	public boolean runInternal()
+	{
 		SudokuBruteForceCracker sbfc = new SudokuBruteForceCracker(sm);
 		PossiblePlacesAlgorithm ppa = new PossiblePlacesAlgorithm(sm);
 		int numChangedFields1 = 0;
@@ -25,7 +34,7 @@ public class AlternatingAlgorithms {
 		do {
 			numChangedFields1 = numChangedFields2 = countPpa = 0; 
 			do {
-				numChangedFields1 = sbfc.oneIteration();
+				numChangedFields1 = sbfc.oneIterationInternal();
 				if (sm.numberOfNonEmptyFields()==sm.getSize()*sm.getSize()) return true;
 				if (++countGlobal>50) 
 					{
@@ -36,7 +45,7 @@ public class AlternatingAlgorithms {
 			} while (numChangedFields1>0);
 			
 			do {
-				numChangedFields2 = ppa.oneIteration(); 
+				numChangedFields2 = ppa.oneIterationInternal(); 
 				if (sm.numberOfNonEmptyFields()==sm.getSize()*sm.getSize()) return true;
 				if (++countGlobal>50) 
 				{

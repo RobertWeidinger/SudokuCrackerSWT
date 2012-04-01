@@ -2,10 +2,11 @@ package de.rw.sudoku.views;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Text;
 
-import de.rw.sudoku.algorithms.SudokuHelper;
 import de.rw.sudoku.model.SudokuCoords;
 import de.rw.sudoku.model.SudokuModel;
 import de.rw.sudoku.model.iterators.SudokuIterator;
@@ -15,6 +16,7 @@ public class SudokuView implements View {
 
 	private SudokuModel sm;
 	private SuText[][] textArray;
+	private Text subText;
 	private Composite parent;
 	private boolean updateModelSuppressed; // Semaphor;
 	private Color colorEditable;
@@ -55,7 +57,10 @@ public class SudokuView implements View {
 		colorFixed = new Color(parent.getBackground().getDevice(),128,255,128);
 		colorError = new Color(parent.getBackground().getDevice(),128,128,255);
 		colorBlocked = new Color(parent.getBackground().getDevice(),255,166,166);
+		parent.setBackgroundImage(new Image(parent.getBackground().getDevice(),"C:\\windows\\feder.bmp"));
 		int additionalRowSpace=0;
+		int rowLocation = 0;
+		int colLocation = 0;
 		for (int i=0; i<sm.getSize(); i++)
 		{
 			if (i%sm.getBlockSize()==0)
@@ -68,11 +73,28 @@ public class SudokuView implements View {
 				textArray[i][j]=new SuText(this, SWT.SINGLE, new SudokuCoords(i,j));
 				SuText sut = textArray[i][j];
 				sut.setSize(textSize);
-				sut.setLocation(textInterspace+j*(textSize.x+textInterspace)+additionalColSpace,
-								textInterspace+i*(textSize.y+textInterspace)+additionalRowSpace );
+				rowLocation = textInterspace+i*(textSize.y+textInterspace)+additionalRowSpace;
+				colLocation = textInterspace+j*(textSize.x+textInterspace)+additionalColSpace;
+				sut.setLocation(colLocation, rowLocation );
 			}
 		}
+		
+		subText = new Text(this.getParent(), SWT.SINGLE);
+		subText.setSize(colLocation, textSize.y);
+		subText.setLocation(new Point(textInterspace+5, rowLocation+textSize.y+textInterspace+additionalRowSpace));
+		subText.setEditable(false);
+		updateSubText();
+		
 		sm.registerView(this);
+	}
+
+	private void updateSubText() {
+		String additionalString = new String("");
+		if (sm.hasConflicts())
+			additionalString+=" - Konflikte!";
+		else if (sm.numberOfNonEmptyFields()==sm.getSize()*sm.getSize())
+			additionalString+=" - gelöst!";
+		subText.setText(sm.numberOfValueFields() + "/" + (sm.getSize()*sm.getSize()) + additionalString);
 	}
 	
 	public SudokuModel getModel()
@@ -84,7 +106,6 @@ public class SudokuView implements View {
 	public void update() 
 	{
 		updateModelSuppressed = true;
-		SudokuHelper sh = new SudokuHelper(getModel());
 		SudokuIterator si = SudokuIterator.createIterator(getModel().getSize(), getModel().getBlockSize(), new SudokuCoords(0,0), SudokuIterator.SubStructures.WHOLE);
 		while (si.hasNext())
 		{
@@ -94,16 +115,14 @@ public class SudokuView implements View {
 			sut.setTextIfNew(s);
 			if (sm.isFixed(sc))//(se.isFixed())
 				sut.setPropertiesFixed();
-			else if (!sm.isValidModel(sc))
+			else if (!sm.isValidModel(sc) || sm.hasConflicts(sc))
 				sut.setPropertiesError();
 			else if (sm.isBlocked(sc))
 				sut.setPropertiesBlocked();
 			else
 				sut.setPropertiesEditable();
-			
-			if (!sm.noValue(sc) && sh.findConflicts(sc, sm.getValue(sc)).size()>0)
-				sut.setPropertiesError();
 		}
+		updateSubText();
 		
 		updateModelSuppressed=false;
 	}

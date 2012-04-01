@@ -65,7 +65,6 @@ public class SudokuCrackerSWT {
         new FixButton					(shell, SWT.PUSH, sm, 500, 150, 120, 30);
         
         new UndoButton					(shell, SWT.PUSH, sm, 500, 200, 120, 30);
-
         
         new BruteForceAlgorithmButton	(shell, SWT.PUSH, sm, 500, 250, 120, 30);
         
@@ -92,7 +91,6 @@ public class SudokuCrackerSWT {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		SudokuCrackerSWT sc = new SudokuCrackerSWT();
 		sc.initUI();
 		sc.run();

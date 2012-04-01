@@ -64,6 +64,14 @@ public class SudokuBruteForceCracker {
 
 	public int oneIteration()
 	{
+		sm.notifyAlgorithmStart();
+		int i = oneIterationInternal();
+		sm.notifyAlgorithmStop();
+		return i;
+	}
+	
+	protected int oneIterationInternal()
+	{
 		log("SudokuBruteForceCracker.oneIteration()");
 		int res = 0;
 

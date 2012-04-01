@@ -14,13 +14,23 @@ public class SudokuEntry {
 	
 	static private void log(String s)
 	{ 
-	//	System.out.println(s); 
+		System.out.println(s); 
 	}
 	
 	protected SudokuEntry(SudokuCoords _sc)
 	{
 		blockingValues = new ArrayList<Integer>();
 		sc = _sc;
+	}
+	
+	@SuppressWarnings("unchecked")
+	protected SudokuEntry(SudokuEntry se2)
+	{
+		this.sc = new SudokuCoords(se2.sc);
+		if (!se2.noValue())
+			this.value = new Integer(se2.getValue());
+		this.isFixed = se2.isFixed;
+		this.blockingValues = (ArrayList<Integer>) se2.getBlockingValues().clone();
 	}
 
 	protected int getRow() {
@@ -122,14 +132,16 @@ public class SudokuEntry {
 		SudokuEntry se2 = (SudokuEntry) _se2;
 		if (! (this.getSudokuCoords().equals(se2.getSudokuCoords()))) return false;
 		
-		if (getValue()!=se2.getValue()) return false;
-		if (getValue()!=null && getValue().intValue()!=se2.getValue().intValue()) return false;
+		if (noValue()!=se2.noValue()) return false;
+		if (!noValue() && getValue().intValue()!=se2.getValue().intValue()) return false;
 		
 		if (this.isFixed()!=se2.isFixed()) return false;
 		
 		ArrayList<Integer> blv = getBlockingValues();
 		ArrayList<Integer> blv2 = se2.getBlockingValues();
-		return blv.containsAll(blv2) && blv2.containsAll(blv);
+		boolean b = blv.containsAll(blv2) && blv2.containsAll(blv); 
+		if (!b) log("Blocking Values differ in SC={"+this.getSudokuCoords()+"}: "+ blv.toString() + " --- "+ blv2.toString());
+		return b;
 	}
 
 	protected String toDisplayString(int minValue, int maxValue)
@@ -277,5 +289,12 @@ public class SudokuEntry {
 		if (!se5.equals(se7)) return 4;
 		
 		return 5;
+	}
+	
+	static public boolean testConstructor2()
+	{
+		SudokuEntry se = new SudokuEntry(new SudokuCoords(0,0));
+		new SudokuEntry(se);
+		return true;
 	}
 }

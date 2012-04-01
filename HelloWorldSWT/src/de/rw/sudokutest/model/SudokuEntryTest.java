@@ -18,5 +18,12 @@ public class SudokuEntryTest {
 	{
 		Assert.assertEquals(5,SudokuEntry.testEquals());
 	}
+	
+	@Test
+	public void testConstructor2()
+	{
+		Assert.assertEquals(true,SudokuEntry.testConstructor2());
+	}
+	
 
 }

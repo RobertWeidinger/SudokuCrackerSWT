@@ -79,6 +79,27 @@ public class SudokuModelTest {
 		sm.undo();
 		Assert.assertTrue(sm.noValue(sc));
 		Assert.assertTrue(sm.isValidModel());
+		Assert.assertEquals(new Integer(9),sm.getValue(new SudokuCoords(2,8)));
+		
+		SudokuCoords sc00 = new SudokuCoords(0, 0);
+		SudokuCoords sc10 = new SudokuCoords(1, 0);
+		SudokuCoords sc20 = new SudokuCoords(2, 0);
+		Integer v00 = sm.getValue(sc00);
+		Integer v10 = sm.getValue(sc10);
+		Assert.assertEquals(true,sm.noValue(sc20)); // nur zur Überprüfung, ob das Modell überhaupt passt.
+		
+		sm.notifyAlgorithmStart();
+		sm.setEmptyValue(sc00);
+		sm.setEmptyValue(sc10);
+		sm.setSuggestedValue(sc20, new Integer(8));
+		sm.notifyAlgorithmStop();
+		
+		sm.undo();
+		
+		Assert.assertEquals(v00, sm.getValue(sc00));
+		Assert.assertEquals(v10, sm.getValue(sc10));
+		Assert.assertEquals(true,sm.noValue(sc20));
+
 	}
 
 	@Test
@@ -136,4 +157,11 @@ public class SudokuModelTest {
 		bEqual = sm1.equalsIgnoringOldValues(sm2);
 		Assert.assertEquals(false,bEqual);
 	}
+
+	@Test
+	public void testHasConflicts()
+	{
+		Assert.assertEquals(true,sm.hasConflicts());
+	}
+		
 }

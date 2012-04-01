@@ -1,9 +1,11 @@
 package de.rw.sudoku.model;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
+import de.rw.sudoku.algorithms.SudokuHelper;
 import de.rw.sudoku.model.iterators.SudokuIterator;
 import de.rw.sudoku.model.iterators.SudokuIterator.SubStructures;
 import de.rw.sudoku.views.View;
@@ -14,8 +16,10 @@ public class SudokuModel implements Model {
 	private ArrayList<View> alViews=null;
 	private int size;
 	private int blockSize;
-	Vector<Vector<SudokuEntry>> arraySudokuEntries;
-	LinkedList<SudokuEntry> oldSudokuEntries;
+	private Vector<Vector<SudokuEntry>> arraySudokuEntries;
+	private LinkedList<OldSudokuEntry> oldSudokuEntries;
+	private Integer algorithmID = null;
+	private boolean bAlgorithmRunning = false;
 
 	private static void log(String s)
 	{ 
@@ -32,7 +36,8 @@ public class SudokuModel implements Model {
 		blockSize = _subSize;
 		arraySudokuEntries = new Vector<Vector<SudokuEntry>>();
 		arraySudokuEntries.ensureCapacity(size);
-		oldSudokuEntries = new LinkedList<SudokuEntry>();
+		oldSudokuEntries = new LinkedList<OldSudokuEntry>();
+		setAlgorithmID(new Integer(0));
 		
 		if (alViews==null) alViews = new ArrayList<View>();
 		
@@ -104,18 +109,24 @@ public class SudokuModel implements Model {
 	
 	private SudokuEntry setNewValue(SudokuCoords sc, Integer value, int flagFixedSuggestedEmpty)
 	{
-		if (!inBounds(sc)) return null;
-		SudokuEntry se = getSudokuEntry(sc);
-		oldSudokuEntries.push(se);
-		se = new SudokuEntry(sc);
-		if (flagFixedSuggestedEmpty!=EMPTY)
+		boolean bAlgorithmRunning = isAlgorithmRunning();
+		if (!bAlgorithmRunning) notifyAlgorithmStart();
+		SudokuEntry se = null;
+		if (inBounds(sc))
 		{
-			se.setValue(value);
-			if (flagFixedSuggestedEmpty==FIXED)
-				se.makeFixed();
+			OldSudokuEntry ose = new OldSudokuEntry(getSudokuEntry(sc), getAlgorithmID());
+			oldSudokuEntries.push(ose);
+			se = new SudokuEntry(sc);
+			if (flagFixedSuggestedEmpty!=EMPTY)
+			{
+				se.setValue(value);
+				if (flagFixedSuggestedEmpty==FIXED)
+					se.makeFixed();
+			}
+			arraySudokuEntries.get(sc.getRow()).set(sc.getCol(),se);
+			updateViews();
 		}
-		arraySudokuEntries.get(sc.getRow()).set(sc.getCol(),se);
-		updateViews();
+		if (!bAlgorithmRunning) notifyAlgorithmStop();
 		return se;
 	}
 	
@@ -149,6 +160,26 @@ public class SudokuModel implements Model {
 		return true;
 	}
 	
+	public boolean hasConflicts(SudokuCoords sc)
+	{
+		SudokuHelper sh = new SudokuHelper(this);
+		if (getValue(sc)==null) return false;
+		List<SudokuFieldValues> lsfv = sh.findConflicts(sc, getValue(sc));
+		return lsfv.size()>0;
+	}
+	
+	public boolean hasConflicts()
+	{
+		SudokuIterator si = SudokuIterator.createIterator(getSize(), getBlockSize(), new SudokuCoords(0,0), SudokuIterator.SubStructures.WHOLE);
+		while (si.hasNext())
+		{
+			SudokuEntry se = getSudokuEntry(si.next());
+			if (hasConflicts(se.getSudokuCoords()))
+				return true;
+		}
+		return false;
+	}
+	
 	public void makeValuesFixed()
 	{
 		SudokuIterator si = SudokuIterator.createIterator(getSize(), getBlockSize(), new SudokuCoords(0,0), SudokuIterator.SubStructures.WHOLE);
@@ -169,6 +200,19 @@ public class SudokuModel implements Model {
 		{
 			SudokuEntry se = getSudokuEntry(si.next());
 			if (!se.noValue() || se.isBlocked())
+				iCount++;
+		}
+		return iCount;
+	}
+	
+	public int numberOfValueFields()
+	{
+		int iCount = 0;
+		SudokuIterator si = SudokuIterator.createIterator(getSize(), getBlockSize(), new SudokuCoords(0,0), SudokuIterator.SubStructures.WHOLE);
+		while (si.hasNext())
+		{
+			SudokuEntry se = getSudokuEntry(si.next());
+			if (!se.noValue())
 				iCount++;
 		}
 		return iCount;
@@ -205,9 +249,14 @@ public class SudokuModel implements Model {
 	public void undo()
 	{
 		if (oldSudokuEntries.size()==0) return;
-		SudokuEntry ose = oldSudokuEntries.pop();
-		Vector<SudokuEntry> alSe = arraySudokuEntries.get(ose.getRow());
-		alSe.set(ose.getCol(), ose);
+		if (oldSudokuEntries.size()==0) return;
+		OldSudokuEntry ose = oldSudokuEntries.peekFirst();
+		Integer algID = ose.getAlgorithmID();
+		do {
+			OldSudokuEntry ose2 = oldSudokuEntries.pop();
+			Vector<SudokuEntry> alSe = arraySudokuEntries.get(ose2.getSudokuEntry().getRow());
+			alSe.set(ose2.getSudokuEntry().getCol(), ose2.getSudokuEntry());
+		} while (oldSudokuEntries.size()!=0 && algID.equals(oldSudokuEntries.peekFirst().getAlgorithmID()));
 		updateViews();
 	}
 	
@@ -218,13 +267,22 @@ public class SudokuModel implements Model {
 	
 	public void addBlockingValue(SudokuCoords sc, Integer value)
 	{
-		getSudokuEntry(sc).addBlockingValue(value);
+		OldSudokuEntry ose = new OldSudokuEntry(getSudokuEntry(sc), getAlgorithmID());
+		SudokuEntry se = new SudokuEntry(getSudokuEntry(sc));
+		se.addBlockingValue(value);
+		setSudokuEntry(se);
+		oldSudokuEntries.push(ose);
 		updateViews();
 	}
 	
 	public void removeBlockingValue(SudokuCoords sc, Integer value)
 	{
-		getSudokuEntry(sc).removeBlockingValue(value);
+		OldSudokuEntry ose = new OldSudokuEntry(getSudokuEntry(sc), getAlgorithmID());
+		SudokuEntry se = new SudokuEntry(getSudokuEntry(sc));
+		se.removeBlockingValue(value);
+		setSudokuEntry(se);
+		oldSudokuEntries.push(ose);
+		updateViews();
 	}
 	
 	public ArrayList<Integer> getBlockingValues(SudokuCoords sc)
@@ -252,10 +310,42 @@ public class SudokuModel implements Model {
 		while (it.hasNext())
 		{
 			SudokuCoords sc = it.next();
-			if (!getSudokuEntry(sc).equals(sm2.getSudokuEntry(sc))) return false;
+			SudokuEntry se1 = getSudokuEntry(sc);
+			SudokuEntry se2 = sm2.getSudokuEntry(sc);
+			if (!se1.equals(se2)) 
+				return false;
 		}
 		return true;
 	}
+	
+
+	public boolean isAlgorithmRunning() {
+		return bAlgorithmRunning;
+	}
+
+	private void setAlgorithmRunning(boolean bAlgorithmRunning) {
+		this.bAlgorithmRunning = bAlgorithmRunning;
+	}
+
+	private Integer getAlgorithmID() {
+		return algorithmID;
+	}
+
+	private void setAlgorithmID(Integer algorithmID) {
+		this.algorithmID = algorithmID;
+	}
+
+	@Override
+	public void notifyAlgorithmStart() {
+		setAlgorithmID(getAlgorithmID().intValue()+1);
+		setAlgorithmRunning(true);
+	}
+
+	@Override
+	public void notifyAlgorithmStop() {
+		setAlgorithmRunning(false);
+	}
+
 	
 	@Override
 	public String toString()
@@ -353,6 +443,8 @@ public class SudokuModel implements Model {
 		}
 		sm.setFixedValue(new SudokuCoords(2,8), 9);
 		sm.setSuggestedValue(new SudokuCoords(0,7), 1);
+		log("TestModel1:");
+		log(sm.toString());
 		return sm;
 	}
 
