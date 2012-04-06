@@ -57,7 +57,8 @@ public class SudokuView implements View {
 		colorFixed = new Color(parent.getBackground().getDevice(),128,255,128);
 		colorError = new Color(parent.getBackground().getDevice(),128,128,255);
 		colorBlocked = new Color(parent.getBackground().getDevice(),255,166,166);
-		parent.setBackgroundImage(new Image(parent.getBackground().getDevice(),"C:\\windows\\feder.bmp"));
+		parent.setBackgroundImage(new Image(parent.getBackground().getDevice(),
+				"src\\de\\rw\\sudoku\\zResources\\SudokuGescanntAusschnitt.jpg"));
 		int additionalRowSpace=0;
 		int rowLocation = 0;
 		int colLocation = 0;
