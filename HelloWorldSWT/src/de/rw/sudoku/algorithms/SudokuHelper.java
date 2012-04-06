@@ -75,7 +75,7 @@ public class SudokuHelper {
 		{
 			SudokuCoords sc = si.next();
 			if (value.equals(sm.getValue(sc))) return null;
-			if (sm.noValue(sc) && !sm.isBlocked(sc))
+			if (!sm.hasValue(sc) && !sm.isBlocked(sc))
 			{
 				List<SudokuFieldValues> ll = findConflicts(sc, value);
 				if (ll.size()==0) // no conflict
@@ -113,7 +113,7 @@ public class SudokuHelper {
 		
 		if (number.intValue()<0) return ll;
 		//if (sm.isBlocked(start) && sm.getBlockingValues(start).contains(number)) return ll;
-		if ( (!sm.noValue(start) && !number.equals(sm.getValue(start)) ) // Zelle bereits mit anderem Wert besetzt
+		if ( (sm.hasValue(start) && !number.equals(sm.getValue(start)) ) // Zelle bereits mit anderem Wert besetzt
 				||
 			 (sm.isBlocked(start) && !sm.getBlockingValues(start).contains(number) ) ) // Zelle mit anderen Werten blockiert
 		{

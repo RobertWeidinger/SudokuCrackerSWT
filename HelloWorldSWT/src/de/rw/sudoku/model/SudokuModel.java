@@ -186,7 +186,7 @@ public class SudokuModel implements Model {
 		while (si.hasNext())
 		{
 			SudokuEntry se = getSudokuEntry(si.next());
-			if (!se.noValue())
+			if (se.hasValue())
 				se.makeFixed();
 		}
 		updateViews();
@@ -199,7 +199,7 @@ public class SudokuModel implements Model {
 		while (si.hasNext())
 		{
 			SudokuEntry se = getSudokuEntry(si.next());
-			if (!se.noValue() || se.isBlocked())
+			if (se.hasValue() || se.isBlocked())
 				iCount++;
 		}
 		return iCount;
@@ -212,7 +212,7 @@ public class SudokuModel implements Model {
 		while (si.hasNext())
 		{
 			SudokuEntry se = getSudokuEntry(si.next());
-			if (!se.noValue())
+			if (se.hasValue())
 				iCount++;
 		}
 		return iCount;
@@ -236,9 +236,9 @@ public class SudokuModel implements Model {
 		return getSudokuEntry(sc).isFixed();
 	}
 	
-	public boolean noValue(SudokuCoords sc)
+	public boolean hasValue(SudokuCoords sc)
 	{
-		return getSudokuEntry(sc).noValue();
+		return getSudokuEntry(sc).hasValue();
 	}
 	
 	public boolean isBlocked(SudokuCoords sc)
@@ -359,7 +359,7 @@ public class SudokuModel implements Model {
 		{
 			SudokuCoords sc = it.next();
 			SudokuEntry se = this.getSudokuEntry(sc);
-			if (se.noValue())
+			if (!se.hasValue())
 				s+= " _";
 			else if (se.isValid(1, getSize()))
 				s+= " " + se.getValue();
@@ -380,7 +380,7 @@ public class SudokuModel implements Model {
 			SudokuEntry se = this.getSudokuEntry(sc);
 			if (se.isBlocked()) s+=" _";
 			else if (se.isFixed()) s+=" F";
-			else if (se.noValue()) s+=" _";
+			else if (!se.hasValue()) s+=" _";
 			else s+=" S";
 		
 			if (sc.getCol()==getSize()-1) s+=System.getProperty("line.separator");

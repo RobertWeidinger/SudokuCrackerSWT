@@ -35,7 +35,7 @@ public class PossiblePlacesAlgorithm {
 			while (si.hasNext())
 			{
 				SudokuCoords sc = si.next();
-				if (!sm.noValue(sc)) continue;
+				if (sm.hasValue(sc)) continue;
 				if (sm.isBlocked(sc) && !sm.getBlockingValues(sc).contains(value)) continue;
 				if (sh.findConflicts(sc, value).size()>0) continue;
 				

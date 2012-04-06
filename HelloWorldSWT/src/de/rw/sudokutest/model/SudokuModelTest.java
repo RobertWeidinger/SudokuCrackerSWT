@@ -30,14 +30,14 @@ public class SudokuModelTest {
 	public void testSetEmptyValue() {
 		SudokuCoords sc = new SudokuCoords(0,5);
 		sm.setEmptyValue(sc);
-		Assert.assertTrue(sm.noValue(sc));
+		Assert.assertFalse(sm.hasValue(sc));
 	}
 
 	@Test
 	public void testSetSuggestedValue() {
 		SudokuCoords sc = new SudokuCoords(0,5);
 		sm.setSuggestedValue(sc, 9);
-		Assert.assertFalse(sm.noValue(sc));
+		Assert.assertTrue(sm.hasValue(sc));
 		Assert.assertFalse(sm.isFixed(sc));
 		
 	}
@@ -52,7 +52,7 @@ public class SudokuModelTest {
 	@Test
 	public void testGetValue() {
 		SudokuCoords sc = new SudokuCoords(2,0);
-		Assert.assertTrue(sm.noValue(sc));
+		Assert.assertFalse(sm.hasValue(sc));
 		Assert.assertEquals(1, sm.getValue(new SudokuCoords(1,0)).intValue());
 	}
 
@@ -77,7 +77,7 @@ public class SudokuModelTest {
 		Assert.assertEquals(1, sm.getValue(sc).intValue());
 		Assert.assertFalse(sm.isFixed(sc));
 		sm.undo();
-		Assert.assertTrue(sm.noValue(sc));
+		Assert.assertFalse(sm.hasValue(sc));
 		Assert.assertTrue(sm.isValidModel());
 		Assert.assertEquals(new Integer(9),sm.getValue(new SudokuCoords(2,8)));
 		
@@ -86,7 +86,7 @@ public class SudokuModelTest {
 		SudokuCoords sc20 = new SudokuCoords(2, 0);
 		Integer v00 = sm.getValue(sc00);
 		Integer v10 = sm.getValue(sc10);
-		Assert.assertEquals(true,sm.noValue(sc20)); // nur zur Überprüfung, ob das Modell überhaupt passt.
+		Assert.assertEquals(false,sm.hasValue(sc20)); // nur zur Überprüfung, ob das Modell überhaupt passt.
 		
 		sm.notifyAlgorithmStart();
 		sm.setEmptyValue(sc00);
@@ -98,7 +98,7 @@ public class SudokuModelTest {
 		
 		Assert.assertEquals(v00, sm.getValue(sc00));
 		Assert.assertEquals(v10, sm.getValue(sc10));
-		Assert.assertEquals(true,sm.noValue(sc20));
+		Assert.assertEquals(false,sm.hasValue(sc20));
 
 	}
 

@@ -27,7 +27,7 @@ public class SudokuEntry {
 	protected SudokuEntry(SudokuEntry se2)
 	{
 		this.sc = new SudokuCoords(se2.sc);
-		if (!se2.noValue())
+		if (se2.hasValue())
 			this.value = new Integer(se2.getValue());
 		this.isFixed = se2.isFixed;
 		this.blockingValues = (ArrayList<Integer>) se2.getBlockingValues().clone();
@@ -61,8 +61,8 @@ public class SudokuEntry {
 		clearBlockingValues();
 	}
 	
-	protected boolean noValue() {
-		return value==null; // && blockingValues.size()==0;
+	protected boolean hasValue() {
+		return value!=null; 
 	}
 	
 	protected boolean isFixed() {
@@ -119,7 +119,7 @@ public class SudokuEntry {
 		ArrayList<Integer> pV = getBlockingValues();
 		for (Integer i: pV)
 			if (i.intValue()<minValue || i.intValue()>maxValue) return false;
-		if (noValue() && isFixed()) return false;
+		if (!hasValue() && isFixed()) return false;
 		if (getValue()!=null)
 			if (getValue().intValue()<minValue || getValue().intValue()>maxValue) return false;
 		return true;
@@ -132,8 +132,8 @@ public class SudokuEntry {
 		SudokuEntry se2 = (SudokuEntry) _se2;
 		if (! (this.getSudokuCoords().equals(se2.getSudokuCoords()))) return false;
 		
-		if (noValue()!=se2.noValue()) return false;
-		if (!noValue() && getValue().intValue()!=se2.getValue().intValue()) return false;
+		if (hasValue()!=se2.hasValue()) return false;
+		if (hasValue() && getValue().intValue()!=se2.getValue().intValue()) return false;
 		
 		if (this.isFixed()!=se2.isFixed()) return false;
 		
@@ -154,7 +154,7 @@ public class SudokuEntry {
 				s+= i + " ";
 			return s;
 		}
-		if (noValue()) return "";
+		if (!hasValue()) return "";
 		if (!isValid(minValue,maxValue)) return "?!?";
 		return getValue().toString();
 	}
@@ -176,11 +176,10 @@ public class SudokuEntry {
 	{
 		String s = new String(" "+KLAMMERAUF);
 		s+=" "+ROWKENNZ+" " + getRow() + " "+COLKENNZ+" " + getCol();
-		s+=" "+VALKENNZ+" " + ((noValue())? EMPTYVAL: value.intValue());
+		s+=" "+VALKENNZ+" " + ((!hasValue())? EMPTYVAL: value.intValue());
 		s+=" "+TYPEKENNZ+" ";
 		if (isFixed()) s+= FIXEDKENNZ;
-		else if (noValue()) s+=EMPTYKENNZ;
-//		else if (isBlocked()) s+=BLOCKEDKENNZ; // Hier kommt er eh nie hin...
+		else if (!hasValue()) s+=EMPTYKENNZ;
 		else s+=SUGGESTEDKENNZ; 
 		s+=" "+BLOCKVALKENNZ+" ";
 		for (int i=0; i<blockingValues.size(); i++)
