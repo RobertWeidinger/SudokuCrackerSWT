@@ -11,7 +11,7 @@ import de.rw.sudoku.views.ClearBlockingValuesButton;
 import de.rw.sudoku.views.FixButton;
 import de.rw.sudoku.views.LoadFileButton;
 import de.rw.sudoku.views.QuitButton;
-import de.rw.sudoku.views.SudokuDumpView;
+//import de.rw.sudoku.views.SudokuDumpView;
 import de.rw.sudoku.views.SudokuView;
 import de.rw.sudoku.views.UndoButton;
 import de.rw.sudoku.views.WriteFileButton;
@@ -23,7 +23,7 @@ public class SudokuCrackerSWT {
 	private Display display;
 	private SudokuModel sm;
 	private SudokuView sv;
-	private SudokuDumpView sdv;
+	//private SudokuDumpView sdv;
 	
 	public SudokuModel getSm() {
 		return sm;
@@ -33,10 +33,10 @@ public class SudokuCrackerSWT {
 		return sv;
 	}
 
-	public SudokuDumpView getSdv() {
+/*	public SudokuDumpView getSdv() {
 		return sdv;
 	}
-
+*/
     public Shell getShell() {
 		return shell;
 	}
@@ -49,14 +49,15 @@ public class SudokuCrackerSWT {
 		
     	display = new Display();
 		shell = new Shell(display);
-		shell.setText("Sudoku Helfer");
+		shell.setText("Sudoku Cracker");
+		shell.setSize(800, 550);
 		shell.open();
         sm = new SudokuModel(9,3);
         sv = new SudokuView(shell,sm);
-        sdv = new SudokuDumpView(shell, sm);
+//        sdv = new SudokuDumpView(shell, sm);
 
         sv.update();
-        sdv.update();
+//        sdv.update();
         
         new WriteFileButton				(shell, SWT.PUSH, sm, 500,  50, 120, 30);
         
