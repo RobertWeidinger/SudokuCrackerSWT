@@ -100,8 +100,6 @@ public class PossiblePlacesAlgorithmTest {
 		sbfc.oneIteration();
 		Assert.assertEquals(true, AlgorithmsTestHelper.modelIsEqualToFile(sm,"sz20120224_Format2.0_nach3BruteForce_2BlockingValues_2BruteForce.txt"));
 		sbfc.oneIteration();
-		Assert.assertEquals(true, AlgorithmsTestHelper.modelIsEqualToFile(sm,"sz20120224_Format2.0_nach3BruteForce_2BlockingValues_3BruteForce.txt"));
-		sbfc.oneIteration();
 		Assert.assertEquals(true, AlgorithmsTestHelper.modelIsEqualToFile(sm,"sz20120224_Format2.0_geloest.txt"));
 	}
 

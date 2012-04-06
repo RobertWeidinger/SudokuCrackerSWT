@@ -38,10 +38,10 @@ public class SudokuBruteForceCracker {
 			while (si.hasNext())
 			{
 				SudokuCoords sc = si.next();
-				boolean isEmpty = sm.noValue(sc);
+				boolean hasValue = !sm.noValue(sc);
 				boolean isBlocked = sm.isBlocked(sc);
 				boolean blockingValuesContainValue = sm.getBlockingValues(sc).contains(value);
-				if (!isEmpty || (isBlocked && !blockingValuesContainValue))
+				if (hasValue || (isBlocked && !blockingValuesContainValue))
 					continue;
 				List<SudokuFieldValues> llSfv = sh.findConflicts(sc, value);
 				if (llSfv.isEmpty())

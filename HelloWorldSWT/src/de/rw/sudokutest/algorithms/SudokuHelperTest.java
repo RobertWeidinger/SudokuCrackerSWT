@@ -21,10 +21,12 @@ public class SudokuHelperTest extends TestCase {
 	
 	private SudokuModel sm;
 	private SudokuHelper sh;
+	
+	private boolean bLog = true;
 
 	private void log(String s)
 	{
-	//	System.out.println(s);
+		if (bLog) System.out.println(s);
 	}
 
 	
@@ -101,6 +103,9 @@ public class SudokuHelperTest extends TestCase {
 	}
 
 	private void setSomeBlockingValuesInSZ20120224() {
+		sm.setSuggestedValue(new SudokuCoords(2,0), new Integer(4));
+		sm.setSuggestedValue(new SudokuCoords(2,6), new Integer(7));
+		
 		sm.addBlockingValue(new SudokuCoords(7, 6), new Integer(1));
 		sm.addBlockingValue(new SudokuCoords(7, 6), new Integer(2));
 		sm.addBlockingValue(new SudokuCoords(7, 8), new Integer(1));
@@ -121,6 +126,16 @@ public class SudokuHelperTest extends TestCase {
 		sm.addBlockingValue(new SudokuCoords(1, 5), new Integer(4));
 		sm.addBlockingValue(new SudokuCoords(1, 5), new Integer(7));
 		
+		if (bLog)
+		{
+			String longPath = new String("..\\..\\..\\ergdata\\SZ20120224WithSomeBlockingValues.txt");
+			try {
+				SudokuFileReaderWriter.writeSudokuToFile(sm, longPath);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	@Test 
@@ -163,7 +178,7 @@ public class SudokuHelperTest extends TestCase {
 		Assert.assertTrue(lSfv.size()==0);
 
 		lSfv = sh.findConflicts(new SudokuCoords(1, 4), new Integer(4));
-		Assert.assertTrue(lSfv.size()==0);
+		Assert.assertEquals(true,lSfv.size()==0);
 		
 		// und noch ein Test:
 		sm = new SudokuModel(9,3);

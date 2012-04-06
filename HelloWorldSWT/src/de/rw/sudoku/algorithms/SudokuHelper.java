@@ -1,5 +1,4 @@
 package de.rw.sudoku.algorithms;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -113,7 +112,14 @@ public class SudokuHelper {
 		List<SudokuFieldValues> ll = new LinkedList<SudokuFieldValues>();
 		
 		if (number.intValue()<0) return ll;
-		if (sm.isBlocked(start) && sm.getBlockingValues(start).contains(number)) return ll;
+		//if (sm.isBlocked(start) && sm.getBlockingValues(start).contains(number)) return ll;
+		if ( (!sm.noValue(start) && !number.equals(sm.getValue(start)) ) // Zelle bereits mit anderem Wert besetzt
+				||
+			 (sm.isBlocked(start) && !sm.getBlockingValues(start).contains(number) ) ) // Zelle mit anderen Werten blockiert
+		{
+			addSudokuFieldValuesToList(ll, number, start);
+			return ll;
+		}
 		
 		for (final SudokuIterator.SubStructures subStruct : SudokuIterator.SubStructures.REAL)
 		{
@@ -125,7 +131,15 @@ public class SudokuHelper {
 				SudokuCoords sc = si.next();
 				if (sc.equals(new SudokuCoords(start))) continue;
 				boolean bConflict=number.equals(sm.getValue(sc));
-				if (!bConflict && sm.isBlocked(sc))
+
+				if (!bConflict && sm.isBlocked(sc) && sm.getBlockingValues(sc).contains(number))
+				{
+					List<SudokuCoords> lSc = findSiblingBlockingValuesInSubStruct(sc, subStruct);
+					if (!lSc.contains(start) && lSc.size()+1==sm.getBlockingValues(sc).size())
+						bConflict = true;
+				}
+				
+/*				if (!bConflict && sm.isBlocked(sc))
 				{
 					List<SudokuCoords> lSc = findSiblingBlockingValuesInSubStruct(sc, subStruct);
 					ArrayList<Integer> blockingValues = sm.getBlockingValues(sc);
@@ -136,18 +150,23 @@ public class SudokuHelper {
 					}
 						
 				}
-				
+*/				
 				if (bConflict)
 				{
-					LinkedList<Integer> llI = new LinkedList<Integer>();
-					llI.add(number);
-					SudokuFieldValues sfv = new SudokuFieldValues(sc.getRow(), sc.getCol(), llI);
-					if (!ll.contains(sfv))
-						ll.add(sfv);
+					addSudokuFieldValuesToList(ll, number, sc);
 				}
 			}
 		}
 		return ll;
+	}
+
+	private void addSudokuFieldValuesToList(List<SudokuFieldValues> lSudokuFieldValues, Integer number, SudokuCoords sc)
+	{
+		LinkedList<Integer> llI = new LinkedList<Integer>();
+		llI.add(number);
+		SudokuFieldValues sfv = new SudokuFieldValues(sc.getRow(), sc.getCol(), llI);
+		if (!lSudokuFieldValues.contains(sfv))
+			lSudokuFieldValues.add(sfv);
 	}
 	
 }
