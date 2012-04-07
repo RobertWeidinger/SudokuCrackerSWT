@@ -5,8 +5,7 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Text;
-
+import org.eclipse.swt.widgets.Label;
 import de.rw.sudoku.model.SudokuCoords;
 import de.rw.sudoku.model.SudokuModel;
 import de.rw.sudoku.model.iterators.SudokuIterator;
@@ -16,7 +15,7 @@ public class SudokuView implements View {
 
 	private SudokuModel sm;
 	private SuText[][] textArray;
-	private Text subText;
+	private Label subText;
 	private Composite parent;
 	private boolean updateModelSuppressed; // Semaphor;
 	private Color colorEditable;
@@ -80,35 +79,10 @@ public class SudokuView implements View {
 			}
 		}
 		
-		subText = new Text(this.getParent(), SWT.SINGLE);
-		//subText.setBackground(arg0);
+		subText = new Label(this.getParent(), SWT.SINGLE);
 		subText.setSize(colLocation, textSize.y);
 		subText.setLocation(new Point(textInterspace+5, rowLocation+textSize.y+textInterspace+additionalRowSpace));
-		subText.setEditable(false);
 		updateSubText();
-		
-		// Bsp f Transparenz:
-		/*
-		 * public static void main(String[] args) {
-Display display = Display.getDefault();
-Image image = new Image(display, "c:\\picture.jpeg"); // filename
-Shell shell = new Shell(SWT.NO_TRIM);
-shell.setBounds(10,10,200,200);
-shell.setBackgroundImage(image);
-shell.setBackgroundMode(SWT.INHERIT_DEFAULT); // !!!!!!!
-Label label = new Label(shell, SWT.NONE);
-label.setText("abdfghl;sdfjksdfg");
-label.setBounds(10,10,100,100);
-shell.open();
-while (!shell.isDisposed()) {
-if (!display.readAndDispatch()) display.sleep();
-}
-image.dispose();
-display.dispose();
-}
-
-		 * 
-		 */
 		
 		sm.registerView(this);
 	}

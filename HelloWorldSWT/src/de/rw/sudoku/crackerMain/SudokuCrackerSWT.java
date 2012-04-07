@@ -51,6 +51,7 @@ public class SudokuCrackerSWT {
 		shell = new Shell(display);
 		shell.setText("Sudoku Cracker");
 		shell.setSize(800, 550);
+		shell.setBackgroundMode(SWT.INHERIT_DEFAULT);
 		shell.open();
         sm = new SudokuModel(9,3);
         sv = new SudokuView(shell,sm);
