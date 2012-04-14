@@ -22,7 +22,7 @@ public class SudokuHelperTest extends TestCase {
 	private SudokuModel sm;
 	private SudokuHelper sh;
 	
-	private boolean bLog = true;
+	private boolean bLog = false;
 
 	private void log(String s)
 	{

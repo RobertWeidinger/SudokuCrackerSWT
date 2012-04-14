@@ -14,7 +14,7 @@ public class SudokuEntry {
 	
 	static private void log(String s)
 	{ 
-		System.out.println(s); 
+	//	System.out.println(s); 
 	}
 	
 	protected SudokuEntry(SudokuCoords _sc)

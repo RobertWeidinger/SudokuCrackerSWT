@@ -11,7 +11,6 @@ import org.junit.Test;
 import de.rw.sudoku.crackerMain.SudokuCrackerSWT;
 import de.rw.sudoku.model.SudokuCoords;
 import de.rw.sudoku.views.SuText;
-//import de.rw.sudoku.views.SudokuDumpView;
 import de.rw.sudoku.views.SudokuView;
 
 
@@ -35,9 +34,6 @@ public class SudokuCrackerSWTTest {
 		SudokuView sv = sc.getSv();
 		SuText sut = sv.getSuText(new SudokuCoords(0,0));
 		Assert.assertEquals("",sut.getString());
-//		SudokuDumpView sdv = sc.getSdv();
-//		String s = sdv.getString();
-//		Assert.assertTrue(s.startsWith("9"));
 		Display d = sc.getDisplay(); 
 		Control cArray[] = d.getShells()[0].getChildren();
 		boolean bFound=false;

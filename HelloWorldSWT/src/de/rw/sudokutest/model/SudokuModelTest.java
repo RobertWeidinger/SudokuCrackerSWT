@@ -1,4 +1,5 @@
 package de.rw.sudokutest.model;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import junit.framework.Assert;
@@ -6,6 +7,7 @@ import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import de.rw.sudoku.io.SudokuFileReaderWriter;
 import de.rw.sudoku.model.SudokuCoords;
 import de.rw.sudoku.model.SudokuModel;
 
@@ -164,4 +166,26 @@ public class SudokuModelTest {
 		Assert.assertEquals(true,sm.hasConflicts());
 	}
 		
+	@Test
+	public void testClearBlockingValues()
+	{
+		SudokuModel sm2 = new SudokuModel(9,3);
+		try {
+			SudokuFileReaderWriter.readSudokuFromFile(sm2, "src\\de\\rw\\sudokutest\\zzTestdata\\KoCo11_Experte_Nr1_Format2.0_NextBruteForceWithConflicts.txt");
+		} catch (IOException e) {
+			e.printStackTrace();
+			Assert.assertTrue(false);
+		}
+		SudokuCoords sc = new SudokuCoords(3,0);
+		ArrayList<Integer> ali = sm2.getBlockingValues(sc);
+		Assert.assertEquals(3, ali.size());
+		
+		sm2.clearBlockingValues();
+		ali = sm2.getBlockingValues(sc);
+		Assert.assertEquals(0, ali.size());
+		
+		sm2.undo();
+		ali = sm2.getBlockingValues(sc);
+		Assert.assertEquals(3, ali.size());
+	}
 }

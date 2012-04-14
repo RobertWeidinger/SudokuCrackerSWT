@@ -279,10 +279,18 @@ public class SudokuModel implements Model {
 	{
 		OldSudokuEntry ose = new OldSudokuEntry(getSudokuEntry(sc), getAlgorithmID());
 		SudokuEntry se = new SudokuEntry(getSudokuEntry(sc));
-		se.removeBlockingValue(value);
+		if (value!=null && value.intValue()>0)
+			se.removeBlockingValue(value);
+		else
+			se.clearBlockingValues();
 		setSudokuEntry(se);
 		oldSudokuEntries.push(ose);
 		updateViews();
+	}
+	
+	private void removeBlockingValues(SudokuCoords sc)
+	{
+		removeBlockingValue(sc,null);
 	}
 	
 	public ArrayList<Integer> getBlockingValues(SudokuCoords sc)
@@ -292,10 +300,12 @@ public class SudokuModel implements Model {
 	
 	public void clearBlockingValues()
 	{
+		notifyAlgorithmStart();
 		SudokuIterator it = SudokuIterator.createIterator(getSize(), getBlockSize(), new SudokuCoords(0,0), SubStructures.WHOLE);
 		while (it.hasNext())
-			this.getSudokuEntry(it.next()).clearBlockingValues();
+			this.removeBlockingValues(it.next());
 		updateViews();
+		notifyAlgorithmStop();
 	}
 	
 	public boolean equalBlockingValues(SudokuCoords sc1, SudokuCoords sc2)
