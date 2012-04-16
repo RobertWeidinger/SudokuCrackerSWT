@@ -442,6 +442,7 @@ public class SudokuModel implements Model {
 	}
 	
 // ========================= Testhilfsmethoden =================================================================	
+	
 	public static SudokuModel createTestModel1()
 	{
 		SudokuModel sm = new SudokuModel(9,3);
