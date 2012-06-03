@@ -2,7 +2,6 @@ package de.rw.sudoku.views;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
@@ -11,22 +10,29 @@ import de.rw.sudoku.model.SudokuModel;
 import de.rw.sudoku.model.iterators.SudokuIterator;
 
 
-public class SudokuView implements View {
+public class SudokuView extends Composite implements View {
 
+	private final static int   additionalSpaceBetweenColsAndRows=5;
+	private final static int[] rgbEditable    = new int[]{255,255,255};
+	private final static int[] rgbFixed       = new int[]{128,255,128};
+	private final static int[] rgbBlocked     = new int[]{255,166,166};
+	private final static int[] rgbError       = new int[]{128,128,255};
+	private final static Point textSize       = new Point(30,30);
+	private final static int   textInterspace = 10;
 	private SudokuModel sm;
 	private SuText[][] textArray;
 	private Label subText;
-	private Composite parent;
 	private boolean updateModelSuppressed; // Semaphor;
 	private Color colorEditable;
 	private Color colorFixed;
 	private Color colorError;
 	private Color colorBlocked;
 	
-	public Composite getParent() {
-		return parent;
+	public void log(String s)
+	{
+		System.out.println(s);
 	}
-
+	
 	public Color getColorEditable() {
 		return colorEditable;
 	}
@@ -43,33 +49,29 @@ public class SudokuView implements View {
 		return colorBlocked;
 	}
 
-	private static Point textSize=new Point(30,30);
-	private static int textInterspace=10;
 	
 	public SudokuView(Composite _parent, SudokuModel _sm)
 	{
+		super(_parent,SWT.NO_BACKGROUND);
 		sm = _sm;
-		parent = _parent;
 		updateModelSuppressed = false;
 		textArray = new SuText[sm.getSize()][sm.getSize()];
-		colorEditable =new Color(parent.getBackground().getDevice(),255,255,255);
-		colorFixed = new Color(parent.getBackground().getDevice(),128,255,128);
-		colorError = new Color(parent.getBackground().getDevice(),128,128,255);
-		colorBlocked = new Color(parent.getBackground().getDevice(),255,166,166);
-		parent.setBackgroundImage(new Image(parent.getBackground().getDevice(),
-				"src/de/rw/sudoku/zResources/SudokuGescanntAusschnitt.jpg"));
+		colorEditable =new Color(getBackground().getDevice(),rgbEditable[0],rgbEditable[1],rgbEditable[2]);
+		colorFixed = new Color(getBackground().getDevice(),rgbFixed[0],rgbFixed[1],rgbFixed[2]);
+		colorError = new Color(getBackground().getDevice(),rgbError[0],rgbError[1],rgbError[2]);
+		colorBlocked = new Color(getBackground().getDevice(),rgbBlocked[0],rgbBlocked[1],rgbBlocked[2]);
 		int additionalRowSpace=0;
 		int rowLocation = 0;
 		int colLocation = 0;
 		for (int i=0; i<sm.getSize(); i++)
 		{
 			if (i%sm.getBlockSize()==0)
-				additionalRowSpace+=5;
+				additionalRowSpace+=additionalSpaceBetweenColsAndRows;
 			int additionalColSpace=0;
 			for (int j=0; j<sm.getSize(); j++)
 			{
 				if (j%sm.getBlockSize()==0)
-					additionalColSpace+=5;
+					additionalColSpace+=additionalSpaceBetweenColsAndRows;
 				textArray[i][j]=new SuText(this, SWT.SINGLE, new SudokuCoords(i,j));
 				SuText sut = textArray[i][j];
 				sut.setSize(textSize);
@@ -78,7 +80,7 @@ public class SudokuView implements View {
 				sut.setLocation(colLocation, rowLocation );
 			}
 		}
-		
+
 		subText = new Label(this.getParent(), SWT.SINGLE);
 		subText.setSize(colLocation, textSize.y);
 		subText.setLocation(new Point(textInterspace+5, rowLocation+textSize.y+textInterspace+additionalRowSpace));
@@ -122,7 +124,7 @@ public class SudokuView implements View {
 				sut.setPropertiesEditable();
 		}
 		updateSubText();
-		
+
 		updateModelSuppressed=false;
 	}
 	
@@ -150,5 +152,28 @@ public class SudokuView implements View {
 		return sv;
 	}
 
-	
+//================= was ausprobieren =======================
+//	
+//	
+//	private GC gc=null;
+//	private Rectangle r=null;
+//	public void tryPaintFrame() {
+//		r = new Rectangle(colLocations[0][0]-spaceBetweenTextAndFrame,
+//				  rowLocations[0][0]-spaceBetweenTextAndFrame,
+//				  colLocations[0][sm.getSize()-1] - colLocations[0][0]+textSize.x+2*spaceBetweenTextAndFrame,
+//				  textSize.y+2*spaceBetweenTextAndFrame);
+//		gc = new GC(getBackground().getDevice()); //(backgroundImage);
+//		gc.setForeground(new Color(getBackground().getDevice(),255,0,0));
+//		gc.setLineWidth (1);
+//		gc.drawRectangle (r);
+//		//getParent().redraw();
+//	}
+//	
+//	public void tryDisposeFrame() {
+//		if (gc!=null) gc.dispose();
+//		r = null;
+//		gc = null;
+//	}
+	//================= was ausprobieren-ende =======================
+
 }

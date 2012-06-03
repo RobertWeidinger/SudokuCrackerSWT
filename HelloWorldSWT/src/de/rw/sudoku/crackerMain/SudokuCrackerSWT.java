@@ -1,5 +1,9 @@
 package de.rw.sudoku.crackerMain;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
@@ -47,6 +51,10 @@ public class SudokuCrackerSWT {
 		shell.setSize(800, 550);
 		shell.setBackgroundMode(SWT.INHERIT_DEFAULT);
 		shell.open();
+		Image backgroundImage = new Image(shell.getBackground().getDevice(),
+				"src/de/rw/sudoku/zResources/SudokuGescanntAusschnitt.jpg");
+		shell.setBackgroundImage(backgroundImage);
+
         sm = new SudokuModel(9,3);
         sv = new SudokuView(shell,sm);
 
@@ -68,6 +76,28 @@ public class SudokuCrackerSWT {
         new AlternatingAlgorithmButton	(shell, SWT.PUSH, sm, 500, 350, 120, 30);
 
         new QuitButton					(shell, SWT.PUSH, sm, 500, 400, 120, 30);
+        
+ //======== was ausprobieren ==================
+//        Button bTryFrame = new Button(shell, SWT.PUSH);
+//    		bTryFrame.setText("Zeichne Rahmen");
+//            bTryFrame.setBounds(500, 450, 60, 30);
+//            bTryFrame.addSelectionListener(new SelectionAdapter() {
+//                @Override
+//                public void widgetSelected(SelectionEvent e) {
+//                    sv.tryPaintFrame();
+//                }
+//            });
+//
+//            Button bTryDelFrame = new Button(shell, SWT.PUSH);
+//        		bTryDelFrame.setText("Lösche Rahmen");
+//                bTryDelFrame.setBounds(650, 450, 60, 30);
+//                bTryDelFrame.addSelectionListener(new SelectionAdapter() {
+//                    @Override
+//                    public void widgetSelected(SelectionEvent e) {
+//                        sv.tryDisposeFrame();
+//                    }
+//                });
+//=========ende ausprobieren ==================
         
 
     }
