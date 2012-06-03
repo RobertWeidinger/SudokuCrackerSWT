@@ -24,10 +24,10 @@ public class SudokuViewTest {
 
 	private SudokuModel sm;
 
-	private void log(String s)
-	{
-		//System.out.println(s);
-	}
+//	private void log(String s)
+//	{
+//		//System.out.println(s);
+//	}
 
 	
 	@Before
