@@ -93,7 +93,7 @@ public class SudokuView extends Composite implements View {
 		String additionalString = new String("");
 		if (sm.hasConflicts())
 			additionalString+=" - Konflikte!";
-		else if (sm.numberOfNonEmptyFields()==sm.getSize()*sm.getSize())
+		else if (sm.numberOfValueFields()==sm.getSize()*sm.getSize())
 			additionalString+=" - gelöst!";
 		subText.setText(sm.numberOfValueFields() + "/" + (sm.getSize()*sm.getSize()) + additionalString);
 	}
@@ -150,6 +150,11 @@ public class SudokuView extends Composite implements View {
 		SudokuView sv = new SudokuView(_parent, SudokuModel.createTestModel1());
 		sv.update();
 		return sv;
+	}
+	
+	public String getSubTextStringForTest()
+	{
+		return subText.getText();
 	}
 
 //================= was ausprobieren =======================

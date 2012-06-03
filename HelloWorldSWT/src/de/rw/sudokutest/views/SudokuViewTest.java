@@ -1,4 +1,6 @@
 package de.rw.sudokutest.views;
+import java.io.IOException;
+
 import junit.framework.Assert;
 
 import org.eclipse.swt.widgets.Display;
@@ -7,6 +9,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import de.rw.sudoku.io.SudokuFileReaderWriter;
 import de.rw.sudoku.model.SudokuCoords;
 import de.rw.sudoku.model.SudokuModel;
 import de.rw.sudoku.views.SuText;
@@ -19,6 +22,14 @@ public class SudokuViewTest {
 	private Display display;
 	private SudokuView sv;
 
+	private SudokuModel sm;
+
+	private void log(String s)
+	{
+		//System.out.println(s);
+	}
+
+	
 	@Before
 	public void setUp() throws Exception {
     	display = new Display();
@@ -53,6 +64,22 @@ public class SudokuViewTest {
 	@Test
 	public void testUpdateModel() {
 		
+	}
+	
+	@Test
+	public void testSubString() {
+		sm = new SudokuModel(9,3);
+		try {
+			SudokuFileReaderWriter.readSudokuFromFile(sm, "src\\de\\rw\\sudokutest\\zzTestdata\\BlackberryProfi4_VieleBlockingValues_Format2.0.txt");
+		} catch (IOException e) {
+			e.printStackTrace();
+			Assert.assertTrue(false);
+		}
+		SudokuView sv = new SudokuView(shell, sm);
+		sv.update();
+		String subText = sv.getSubTextStringForTest();
+		boolean bEnthaeltGeloest = subText.contains("gelöst");
+		Assert.assertEquals(bEnthaeltGeloest,false);
 	}
 
 }

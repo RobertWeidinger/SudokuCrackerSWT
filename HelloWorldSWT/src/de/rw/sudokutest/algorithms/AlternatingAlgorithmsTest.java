@@ -22,6 +22,11 @@ public class AlternatingAlgorithmsTest {
 
 	@Before
 	public void setUp() throws Exception {
+	}
+	
+	
+	@Test
+	public void testRun() {
 		sm = new SudokuModel(9,3);
 		try {
 			SudokuFileReaderWriter.readSudokuFromFile(sm, "src\\de\\rw\\sudokutest\\zzTestdata\\sz20120224_Format2.0.txt");
@@ -29,16 +34,42 @@ public class AlternatingAlgorithmsTest {
 			e.printStackTrace();
 			Assert.assertTrue(false);
 		}
-	}
-	
-	
-	@Test
-	public void testRun() {
 		AlternatingAlgorithms aa = new AlternatingAlgorithms(sm);
 		boolean success = aa.run();
 		Assert.assertEquals(true, success);
 		log(sm.toStringWithFlags());
 		Assert.assertEquals(true, AlgorithmsTestHelper.modelIsEqualToFile(sm,"sz20120224_Format2.0_geloest.txt"));
+	}
+
+	@Test
+	public void testRun2() {
+		sm = new SudokuModel(9,3);
+		try {
+			SudokuFileReaderWriter.readSudokuFromFile(sm, "src\\de\\rw\\sudokutest\\zzTestdata\\BlackberryProfi4_Format2.0.txt");
+		} catch (IOException e) {
+			e.printStackTrace();
+			Assert.assertTrue(false);
+		}
+		AlternatingAlgorithms aa = new AlternatingAlgorithms(sm);
+		boolean success = aa.run();
+		Assert.assertEquals(true, success);
+		log(sm.toStringWithFlags());
+		Assert.assertEquals(true, AlgorithmsTestHelper.modelIsEqualToFile(sm,"BlackberryProfi4_Loesung_Format2.0.txt"));
+	}
+
+	
+	@Test
+	public void testRun3() {
+		sm = new SudokuModel(9,3);
+		try {
+			SudokuFileReaderWriter.readSudokuFromFile(sm, "src\\de\\rw\\sudokutest\\zzTestdata\\KoCo11_Experte_Nr1_Format2.0.txt");
+		} catch (IOException e) {
+			e.printStackTrace();
+			Assert.assertTrue(false);
+		}
+		AlternatingAlgorithms aa = new AlternatingAlgorithms(sm);
+		boolean success = aa.run();
+		Assert.assertEquals(true, success); // Nur Test, dass Iterationsgrenze nicht erreicht wird.
 	}
 
 }

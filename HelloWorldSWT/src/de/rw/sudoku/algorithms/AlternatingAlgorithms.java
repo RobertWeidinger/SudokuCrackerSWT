@@ -32,10 +32,10 @@ public class AlternatingAlgorithms {
 		int countSbfc = 0;
 		int countPpa = 0;
 		do {
-			numChangedFields1 = numChangedFields2 = countPpa = 0; 
+			numChangedFields1 = numChangedFields2 = countPpa = countSbfc = 0; 
 			do {
 				numChangedFields1 = sbfc.oneIterationInternal();
-				if (sm.numberOfNonEmptyFields()==sm.getSize()*sm.getSize()) return true;
+				if (sm.numberOfValueFields()==sm.getSize()*sm.getSize()) return true;
 				if (++countGlobal>50) 
 					{
 						log("Iterationsgrenze erreicht: " + countGlobal);
@@ -46,7 +46,7 @@ public class AlternatingAlgorithms {
 			
 			do {
 				numChangedFields2 = ppa.oneIterationInternal(); 
-				if (sm.numberOfNonEmptyFields()==sm.getSize()*sm.getSize()) return true;
+				if (sm.numberOfValueFields()==sm.getSize()*sm.getSize()) return true;
 				if (++countGlobal>50) 
 				{
 					log("Iterationsgrenze erreicht: " + countGlobal);
