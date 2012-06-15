@@ -24,10 +24,6 @@ public class SudokuCrackerSWT {
 	private SudokuModel sm;
 	private SudokuView sv;
 	
-	public SudokuModel getSm() {
-		return sm;
-	}
-
 	public SudokuView getSv() {
 		return sv;
 	}
@@ -40,6 +36,15 @@ public class SudokuCrackerSWT {
 		return display;
 	}
 
+	public SudokuCrackerSWT()
+	{
+		shell = null;
+		display = null;
+		sm = null;
+		sv = null;
+		initUI();
+	}
+	
 	public void initUI() {
 		
     	display = new Display();
@@ -113,7 +118,6 @@ public class SudokuCrackerSWT {
 	 */
 	public static void main(String[] args) {
 		SudokuCrackerSWT sc = new SudokuCrackerSWT();
-		sc.initUI();
 		sc.run();
 	}
 

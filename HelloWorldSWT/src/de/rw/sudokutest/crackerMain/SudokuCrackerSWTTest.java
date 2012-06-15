@@ -21,7 +21,7 @@ public class SudokuCrackerSWTTest {
 	@Before
 	public void setUp() throws Exception {
 		sc = new SudokuCrackerSWT();
-		sc.initUI();
+
 	}
 
 	@After
@@ -50,4 +50,5 @@ public class SudokuCrackerSWTTest {
 		Assert.assertTrue(bFound);
 	}
 
+	
 }
